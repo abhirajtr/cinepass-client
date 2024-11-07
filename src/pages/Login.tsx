@@ -1,10 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../feature/authThunk';
+import { AppDispatch, RootState } from '../store';
 
-// Define the type for form values
 interface LoginFormValues {
     email: string;
     password: string;
@@ -13,7 +17,17 @@ interface LoginFormValues {
 const Login: FC = () => {
     const [showPassword, setShowPassword] = useState(false);
 
-    // Validation schema using Yup
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, navigate])
+
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
         password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -24,8 +38,18 @@ const Login: FC = () => {
         password: '',
     };
 
-    const onSubmit = (values: LoginFormValues) => {
+    const onSubmit = async (values: LoginFormValues) => {
         console.log('Form data:', values);
+        try {
+            await dispatch(login(values));
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                toast.error("Something went wrong. Please try again.");
+            }
+            console.log(error);
+        }
     };
 
     return (
@@ -45,7 +69,7 @@ const Login: FC = () => {
                                 name="email"
                                 className="w-full px-4 py-2 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                             />
-                            <ErrorMessage name="email" component="div" className="text-pink-500 text-sm mt-1" />
+                            <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                         </div>
 
                         {/* Password Field */}
@@ -63,7 +87,7 @@ const Login: FC = () => {
                             >
                                 {showPassword ? <FaEye /> : <FaEyeSlash />}
                             </span>
-                            <ErrorMessage name="password" component="div" className="text-pink-500 text-sm mt-1" />
+                            <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
                         </div>
 
                         <div className="mb-4 text-right">

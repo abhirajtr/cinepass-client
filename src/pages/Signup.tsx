@@ -4,9 +4,11 @@ import { FC, useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
-import { backendUrl } from '../App';
 import OtpInput from '../components/OtpInput';
 import { toast } from 'sonner';
+import { backendUrl } from '../constants';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 interface SignupFormValues {
     email: string;
@@ -22,8 +24,15 @@ const Signup: FC = () => {
     const [otpSentEmail, setOtpSentEmail] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
 
+    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
+
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, navigate])
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -53,35 +62,34 @@ const Signup: FC = () => {
     const onSubmit = async (values: SignupFormValues) => {
         console.log('Form data:', values);
         try {
-            const response = await axios.post(backendUrl + "/user/signup", values);
+            const response = await axios.post(`${backendUrl}/user/signup`, values);
             console.log(response);
             setOtpSentEmail(values.email);
             toast.info(response.data?.message);
             setIsSignupSuccessful(true);
         } catch (error) {
-            if (error instanceof AxiosError) {
-                toast.success(error?.response?.data?.message);
-            } else {
-                toast.success("Something went wrong. Please try again.");
-            }
+            const errorMessage = error instanceof AxiosError
+                ? error?.response?.data?.message
+                : "Something went wrong. Please try again.";
+            toast.error(errorMessage);
             console.log(error);
         }
     };
 
     const resendOtp = async () => {
         try {
-            const response = await axios.post(backendUrl + "/user/resend-otp", { email: otpSentEmail });
+            const response = await axios.post(`${backendUrl}/user/resend-otp`, { email: otpSentEmail });
             console.log(response);
             toast.success(response.data?.message);
         } catch (error) {
-            if (error instanceof AxiosError) {
-                toast.success(error?.response?.data?.message);
-            } else {
-                toast.success("Something went wrong. Please try again.");
-            }
+            const errorMessage = error instanceof AxiosError
+                ? error?.response?.data?.message
+                : "Something went wrong. Please try again.";
+            toast.error(errorMessage);
             console.log(error);
         }
     };
+
 
     const submitOtp = async (otp: string) => {
         console.log('OTP submitted:', otp);
