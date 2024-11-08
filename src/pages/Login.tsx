@@ -54,51 +54,53 @@ const Login: FC = () => {
     };
 
     return isAuthenticated ? null : (
-        <div className="flex items-center justify-center min-h-screen bg-bg-dark px-4">
-            <div className="w-full max-w-md p-6 rounded-lg shadow-lg border border-gray-metallic bg-bg-dark-secondary">
-                <h1 className="text-3xl font-semibold text-center text-highlight-text mb-4">Welcome back!</h1>
-                <p className="text-center text-text-muted mb-6">We are happy to see you again. Please log in to continue.</p>
+        <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
+            <div className="w-full max-w-md p-6 rounded-lg shadow-lg border border-grey-15">
+                <h1 className="text-3xl font-semibold text-center text-green-60 mb-4">Welcome back!</h1>
+                <p className="text-center text-grey-75 mb-6">We are happy to see you again. Please log in to continue.</p>
 
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                     <Form>
                         {/* Email Field */}
                         <div className="mb-6">
-                            <label htmlFor="email" className="block text-text-primary text-sm mb-2">Email</label>
+                            <label htmlFor="email" className="block text-grey-75 text-sm mb-2">Email</label>
                             <Field
+                                placeholder="Enter your email address"
                                 type="email"
                                 id="email"
                                 name="email"
-                                className="w-full px-4 py-2 bg-bg-dark text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary border border-gray-metallic"
+                                className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
                             />
                             <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1" />
                         </div>
 
                         {/* Password Field */}
                         <div className="mb-6 relative">
-                            <label htmlFor="password" className="block text-text-primary text-sm mb-2">Password</label>
+                            <label htmlFor="password" className="block text-grey-75 text-sm mb-2">Password</label>
                             <Field
+                                placeholder="Enter your password"
                                 type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 name="password"
-                                className="w-full px-4 py-2 bg-bg-dark text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary border border-gray-metallic"
+                                className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-10 cursor-pointer text-text-muted"
+                                className="absolute right-4 top-10 cursor-pointer text-grey-35 hover:text-grey-75"
                             >
-                                {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </span>
                             <ErrorMessage name="password" component="div" className="text-red-500 text-xs mt-1" />
                         </div>
 
                         <div className="mb-6 text-right">
-                            <Link to="/forgot-password" className="text-highlight-text hover:underline">Forgot Password?</Link>
+                            <Link to="/forgot-password" className="text-absolute-white hover:underline">Forgot Password?</Link>
                         </div>
 
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-brand-primary text-text-primary py-2 rounded-md hover:bg-brand-secondary transition duration-300"
+                            className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
                         >
                             Login
                         </button>
@@ -107,9 +109,9 @@ const Login: FC = () => {
 
                 {/* Additional Links */}
                 <div className="mt-6 text-center">
-                    <p className="text-sm text-text-muted">
+                    <p className="text-sm text-grey-70">
                         Don't have an account?{' '}
-                        <Link to="/signup" className="text-brand-primary hover:underline">
+                        <Link to="/signup" className="text-absolute-white hover:underline">
                             Sign up
                         </Link>
                     </p>

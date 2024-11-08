@@ -107,7 +107,7 @@ const Signup: FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-bg-dark px-4">
+        <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
 
             {
                 isSignupSuccessful ?
@@ -116,19 +116,19 @@ const Signup: FC = () => {
                         submitAction={submitOtp}
                         resendAction={resendOtp}
                     /> :
-                    <div className="w-full max-w-md p-6 bg-bg-dark border border-gray-metallic rounded-md shadow-lg">
-                        <h1 className="text-3xl font-bold text-center text-highlight-text mb-4">Create an Account</h1>
-                        <p className="text-center text-text-muted mb-6">Join CinePass to easily book tickets and explore movie showtimes.</p>
+                    <div className="w-full max-w-md p-6 border border-grey-15 rounded-md shadow-lg">
+                        <h1 className="text-3xl font-bold text-center text-green-60 mb-4">Create an Account</h1>
+                        <p className="text-center text-grey-75 mb-6">Join CinePass to easily book tickets and explore movie showtimes.</p>
                         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                             <Form>
                                 {/* Email Field */}
                                 <div className="mb-4">
-                                    <label htmlFor="email" className="block text-text-muted mb-2">Email</label>
+                                    <label htmlFor="email" className="block text-grey-75 mb-2">Email</label>
                                     <Field
                                         type="email"
                                         id="email"
                                         name="email"
-                                        className="w-full px-4 py-2 bg-bg-dark text-text-primary border border-gray-metallic rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
                                         placeholder="Enter your email"
                                     />
                                     <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
@@ -136,13 +136,13 @@ const Signup: FC = () => {
 
                                 {/* Phone Number Field */}
                                 <div className="mb-4">
-                                    <label htmlFor="phone" className="block text-text-muted mb-2">Phone Number</label>
+                                    <label htmlFor="phone" className="block text-grey-75 mb-2">Phone Number</label>
                                     <div className="relative">
                                         <Field
                                             type="text"
                                             id="phone"
                                             name="phone"
-                                            className="w-full px-4 py-2 pl-16 bg-bg-dark text-text-primary border border-gray-metallic rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                            className="w-full px-4 py-2 pl-16 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
                                             placeholder="Enter your 10-digit number"
                                             maxLength={10}
                                         />
@@ -153,17 +153,17 @@ const Signup: FC = () => {
 
                                 {/* Password Field */}
                                 <div className="mb-4 relative">
-                                    <label htmlFor="password" className="block text-text-muted mb-2">Password</label>
+                                    <label htmlFor="password" className="block text-grey-75 mb-2">Password</label>
                                     <Field
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
-                                        className="w-full px-4 py-2 bg-bg-dark text-text-primary border border-gray-metallic rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 focus:ring-green-80 placeholder:text-grey-35"
                                         placeholder="Enter your password"
                                     />
                                     <span
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-11 cursor-pointer text-gray-400"
+                                        className="absolute right-4 top-11 cursor-pointer text-grey-35 hover:text-grey-75"
                                     >
                                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                                     </span>
@@ -172,17 +172,17 @@ const Signup: FC = () => {
 
                                 {/* Confirm Password Field */}
                                 <div className="mb-4 relative">
-                                    <label htmlFor="confirmPassword" className="block text-text-muted mb-2">Confirm Password</label>
+                                    <label htmlFor="confirmPassword" className="block text-grey-75 mb-2">Confirm Password</label>
                                     <Field
                                         type={showConfirmPassword ? "text" : "password"}
                                         id="confirmPassword"
                                         name="confirmPassword"
-                                        className="w-full px-4 py-2 bg-bg-dark text-text-primary border border-gray-metallic rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Confirm your password"
+                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 focus:ring-green-80 placeholder:text-grey-35"
+                                        placeholder="Re-enter your password"
                                     />
                                     <span
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-4 top-11 cursor-pointer text-gray-400"
+                                        className="absolute right-4 top-11 cursor-pointer text-grey-35 hover:text-grey-75"
                                     >
                                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                                     </span>
@@ -192,7 +192,7 @@ const Signup: FC = () => {
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-brand-primary text-text-primary py-2 rounded-md hover:bg-brand-secondary transition duration-300"
+                                    className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
                                 >
                                     Sign Up
                                 </button>
@@ -201,9 +201,9 @@ const Signup: FC = () => {
 
                         {/* Additional Links */}
                         <div className="mt-4 text-center">
-                            <p className="text-sm text-text-muted">
+                            <p className="text-sm text-grey-70">
                                 Already have an account?{' '}
-                                <Link to="/login" className="text-brand-primary hover:underline">
+                                <Link to="/login" className="text-absolute-white hover:underline">
                                     Log in
                                 </Link>
                             </p>

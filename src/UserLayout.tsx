@@ -6,7 +6,7 @@ const UserLayout = () => {
     return (
         <div className="bg-grey-10 min-h-[100vh]">
             <Navbar />
-            <div className="bg-background px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+            <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
                 <Outlet />
             </div>
             <Footer />

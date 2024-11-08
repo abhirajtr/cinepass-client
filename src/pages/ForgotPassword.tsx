@@ -8,7 +8,7 @@ interface ForgotPasswordFormValues {
 }
 
 const ForgotPassword: FC = () => {
-    const [otpSent, setOtpSent] = useState(false);
+    const [otpSent, setOtpSent] = useState(true);
     const [email, setEmail] = useState<string>('');
 
     const validationSchema = Yup.object({
@@ -60,10 +60,10 @@ const ForgotPassword: FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black px-4">
-            <div className="w-full max-w-md p-6 bg-black border border-gray-700 rounded-md shadow-lg">
-                <h1 className="text-3xl font-bold text-center text-white mb-4">Forgot Password</h1>
-                <p className="text-center text-gray-400 mb-6">
+        <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
+            <div className="w-full max-w-md p-6 border border-grey-15 rounded-md shadow-lg">
+                <h1 className="text-3xl font-bold text-center text-green-60 mb-4">Forgot Password</h1>
+                <p className="text-center text-grey-75 mb-6">
                     {otpSent
                         ? `Enter the 4-digit OTP sent to ${email}`
                         : 'Enter your email address to receive a reset OTP.'}
@@ -85,24 +85,26 @@ const ForgotPassword: FC = () => {
                     >
                         {({ errors, touched, setFieldValue }) => (
                             <Form>
-                                <div className="flex gap-4 mb-2">
-                                    {['otp1', 'otp2', 'otp3', 'otp4'].map((otpField, index) => (
-                                        <div key={index} className="w-1/4">
-                                            <Field
-                                                type="text"
-                                                name={otpField}
-                                                innerRef={otpRefs[index]}
-                                                className="w-full px-2 py-3 bg-gray-900 text-white border border-gray-700 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                                maxLength={1}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    handleOtpChange(e, index, setFieldValue)
-                                                }
-                                                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-                                                    handleOtpKeyDown(e, index)
-                                                }
-                                            />
-                                        </div>
-                                    ))}
+                                <div className='px-20 mb-5'>
+                                    <div className="flex gap-2 mb-2">
+                                        {['otp1', 'otp2', 'otp3', 'otp4'].map((otpField, index) => (
+                                            <div key={index} className="w-1/4">
+                                                <Field
+                                                    type="text"
+                                                    name={otpField}
+                                                    innerRef={otpRefs[index]}
+                                                    className="w-full px-4 py-3 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
+                                                    maxLength={1}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                        handleOtpChange(e, index, setFieldValue)
+                                                    }
+                                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                                                        handleOtpKeyDown(e, index)
+                                                    }
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                                 {touched.otp1 && (errors.otp1 || errors.otp2 || errors.otp3 || errors.otp4) && (
                                     <div className="text-red-500 text-sm mb-4 ">
@@ -111,7 +113,7 @@ const ForgotPassword: FC = () => {
                                 )}
                                 <button
                                     type="submit"
-                                    className="w-full bg-pink-600 text-white py-2 rounded-md hover:bg-pink-700 transition duration-300"
+                                    className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
                                 >
                                     Verify OTP
                                 </button>
@@ -122,21 +124,21 @@ const ForgotPassword: FC = () => {
                     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                         <Form>
                             <div className="mb-4">
-                                <label htmlFor="email" className="block text-gray-400 mb-2">
+                                <label htmlFor="email" className="block text-grey-75 mb-2">
                                     Email
                                 </label>
                                 <Field
                                     type="email"
                                     id="email"
                                     name="email"
-                                    className="w-full px-4 py-2 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                    className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
                                     placeholder="Enter your email"
                                 />
-                                <ErrorMessage name="email" component="div" className="text-pink-500 text-sm mt-1" />
+                                <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                             </div>
                             <button
                                 type="submit"
-                                className="w-full bg-pink-600 text-white py-2 rounded-md hover:bg-pink-700 transition duration-300"
+                                className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
                             >
                                 Send OTP
                             </button>
@@ -145,9 +147,9 @@ const ForgotPassword: FC = () => {
                 )}
 
                 <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-grey-75">
                         Remembered your password?{' '}
-                        <Link to="/login" className="text-pink-400 hover:underline">
+                        <Link to="/login" className="text-absolute-white hover:underline">
                             Log in
                         </Link>
                     </p>
