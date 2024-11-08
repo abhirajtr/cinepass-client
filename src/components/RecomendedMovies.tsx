@@ -9,19 +9,19 @@ interface Movie {
     posterUrl: string;
 }
 
-interface NowShowingProps {
+interface RecomendedMoviesProps {
     movies: Movie[];
 }
 
-const NowShowing: FC<NowShowingProps> = ({ movies }) => {
+const RecomendedMovies: FC<RecomendedMoviesProps> = ({ movies }) => {
     return (
         <section className="mx-auto py-12 px-4 max-w-7xl relative">
             <div className="text-3xl py-8">
-                <Title text1={'Now'} text2={'Showing'} />
+                <Title text1={'Recomended'} text2={'Movies'} />
             </div>
             <MovieCarousel movies={movies} />
         </section>
     );
 };
 
-export default NowShowing;
+export default RecomendedMovies;

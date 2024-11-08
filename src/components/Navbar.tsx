@@ -25,7 +25,7 @@ const Navbar = () => {
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
-                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full ${isActive ? "bg-grey-15 text-white" : "text-absolute-white"
+                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full text-absolute-white ${isActive ? "bg-grey-15" : ""
                                 }`
                             }
                         >
@@ -36,7 +36,7 @@ const Navbar = () => {
                         <NavLink
                             to="/movies"
                             className={({ isActive }) =>
-                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full ${isActive ? "bg-grey-15 text-white" : "text-absolute-white"
+                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full text-absolute-white ${isActive ? "bg-grey-15" : ""
                                 }`
                             }
                         >
@@ -47,7 +47,7 @@ const Navbar = () => {
                         <NavLink
                             to="/theatres"
                             className={({ isActive }) =>
-                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full ${isActive ? "bg-grey-15 text-white" : "text-absolute-white"
+                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full text-absolute-white ${isActive ? "bg-grey-15" : ""
                                 }`
                             }
                         >
@@ -58,7 +58,7 @@ const Navbar = () => {
                         <NavLink
                             to="/about-us"
                             className={({ isActive }) =>
-                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full ${isActive ? "bg-grey-15 text-white" : "text-absolute-white"
+                                `flex items-center justify-center h-10 w-24 px-2 py-2 rounded-full text-absolute-white ${isActive ? "bg-grey-15" : ""
                                 }`
                             }
                         >
@@ -71,10 +71,10 @@ const Navbar = () => {
                     <div className="relative">
                         <div className="flex items-center h-full text-absolute-white hover:cursor-pointer hover:text-green-60 relative group">
                             <FaUserCircle size={30} />
-                            <div className="absolute bg-absolute-white rounded right-0 top-10 group-hover:flex flex-col hidden w-32 text-center gap-2 py-3 text-black">
-                                <span className="hover:bg-green-60">My Profile</span>
-                                <span className="hover:bg-green-60">Bookings</span>
-                                <span className="hover:bg-green-60" onClick={handleLogout}>Logout</span>
+                            <div className="absolute bg-absolute-white rounded right-0 top-10 group-hover:flex flex-col hidden w-36 text-center gap-2 py-3 text-black">
+                                <span className="hover:bg-green-60 py-1 px-4 w-full">My Profile</span>
+                                <span className="hover:bg-green-60 py-1 px-4 w-full">Bookings</span>
+                                <span className="hover:bg-green-60 py-1 px-4 w-full" onClick={handleLogout}>Logout</span>
                             </div>
                         </div>
                     </div>
