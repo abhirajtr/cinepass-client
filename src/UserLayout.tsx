@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar"
 
 const UserLayout = () => {
     return (
-        <div className="bg-bg-dark min-h-[100vh]">
+        <div className="bg-grey-10 min-h-[100vh]">
             <Navbar />
             <div className="bg-background px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
                 <Outlet />
