@@ -23,7 +23,7 @@ export const getRoleFromToken = (token: string): string | null => {
 const isTokenExpired = (token: string): boolean => {
     try {
         const decodedToken: JwtPayload = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
+        const currentTime = Date.now() / 5000;
         return decodedToken.exp < currentTime;
     } catch (error) {
         console.error("Error decoding token for expiration check:", error);

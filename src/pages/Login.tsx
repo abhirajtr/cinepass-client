@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../feature/authThunk';
 import { AppDispatch, RootState } from '../store';
@@ -24,9 +25,9 @@ const Login: FC = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/");
+            navigate('/');
         }
-    }, [isAuthenticated, navigate])
+    }, [isAuthenticated, navigate]);
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -46,58 +47,58 @@ const Login: FC = () => {
             if (error instanceof AxiosError) {
                 toast.error(error?.response?.data?.message);
             } else {
-                toast.error("Something went wrong. Please try again.");
+                toast.error('Something went wrong. Please try again.');
             }
             console.log(error);
         }
     };
 
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-black">
-            <div className="w-full max-w-md p-6 bg-black border border-gray-700 rounded-md shadow-lg">
-                <h1 className="text-3xl font-bold text-center text-white mb-4">Welcome back!</h1>
-                <p className="text-center text-gray-400 mb-6">We're glad to see you again. Please log in to continue.</p>
+    return isAuthenticated ? null : (
+        <div className="flex items-center justify-center min-h-screen bg-bg-dark px-4">
+            <div className="w-full max-w-md p-6 rounded-lg shadow-lg border border-gray-metallic bg-bg-dark-secondary">
+                <h1 className="text-3xl font-semibold text-center text-highlight-text mb-4">Welcome back!</h1>
+                <p className="text-center text-text-muted mb-6">We are happy to see you again. Please log in to continue.</p>
 
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                     <Form>
                         {/* Email Field */}
-                        <div className="mb-4">
-                            <label htmlFor="email" className="block text-gray-400 mb-2">Email</label>
+                        <div className="mb-6">
+                            <label htmlFor="email" className="block text-text-primary text-sm mb-2">Email</label>
                             <Field
                                 type="email"
                                 id="email"
                                 name="email"
-                                className="w-full px-4 py-2 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                className="w-full px-4 py-2 bg-bg-dark text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary border border-gray-metallic"
                             />
-                            <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                            <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1" />
                         </div>
 
                         {/* Password Field */}
-                        <div className="mb-4 relative">
-                            <label htmlFor="password" className="block text-gray-400 mb-2">Password</label>
+                        <div className="mb-6 relative">
+                            <label htmlFor="password" className="block text-text-primary text-sm mb-2">Password</label>
                             <Field
-                                type={showPassword ? "text" : "password"}
+                                type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 name="password"
-                                className="w-full px-4 py-2 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                className="w-full px-4 py-2 bg-bg-dark text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary border border-gray-metallic"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-11 cursor-pointer text-gray-400"
+                                className="absolute right-4 top-10 cursor-pointer text-text-muted"
                             >
                                 {showPassword ? <FaEye /> : <FaEyeSlash />}
                             </span>
-                            <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                            <ErrorMessage name="password" component="div" className="text-red-500 text-xs mt-1" />
                         </div>
 
-                        <div className="mb-4 text-right">
-                            <Link to="/forgot-password" className="text-pink-400 hover:underline">Forgot Password?</Link>
+                        <div className="mb-6 text-right">
+                            <Link to="/forgot-password" className="text-highlight-text hover:underline">Forgot Password?</Link>
                         </div>
 
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-pink-600 text-white py-2 rounded-md hover:bg-pink-700 transition duration-300"
+                            className="w-full bg-brand-primary text-text-primary py-2 rounded-md hover:bg-brand-secondary transition duration-300"
                         >
                             Login
                         </button>
@@ -105,10 +106,10 @@ const Login: FC = () => {
                 </Formik>
 
                 {/* Additional Links */}
-                <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-400">
+                <div className="mt-6 text-center">
+                    <p className="text-sm text-text-muted">
                         Don't have an account?{' '}
-                        <Link to="/signup" className="text-pink-400 hover:underline">
+                        <Link to="/signup" className="text-brand-primary hover:underline">
                             Sign up
                         </Link>
                     </p>
