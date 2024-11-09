@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { backendUrl } from '../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { motion } from 'framer-motion';
 
 interface SignupFormValues {
     email: string;
@@ -190,12 +191,13 @@ const Signup: FC = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <button
+                                <motion.button
                                     type="submit"
                                     className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
+                                    whileTap={{ scale: 0.9 }}
                                 >
                                     Sign Up
-                                </button>
+                                </motion.button>
                             </Form>
                         </Formik>
 

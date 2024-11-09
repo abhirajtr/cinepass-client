@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import UserLayout from "./UserLayout";
 import AdminLogin from './pages/Admin/Login';
 import AdminLayout from "./AdminLayout";
+// import MyComponent from "./components/MyComponent";
 
 
 const App = () => {
@@ -14,8 +15,9 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword user="user" />} />
       <Route path="/" element={<UserLayout />}>
+      {/* <Route path="/" element={<MyComponent />} /> */}
         <Route path="/" element={<Home />} />
         <Route path="/movies" element={<Home />} />
         <Route path="/theatres" element={<Home />} />

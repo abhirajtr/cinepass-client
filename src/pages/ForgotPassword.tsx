@@ -1,15 +1,25 @@
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FC, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import axios, { AxiosError } from 'axios';
+import { backendUrl } from '../constants';
+import { toast } from 'sonner';
 
 interface ForgotPasswordFormValues {
     email: string;
 }
+interface ForgotPasswordProps {
+    user: string;
+}
 
-const ForgotPassword: FC = () => {
+
+const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
     const [otpSent, setOtpSent] = useState(true);
     const [email, setEmail] = useState<string>('');
+    const [otp, setOtp] = useState<string[]>(['', '', '', '']);
+    const inputsRef = useRef<HTMLInputElement[]>([]); // Refs for input fields
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -21,7 +31,17 @@ const ForgotPassword: FC = () => {
 
     const sendOtp = async (email: string) => {
         console.log(`Sending OTP to ${email}`);
-        return new Promise((resolve) => setTimeout(resolve, 1000));
+        try {
+            const response = await axios.post(backendUrl + `/${user}/forgot-Password`, { email });
+            toast.success(response.data?.message);
+            setOtpSent(true);
+            console.log(response);
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+            }
+            console.log(error);
+        }
     };
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
@@ -34,30 +54,42 @@ const ForgotPassword: FC = () => {
         }
     };
 
-    const otpRefs = [
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-        useRef<HTMLInputElement>(null),
-    ];
 
-    const handleOtpChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        index: number,
-        setFieldValue: FormikHelpers<{ otp1: string; otp2: string; otp3: string; otp4: string }>['setFieldValue']
-    ) => {
-        const value = e.target.value;
-        setFieldValue(`otp${index + 1}`, value);
-        if (value.length === 1 && index < otpRefs.length - 1) {
-            otpRefs[index + 1].current?.focus();
+
+    // Move focus to the next input if the current one is filled
+    const handleChange = (value: string, index: number) => {
+        const newOtp = [...otp];
+        newOtp[index] = value;
+
+        if (value.length === 1 && index < 3) {
+            inputsRef.current[index + 1]?.focus();
+        }
+
+        setOtp(newOtp);
+    };
+
+    // Move focus to the previous input on backspace if the current one is empty
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === 'Backspace' && !otp[index] && index > 0) {
+            inputsRef.current[index - 1]?.focus();
         }
     };
 
-    const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-        if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
-            otpRefs[index - 1].current?.focus();
+    const handleVerifyOtp = async () => {
+        const otpValue = otp.join('');
+        console.log(email, otpValue);
+
+        try {
+            const response = await axios.post(backendUrl + `/${user}/forgot-Password/verify-otp`, { email, otp: otpValue });
+            toast.success(response.data?.message);
+            console.log(response);
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+            }
+            console.log(error);
         }
-    };
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
@@ -70,56 +102,37 @@ const ForgotPassword: FC = () => {
                 </p>
 
                 {otpSent ? (
-                    <Formik
-                        initialValues={{ otp1: '', otp2: '', otp3: '', otp4: '' }}
-                        validationSchema={Yup.object({
-                            otp1: Yup.string().required('Required').length(1),
-                            otp2: Yup.string().required('Required').length(1),
-                            otp3: Yup.string().required('Required').length(1),
-                            otp4: Yup.string().required('Required').length(1),
-                        })}
-                        onSubmit={(values) => {
-                            const otp = `${values.otp1}${values.otp2}${values.otp3}${values.otp4}`;
-                            console.log('OTP Submitted:', otp);
-                        }}
-                    >
-                        {({ errors, touched, setFieldValue }) => (
-                            <Form>
-                                <div className='px-20 mb-5'>
-                                    <div className="flex gap-2 mb-2">
-                                        {['otp1', 'otp2', 'otp3', 'otp4'].map((otpField, index) => (
-                                            <div key={index} className="w-1/4">
-                                                <Field
-                                                    type="text"
-                                                    name={otpField}
-                                                    innerRef={otpRefs[index]}
-                                                    className="w-full px-4 py-3 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
-                                                    maxLength={1}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                        handleOtpChange(e, index, setFieldValue)
-                                                    }
-                                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-                                                        handleOtpKeyDown(e, index)
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                {touched.otp1 && (errors.otp1 || errors.otp2 || errors.otp3 || errors.otp4) && (
-                                    <div className="text-red-500 text-sm mb-4 ">
-                                        Required
-                                    </div>
-                                )}
-                                <button
-                                    type="submit"
-                                    className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
-                                >
-                                    Verify OTP
-                                </button>
-                            </Form>
-                        )}
-                    </Formik>
+                    <>
+                        <div className="flex justify-center mb-4 space-x-2">
+                            {otp.map((_, index) => (
+                                <input
+                                    key={index}
+                                    type="text" 
+                                    maxLength={1}
+                                    className="w-12 h-12 text-center rounded-lg text-xl bg-grey-10 text-absolute-white focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
+                                    value={otp[index]}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+                                        handleChange(value, index);
+                                    }}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    ref={(el) => (inputsRef.current[index] = el!)} // Store ref for each input
+                                />
+
+                            ))}
+                        </div>
+                        <motion.button
+                            disabled={otp.join('').length < 4 ? true : false}
+                            onClick={handleVerifyOtp}
+                            type="submit"
+                            className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            Verify OTP
+                        </motion.button>
+
+                    </>
+
                 ) : (
                     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                         <Form>
@@ -136,12 +149,13 @@ const ForgotPassword: FC = () => {
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                             </div>
-                            <button
+                            <motion.button
                                 type="submit"
                                 className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
+                                whileTap={{ scale: 0.9 }}
                             >
                                 Send OTP
-                            </button>
+                            </motion.button>
                         </Form>
                     </Formik>
                 )}
@@ -155,7 +169,7 @@ const ForgotPassword: FC = () => {
                     </p>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

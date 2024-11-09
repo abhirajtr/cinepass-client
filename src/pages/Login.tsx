@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../feature/authThunk';
 import { AppDispatch, RootState } from '../store';
+import { motion } from 'framer-motion';
 
 interface LoginFormValues {
     email: string;
@@ -98,12 +99,19 @@ const Login: FC = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <button
+                        {/* <button
                             type="submit"
                             className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
                         >
                             Login
-                        </button>
+                        </button> */}
+                        <motion.button
+                            type="submit"
+                            className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            Log In
+                        </motion.button>
                     </Form>
                 </Formik>
 

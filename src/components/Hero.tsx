@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { assets } from "../constants";
 
 const Hero = () => {
     const banners = [
-        {
-            image: assets.banner1,
-        },
-        {
-            image: assets.banner2,
-        },
-        {
-            image: assets.banner3,
-        }
+        { image: assets.banner1 },
+        { image: assets.banner2 },
+        { image: assets.banner3 },
     ];
 
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -26,10 +21,17 @@ const Hero = () => {
 
     return (
         <div className="relative overflow-hidden">
-            <div
-                className="flex transition-transform duration-700 ease-out"
+            <motion.div
+                className="flex"
+                animate={{
+                    x: `-${currentBannerIndex * 100}%`,
+                }}
+                transition={{
+                    duration: 0.9,
+                    ease: "easeInOut",
+                }}
                 style={{
-                    transform: `translateX(-${currentBannerIndex * 100}%)`,
+                    display: "flex", // Ensure the banners align in a row
                 }}
             >
                 {banners.map((banner, index) => (
@@ -41,12 +43,14 @@ const Hero = () => {
                         }}
                     />
                 ))}
-            </div>
+            </motion.div>
+
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2">
                 {banners.map((_, index) => (
                     <button
                         key={index}
-                        className={`h-2 w-2 rounded-full ${index === currentBannerIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
+                        className={`h-2 w-2 rounded-full ${index === currentBannerIndex ? 'bg-blue-500' : 'bg-gray-300'
+                            }`}
                         onClick={() => setCurrentBannerIndex(index)}
                     />
                 ))}

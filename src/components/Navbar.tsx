@@ -15,7 +15,7 @@ const Navbar = () => {
     };
 
     return (
-        <header className="bg-grey-11/30 text-gray-800 border-b border-grey-15 sticky top-0 z-10 backdrop-blur-lg">
+        <header className="bg-grey-11/30  border-b border-grey-15 sticky top-0 z-10 backdrop-blur-lg text-absolute-white">
             <div className="container flex justify-between h-15 mx-auto max-w-7xl px-6 py-3">
                 <NavLink to="/" aria-label="Back to homepage" className="flex items-center">
                     <p className="text-xl font-bold text-green-60">CinePass</p>

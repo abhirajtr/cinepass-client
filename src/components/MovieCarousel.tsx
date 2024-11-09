@@ -1,7 +1,8 @@
 // MovieCarousel.tsx
 import { useRef, FC } from "react";
+import { motion } from "framer-motion";
 import { FaChevronRight } from "react-icons/fa";
-import MovieCard from "./MovieCard"; // Import the MovieCard component
+import MovieCard from "./MovieCard";
 
 interface Movie {
     id: string;
@@ -31,9 +32,13 @@ const MovieCarousel: FC<MovieCarouselProps> = ({ movies }) => {
 
     return (
         <div className="relative">
-            <div
+            <motion.div
                 ref={scrollRef}
                 className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide"
+                drag="x"
+                dragConstraints={{ left: -300 * movies.length, right: 0 }}
+                whileTap={{ cursor: "grabbing" }}
+                transition={{ ease: "easeOut", duration: 0.5 }}
             >
                 {movies.map((movie) => (
                     <MovieCard
@@ -44,12 +49,12 @@ const MovieCarousel: FC<MovieCarouselProps> = ({ movies }) => {
                         posterUrl={movie.posterUrl}
                     />
                 ))}
-            </div>
+            </motion.div>
 
             {/* Scroll Left Button */}
             <button
                 onClick={scrollLeft}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white-90  hover:text-grey-10 hover:bg-green-60 text-white p-2 rounded-full shadow-lg transition duration-300"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white-90 hover:text-grey-10 hover:bg-green-60 text-white p-2 rounded-full shadow-lg transition duration-300"
             >
                 <FaChevronRight size={20} style={{ transform: 'rotate(180deg)' }} />
             </button>
@@ -57,7 +62,7 @@ const MovieCarousel: FC<MovieCarouselProps> = ({ movies }) => {
             {/* Scroll Right Button */}
             <button
                 onClick={scrollRight}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white-90  hover:text-grey-10 hover:bg-green-60 text-white p-2 rounded-full shadow-lg transition duration-300"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white-90 hover:text-grey-10 hover:bg-green-60 text-white p-2 rounded-full shadow-lg transition duration-300"
             >
                 <FaChevronRight size={20} />
             </button>

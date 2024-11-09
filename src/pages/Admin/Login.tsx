@@ -24,7 +24,7 @@ const Login = () => {
         }
     }, [isAuthenticated, navigate]);
 
-    
+
     const validationSchema = Yup.object({
         email: Yup.string()
             .email('Invalid email address')
