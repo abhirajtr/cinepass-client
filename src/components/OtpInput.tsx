@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useRef, useEffect } from 'react';
 
 interface OtpInputProps {
@@ -12,10 +13,10 @@ const OtpInput: React.FC<OtpInputProps> = ({ email, submitAction, resendAction }
     const [timer, setTimer] = useState<number>(60);
     const [error, setError] = useState<string | null>(null);
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-    
 
 
-    
+
+
     useEffect(() => {
         if (isResendDisabled) {
             const interval = setInterval(() => {
@@ -32,7 +33,7 @@ const OtpInput: React.FC<OtpInputProps> = ({ email, submitAction, resendAction }
         }
     }, [isResendDisabled]);
 
-    
+
     const handleChange = (value: string, index: number) => {
         if (!/^\d*$/.test(value)) return;
         const updatedOtp = [...otp];
@@ -51,7 +52,7 @@ const OtpInput: React.FC<OtpInputProps> = ({ email, submitAction, resendAction }
         }
     };
 
-    
+
     const handleSubmit = () => {
         const otpValue = otp.join('');
         if (otpValue.length === 4) {
@@ -70,57 +71,58 @@ const OtpInput: React.FC<OtpInputProps> = ({ email, submitAction, resendAction }
     };
 
     return (
-        
-            <div className="w-full max-w-md p-6 bg-black border border-gray-700 rounded-md shadow-lg">
-                <h1 className="text-3xl font-bold text-center text-white mb-4">Enter OTP</h1>
-                <p className="text-center text-gray-400 mb-6">
-                    We have sent a 4-digit OTP to your email: <span className="font-bold">{email}</span>
-                </p>
 
-                {/* OTP Inputs */}
-                <div className="flex justify-center mb-4 space-x-2">
-                    {otp.map((_, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            maxLength={1}
-                            className="w-12 h-12 text-center text-white bg-gray-900 border border-gray-700 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-pink-500"
-                            value={otp[index]}
-                            onChange={(e) => handleChange(e.target.value, index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            ref={(el) => (inputsRef.current[index] = el)}
-                        />
-                    ))}
-                </div>
+        <div className="w-full max-w-md p-6  border border-grey-15 rounded-md shadow-lg">
+            <h1 className="text-3xl font-bold text-center text-green-60 mb-4">Enter OTP</h1>
+            <p className="text-center text-grey-75 mb-6">
+                We have sent a 4-digit OTP to your email: <span className="font-bold">{email}</span>
+            </p>
 
-                {/* Error Message */}
-                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-
-                {/* Submit Button */}
-                <button
-                    onClick={handleSubmit}
-                    className="w-full bg-pink-600 text-white py-2 rounded-md mt-4 hover:bg-pink-700 transition duration-300"
-                    disabled={otp.some((digit) => digit === '') || otp.length !== 4} // Disable if any field is empty or OTP is not 4 digits
-                >
-                    Submit OTP
-                </button>
-
-                {/* Resend OTP Section */}
-                <div className="mt-4 text-center flex items-center min-h-16">
-                    {isResendDisabled ? (
-                        <p className="text-gray-400 mr-2">
-                            You can resend OTP in {timer} seconds
-                        </p>
-                    ) : (
-                        <button
-                            onClick={handleResendOtp}
-                            className="bg-pink-600 text-white rounded-md p-2 mt-2 hover:bg-pink-700 transition duration-300"
-                        >
-                            Resend OTP
-                        </button>
-                    )}
-                </div>
+            {/* OTP Inputs */}
+            <div className="flex justify-center mb-4 space-x-2">
+                {otp.map((_, index) => (
+                    <input
+                        key={index}
+                        type="text"
+                        maxLength={1}
+                        className="w-12 h-12 text-center text-absolute-white bg-grey-10 border border-grey-15 rounded-md text-xl focus:outline-none focus:ring-1 focus:ring-green-80"
+                        value={otp[index]}
+                        onChange={(e) => handleChange(e.target.value, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        ref={(el) => (inputsRef.current[index] = el)}
+                    />
+                ))}
             </div>
+
+            {/* Error Message */}
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+            {/* Submit Button */}
+            <motion.button
+                onClick={handleSubmit}
+                disabled={otp.some((digit) => digit === '') || otp.length !== 4} // Disable if any field is empty or OTP is not 4 digits
+                className="w-full bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300"
+                whileTap={{ scale: 0.9 }}
+            >
+                Verify OTP
+            </motion.button>
+
+            {/* Resend OTP Section */}
+            <div className="mt-4 text-center flex items-center min-h-16">
+                {isResendDisabled ? (
+                    <p className="text-grey-75 mr-2">
+                        You can resend OTP in {timer} seconds
+                    </p>
+                ) : (
+                    <motion.button
+                        onClick={handleResendOtp}
+                        className="bg-green-60/50 rounded-md p-2 mt-2 hover:bg-green-60/70 transition duration-300"
+                    >
+                        Resend OTP
+                    </motion.button>
+                )}
+            </div>
+        </div>
     );
 };
 

@@ -7,16 +7,17 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../feature/authThunk';
+import { login, loginAdmin, loginTheatre } from '../feature/authThunk';
 import { AppDispatch, RootState } from '../store';
 import { motion } from 'framer-motion';
+import { UserRole } from '../constants';
 
 interface LoginFormValues {
     email: string;
     password: string;
 }
 
-const Login: FC = () => {
+const Login: FC<{ user: UserRole }> = ({ user }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -43,7 +44,19 @@ const Login: FC = () => {
     const onSubmit = async (values: LoginFormValues) => {
         console.log('Form data:', values);
         try {
-            await dispatch(login(values));
+            switch (user) {
+                case 'user':
+                    await dispatch(login(values));
+                    break;
+                case 'admin':
+                    await dispatch(loginAdmin(values));
+                    break;
+                case 'theatre':
+                    await dispatch(loginTheatre(values));
+                    break;
+                default:
+                    await dispatch(login(values));
+            }
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error?.response?.data?.message);
@@ -116,14 +129,18 @@ const Login: FC = () => {
                 </Formik>
 
                 {/* Additional Links */}
-                <div className="mt-6 text-center">
-                    <p className="text-sm text-grey-70">
-                        Don't have an account?{' '}
-                        <Link to="/signup" className="text-absolute-white hover:underline">
-                            Sign up
-                        </Link>
-                    </p>
-                </div>
+                {
+                    user === "admin" ?
+                        null :
+                        <div className="mt-6 text-center">
+                            <p className="text-sm text-grey-70">
+                                Don't have an account?{' '}
+                                <Link to={user === "user" ? "/signup" : "/theatre/signup"} className="text-absolute-white hover:underline">
+                                    Sign up
+                                </Link>
+                            </p>
+                        </div>
+                }
             </div>
         </div>
     );

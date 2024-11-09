@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import OtpInput from '../components/OtpInput';
 import { toast } from 'sonner';
-import { backendUrl } from '../constants';
+import { backendUrl, UserRole } from '../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { motion } from 'framer-motion';
@@ -18,7 +18,7 @@ interface SignupFormValues {
     phone: string;
 }
 
-const Signup: FC = () => {
+const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSignupSuccessful, setIsSignupSuccessful] = useState(false);
@@ -62,7 +62,7 @@ const Signup: FC = () => {
     const onSubmit = async (values: SignupFormValues) => {
         console.log('Form data:', values);
         try {
-            const response = await axios.post(`${backendUrl}/user/signup`, values);
+            const response = await axios.post(`${backendUrl}/${user}/signup`, values);
             console.log(response);
             setOtpSentEmail(values.email);
             toast.info(response.data?.message);
@@ -106,6 +106,13 @@ const Signup: FC = () => {
             console.log(error);
         }
     };
+    const welcomeMessage = "Welcome to CinePass";
+
+    const descriptionMessage = user === "theatre"
+        ? "Sign up to manage your theatre, shows, and bookings."
+        : "Sign up to discover movies, book tickets, and manage your bookings.";
+
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
@@ -118,8 +125,8 @@ const Signup: FC = () => {
                         resendAction={resendOtp}
                     /> :
                     <div className="w-full max-w-md p-6 border border-grey-15 rounded-md shadow-lg">
-                        <h1 className="text-3xl font-bold text-center text-green-60 mb-4">Create an Account</h1>
-                        <p className="text-center text-grey-75 mb-6">Join CinePass to easily book tickets and explore movie showtimes.</p>
+                        <h1 className="text-3xl font-bold text-center text-green-60 mb-4">{welcomeMessage}</h1>
+                        <p className="text-center text-grey-75 mb-6">{descriptionMessage}</p>
                         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                             <Form>
                                 {/* Email Field */}
@@ -205,7 +212,7 @@ const Signup: FC = () => {
                         <div className="mt-4 text-center">
                             <p className="text-sm text-grey-70">
                                 Already have an account?{' '}
-                                <Link to="/login" className="text-absolute-white hover:underline">
+                                <Link to={`${user === "theatre" ? '/theatre/login' : '/login'}`} className="text-absolute-white hover:underline">
                                     Log in
                                 </Link>
                             </p>

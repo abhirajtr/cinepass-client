@@ -37,3 +37,19 @@ export const loginAdmin = createAsyncThunk(
         }
     }
 )
+export const loginTheatre = createAsyncThunk(
+    'auth/loginAdmin',
+    async (loginData: { email: string, password: string }, { dispatch }) => {
+        try {
+            const response = await axios.post(backendUrl + `/theatre/login`, loginData, { withCredentials: true });
+            toast.success(response.data?.message);
+            dispatch(loginSuccess(response.data.accessToken));
+            console.log(response);
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+            }
+            console.log(error);
+        }
+    }
+)
