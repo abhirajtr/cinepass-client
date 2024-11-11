@@ -3,7 +3,7 @@ import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.png';
 import banner3 from './assets/banner3.png';
 
-export type UserRole = 'user' | 'admin' | 'theatre';
+export type UserRole = 'user' | 'admin' | 'theatreOwner';
 export const assets = {
     hero_img,
     banner1,

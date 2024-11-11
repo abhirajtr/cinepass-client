@@ -9,7 +9,7 @@ export const login = createAsyncThunk(
     'auth/login',
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
-            const response = await axios.post(backendUrl + `/user/login`, loginData, { withCredentials: true });
+            const response = await axios.post(backendUrl + `/auth/login`, loginData, { withCredentials: true });
             toast.success(response.data?.message);
             dispatch(loginSuccess(response.data.accessToken));
             console.log(response);

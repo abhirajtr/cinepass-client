@@ -7,29 +7,37 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { login, loginAdmin, loginTheatre } from '../feature/authThunk';
+import { login } from '../feature/authThunk';
 import { AppDispatch, RootState } from '../store';
 import { motion } from 'framer-motion';
-import { UserRole } from '../constants';
+// import { UserRole } from '../constants';
 
 interface LoginFormValues {
     email: string;
     password: string;
 }
 
-const Login: FC<{ user: UserRole }> = ({ user }) => {
+const Login: FC = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
+    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/');
+            if (role === "regularUser") {
+                navigate('/');
+            } else if (role === "admin") {
+                navigate('/admin');
+            } else if (role === "theatreOwner") {
+                navigate('/theatreOwner');
+            } else {
+                navigate('/login'); // Redirect to login if the role is undefined or empty
+            }
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, role]);
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -44,19 +52,19 @@ const Login: FC<{ user: UserRole }> = ({ user }) => {
     const onSubmit = async (values: LoginFormValues) => {
         console.log('Form data:', values);
         try {
-            switch (user) {
-                case 'user':
-                    await dispatch(login(values));
-                    break;
-                case 'admin':
-                    await dispatch(loginAdmin(values));
-                    break;
-                case 'theatre':
-                    await dispatch(loginTheatre(values));
-                    break;
-                default:
-                    await dispatch(login(values));
-            }
+            await dispatch(login(values));
+            // switch (user) {
+            //     case 'user':
+            //         break;
+            //     case 'admin':
+            //         await dispatch(loginAdmin(values));
+            //         break;
+            //     case 'theatreOwner':
+            //         await dispatch(loginTheatre(values));
+            //         break;
+            //     default:
+            //         await dispatch(login(values));
+            // }
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error?.response?.data?.message);
@@ -129,18 +137,16 @@ const Login: FC<{ user: UserRole }> = ({ user }) => {
                 </Formik>
 
                 {/* Additional Links */}
-                {
-                    user === "admin" ?
-                        null :
-                        <div className="mt-6 text-center">
-                            <p className="text-sm text-grey-70">
-                                Don't have an account?{' '}
-                                <Link to={user === "user" ? "/signup" : "/theatre/signup"} className="text-absolute-white hover:underline">
-                                    Sign up
-                                </Link>
-                            </p>
-                        </div>
-                }
+                <div className="mt-6 text-center">
+                    <p className="text-sm text-grey-70">
+                        Don't have an account?{' '}
+                        <Link to="/signup" className="text-absolute-white hover:underline">
+                            Sign up
+                        </Link>
+                    </p>
+                </div>
+
+
             </div>
         </div>
     );

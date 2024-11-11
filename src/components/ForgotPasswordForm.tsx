@@ -27,6 +27,9 @@ const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({ onSubmit }) => {
     return (
         <div className="w-full max-w-md p-6 border border-grey-15 rounded-md shadow-lg">
             <h1 className="text-3xl font-bold text-center text-green-60 mb-4">Forgot Password</h1>
+            <p className="text-center text-grey-75 mb-6">
+                Enter your email address, and we’ll send you an OTP to reset your password.
+            </p>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => onSubmit(values.email)}>
                 <Form>
                     <div className="mb-4">

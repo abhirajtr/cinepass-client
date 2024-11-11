@@ -9,12 +9,10 @@ import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import { useNavigate } from 'react-router-dom';
 
 
-interface ForgotPasswordProps {
-    user: string;
-}
 
 
-const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
+
+const ForgotPassword: FC = () => {
 
     const [otpSent, setOtpSent] = useState(false);
     const [email, setEmail] = useState<string>('');
@@ -23,7 +21,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
 
     const onSubmitForgotPassword = async (email: string) => {
         try {
-            const response = await axios.post(backendUrl + `/${user}/forgot-Password`, { email });
+            const response = await axios.post(backendUrl + `/auth/password-reset/request`, { email });
             toast.success(response.data?.message);
             setEmail(email);
             setOtpSent(true);
@@ -38,7 +36,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
 
     const handleVerifyOtp = async (otp: string) => {
         try {
-            const response = await axios.post(backendUrl + `/${user}/forgot-Password/verify-otp`, { email, otp });
+            const response = await axios.post(backendUrl + `/auth/password-reset/verify`, { email, otp });
             setOtpVerified(true);
             toast.success(response.data?.message);
         } catch (error) {
@@ -51,7 +49,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
 
     const handleResendOtp = async () => {
         try {
-            const response = await axios.post(`${backendUrl}/user/resend-otp`, { email });
+            const response = await axios.post(backendUrl + `/auth/password-reset/resend-otp`, { email });
             toast.success(response.data?.message);
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -60,10 +58,10 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ user }) => {
             console.log(error);
         }
     };
-    
+
     const handleOnSubmitPassword = async (password: string, confirmPassword: string) => {
         try {
-            const response = await axios.post(`${backendUrl}/user/password-reset`, {email, password, confirmPassword});
+            const response = await axios.post(backendUrl + `/auth/password-reset/complete`, { email, password, confirmPassword });
             toast.success(response.data?.message);
             navigate("/login");
         } catch (error) {

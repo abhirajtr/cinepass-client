@@ -23,7 +23,6 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSignupSuccessful, setIsSignupSuccessful] = useState(false);
     const [otpSentEmail, setOtpSentEmail] = useState('');
-    const [otpVerified, setOtpVerified] = useState(false);
 
     const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
 
@@ -46,12 +45,6 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
             .required('Phone number is required'),
     });
 
-    useEffect(() => {
-        if (otpVerified) {
-            navigate("/login");
-        }
-    }, [otpVerified, navigate]);
-
     const initialValues: SignupFormValues = {
         email: '',
         phone: '',
@@ -62,7 +55,7 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const onSubmit = async (values: SignupFormValues) => {
         console.log('Form data:', values);
         try {
-            const response = await axios.post(`${backendUrl}/${user}/signup`, values);
+            const response = await axios.post(`${backendUrl}/auth/signup/${user}`, values);
             console.log(response);
             setOtpSentEmail(values.email);
             toast.info(response.data?.message);
@@ -78,7 +71,7 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
 
     const resendOtp = async () => {
         try {
-            const response = await axios.post(`${backendUrl}/user/resend-otp`, { email: otpSentEmail });
+            const response = await axios.post(`${backendUrl}/auth/signup/resend-otp`, { email: otpSentEmail });
             console.log(response);
             toast.success(response.data?.message);
         } catch (error) {
@@ -93,10 +86,10 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const submitOtp = async (otp: string) => {
         console.log('OTP submitted:', otp);
         try {
-            const response = await axios.post(backendUrl + "/user/verify-signup-otp", { email: otpSentEmail, otp });
+            const response = await axios.post(backendUrl + `/auth/verify-otp`, { email: otpSentEmail, otp });
             console.log(response);
             toast.success(response.data?.message);
-            setOtpVerified(true);
+            navigate("/login");
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.success(error?.response?.data?.message);
@@ -108,7 +101,7 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     };
     const welcomeMessage = "Welcome to CinePass";
 
-    const descriptionMessage = user === "theatre"
+    const descriptionMessage = user === "theatreOwner"
         ? "Sign up to manage your theatre, shows, and bookings."
         : "Sign up to discover movies, book tickets, and manage your bookings.";
 
@@ -212,7 +205,7 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
                         <div className="mt-4 text-center">
                             <p className="text-sm text-grey-70">
                                 Already have an account?{' '}
-                                <Link to={`${user === "theatre" ? '/theatre/login' : '/login'}`} className="text-absolute-white hover:underline">
+                                <Link to={`${user === "theatreOwner" ? '/theatre/login' : '/login'}`} className="text-absolute-white hover:underline">
                                     Log in
                                 </Link>
                             </p>
