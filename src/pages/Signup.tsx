@@ -24,15 +24,22 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const [isSignupSuccessful, setIsSignupSuccessful] = useState(false);
     const [otpSentEmail, setOtpSentEmail] = useState('');
 
-    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
-
+    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/");
+            if (role === "regularUser") {
+                navigate('/');
+            } else if (role === "admin") {
+                navigate('/admin');
+            } else if (role === "theatreOwner") {
+                navigate('/theatreOwner');
+            } else {
+                navigate('/login'); // Redirect to login if the role is undefined or empty
+            }
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, role]);
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),

@@ -29,7 +29,7 @@ const Nav = () => {
                         <p className="h-8 w-auto  text-green-60 font-bold text-xl">CinePass</p>
                         {/* <img className="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" /> */}
                     </div>
-                    <div className="hidden sm:ml-6 sm:block">
+                    <div className="sm:block hidden">
                         <div className="flex space-x-4">
                             <NavLink
                                 to="/"

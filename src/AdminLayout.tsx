@@ -1,30 +1,38 @@
-// import Navbar from "./components/Admin/Navbar";
-import { useDispatch } from "react-redux";
-import Sidebar from "./components/Admin/Sidebar";
-import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "./store";
+import { Outlet, useNavigate } from "react-router-dom"
+import Navbar from "./components/Admin/Navbar"
+import Sidebar from "./components/Admin/Sidebar"
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./store";
 import { logout } from "./feature/authSlice";
+// import { useContext } from "react"
+// import Login from "./components/Admin/Login";
+// import { AdminContext } from "./context/AdminContext";
+
 
 const AdminLayout = () => {
+
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
 
-    const handleLogout = async () => {
+    const handleLogout = () => {
         dispatch(logout());
         navigate("/login");
-    }
+    };
+    
+    if (!isAuthenticated && role !== "admin") return null;
+    
     return (
-        <div className="min-h-[100vh] bg-grey-10 text-white flex flex-col">
-            {/* <Navbar/> */}
-            <Sidebar logout={handleLogout} />
+        <div className="bg-grey-10 min-h-screen">
+            <Navbar logout={handleLogout} />
+            <hr />
+            <div className="flex w-full">
+                <Sidebar />
+                <div className="w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-gray-600 text-base">
+                    <Outlet />
+                </div>
+            </div>
         </div>
-        // <div className="bg-bg-dark min-h-[100vh]">
-        //     <Navbar />
-        //     <div className="bg-background px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-        //         <Outlet />
-        //     </div>
-        //     <Footer />
-        // </div>
     )
 }
 

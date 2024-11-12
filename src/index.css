@@ -32,3 +32,30 @@
   margin: 0;
   /* Remove any margin on the spinner */
 }
+
+
+/* Target webkit browsers */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Background color of the track */
+  border-radius: 6px; /* Round the corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb color */
+  border-radius: 6px; /* Round the corners */
+  border: 3px solid #f0f0f0; /* Add padding around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin; /* Thin scrollbar width */
+  scrollbar-color: #98989A #262626; /* Scrollbar thumb and track color */
+}

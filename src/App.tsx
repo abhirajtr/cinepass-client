@@ -7,6 +7,7 @@ import UserLayout from "./UserLayout";
 // import AdminLogin from './pages/Admin/Login';
 import AdminLayout from "./AdminLayout";
 import TheatreOwnerLayout from "./TheatreOwnerLayout";
+import Users from "./pages/Admin/Users";
 // import MyComponent from "./components/MyComponent";
 
 
@@ -23,8 +24,8 @@ const App = () => {
       <Route path="/theatreOwner/signup" element={<Signup user="theatreOwner" />} />
 
       {/* Forgot Password */}
-      <Route path="/forgot-password" element={<ForgotPassword  />} />
-      <Route path="/theatreOwnner/forgot-password" element={<ForgotPassword  />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      {/* <Route path="/theatreOwnner/forgot-password" element={<ForgotPassword  />} /> */}
 
       {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
       <Route path="/" element={<UserLayout />}>
@@ -35,7 +36,7 @@ const App = () => {
         <Route path="/about-us" element={<Home />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
-        {/* <Route path="/" element={} /> */}
+        <Route path="users" element={<Users />} />
       </Route>
       <Route path="/theatreOwner" element={<TheatreOwnerLayout />}>
         {/* <Route path="/" element={} /> */}

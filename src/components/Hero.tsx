@@ -7,6 +7,8 @@ const Hero = () => {
         { image: assets.banner1 },
         { image: assets.banner2 },
         { image: assets.banner3 },
+        { image: assets.banner4 },
+        { image: assets.banner5 },
     ];
 
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
