@@ -8,6 +8,7 @@ import UserLayout from "./UserLayout";
 import AdminLayout from "./AdminLayout";
 import TheatreOwnerLayout from "./TheatreOwnerLayout";
 import Users from "./pages/Admin/Users";
+import Movies from "./pages/Admin/Movies";
 // import MyComponent from "./components/MyComponent";
 
 
@@ -37,6 +38,7 @@ const App = () => {
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="users" element={<Users />} />
+        <Route path="movies" element={<Movies />} />
       </Route>
       <Route path="/theatreOwner" element={<TheatreOwnerLayout />}>
         {/* <Route path="/" element={} /> */}

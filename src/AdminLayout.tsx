@@ -23,12 +23,12 @@ const AdminLayout = () => {
     if (!isAuthenticated && role !== "admin") return null;
     
     return (
-        <div className="bg-grey-10 min-h-screen">
+        <div className="bg-grey-10 min-h-screen flex flex-col">
             <Navbar logout={handleLogout} />
             <hr />
-            <div className="flex w-full">
+            <div className="flex flex-1 w-full h-full">
                 <Sidebar />
-                <div className="w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-gray-600 text-base">
+                <div className="w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-absolute-white text-base">
                     <Outlet />
                 </div>
             </div>
