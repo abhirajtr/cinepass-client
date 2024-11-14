@@ -3,8 +3,9 @@ import axiosInstance from "../../axiosInstance"
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import Pagination from "../../components/Pagination";
-import Search from "../../components/search";
 import Title from "../../components/Title";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import Search from "../../components/Search";
 
 interface User {
     userId: string;
@@ -27,6 +28,31 @@ const Users = () => {
     const [usersPerPage] = useState<number>(5);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalCount, setTotalCount] = useState<number>(1);
+    //modal
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [actionUser, setActionUser] = useState<{ userId: string, isBlocked: boolean }>({ userId: "", isBlocked: false });
+    const [message, setMessage] = useState<string>("");
+    const [title, setTitle] = useState<string>("");
+
+    const handleOpenModal = (userId: string, isBlocked: boolean) => {
+        setActionUser({ userId, isBlocked }); // Set the user to block
+        setMessage(`${isBlocked? 'Are you sure you want to block this user?': 'Are you sure you want to unblock this user?' }`);
+        setTitle(`${isBlocked? 'Block User': 'Unblock User'}`);
+        setIsModalOpen(true); // Open the modal
+    };
+    const handleConfirm = () => {
+        if (actionUser) {
+            blockUnblock(actionUser.userId, actionUser.isBlocked); // Call the blockUser function with the user ID
+        } else {
+            return
+        }
+        setIsModalOpen(false); // Close the modal after confirming
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    }
+
 
     const blockUnblock = async (userId: string, isBlocked: boolean) => {
         try {
@@ -57,7 +83,7 @@ const Users = () => {
                 setUsers(response.data.users);
                 setTotalCount(response.data.totalCount);
                 console.log(response);
-                
+
                 console.log('totalCount', totalCount);
 
                 // console.log(response.data.users);
@@ -79,7 +105,7 @@ const Users = () => {
                 <Title text1="Users" text2="List" />
             </div>
             {/* <p className="mb-2 text-green-60 text-lg">Users List</p> */}
-            <div className="mb-4 flex w-full justify-between">
+            <div className="mb-10 flex w-full justify-between">
                 <div className="w-80">
                     {/* <input type="text"
                         onChange={(e) => setSearch(e.target.value)}
@@ -133,7 +159,7 @@ const Users = () => {
                             <p>{user.role}</p>
                             <div className="flex items-center justify-center">
                                 <p className={`${user.isBlocked ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} px-4 py-1 rounded-sm w-24 text-center font-semibold hover: cursor-pointer`}
-                                    onClick={() => blockUnblock(user.userId, !user.isBlocked)}
+                                    onClick={() => handleOpenModal(user.userId, !user.isBlocked)}
                                 >
                                     {user.isBlocked ? 'Unblock' : 'Block'}
                                 </p>
@@ -148,6 +174,7 @@ const Users = () => {
 
             </div>
             <Pagination currentPage={currentPage} limit={usersPerPage} totalCount={totalCount} setCurrentPage={setCurrentPage} />
+            <ConfirmationModal isOpen={isModalOpen} message={message} onClose={handleCancel} onConfirm={handleConfirm} title={title} />
         </>
     )
 }

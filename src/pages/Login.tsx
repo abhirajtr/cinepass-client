@@ -32,7 +32,7 @@ const Login: FC = () => {
             } else if (role === "admin") {
                 navigate('/admin');
             } else if (role === "theatreOwner") {
-                navigate('/theatreOwner');
+                navigate('/theatreOwner/theatres');
             } else {
                 navigate('/login'); // Redirect to login if the role is undefined or empty
             }

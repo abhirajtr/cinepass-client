@@ -4,15 +4,16 @@ import { jwtDecode } from "jwt-decode";
 // Define the structure of the JWT payload
 interface JwtPayload {
     role: string;
-    exp: number;  // You can add more fields as needed
+    userId: string;
+    exp: number;
 }
 
-// Utility function to get role from the JWT token
-export const getRoleFromToken = (token: string): string | null => {
+// Utility function to decode and extract role and userId from JWT token
+export const getRoleAndUserIdFromToken = (token: string): { role: string; userId: string } | null => {
     try {
         const decodedToken: JwtPayload = jwtDecode(token);
-        console.log(decodedToken);
-        return decodedToken.role;
+        const { role, userId } = decodedToken;
+        return { role, userId };
     } catch (error) {
         console.error("Error decoding token:", error);
         return null;
@@ -23,7 +24,7 @@ export const getRoleFromToken = (token: string): string | null => {
 const isTokenExpired = (token: string): boolean => {
     try {
         const decodedToken: JwtPayload = jwtDecode(token);
-        const currentTime = Date.now() / 5000;
+        const currentTime = Date.now() / 1000; // Convert to seconds
         return decodedToken.exp < currentTime;
     } catch (error) {
         console.error("Error decoding token for expiration check:", error);
@@ -36,33 +37,40 @@ interface AuthState {
     accessToken: string | null;
     isAuthenticated: boolean;
     role: string | null;
+    userId: string | null;
 }
 
-// Retrieve accessToken from localStorage and validate expiration
-const accessToken = localStorage.getItem('accessToken');
+// Retrieve accessToken from localStorage and validate expiration and payload
+const accessToken = localStorage.getItem("accessToken");
+const tokenData = accessToken ? getRoleAndUserIdFromToken(accessToken) : null;
+
 const initialState: AuthState = {
-    accessToken: accessToken,
+    accessToken,
     isAuthenticated: accessToken ? !isTokenExpired(accessToken) : false,
-    role: accessToken ? getRoleFromToken(accessToken) : null,
+    role: tokenData ? tokenData.role : null,
+    userId: tokenData ? tokenData.userId : null,
 };
 
 // Create the auth slice
 const authSlice = createSlice({
-    name: 'auth',
+    name: "auth",
     initialState,
     reducers: {
         loginSuccess: (state, action: PayloadAction<string>) => {
             const token = action.payload;
+            const tokenData = getRoleAndUserIdFromToken(token);
             state.accessToken = token;
-            state.isAuthenticated = !isTokenExpired(token);  // Ensure the token is valid
-            state.role = getRoleFromToken(token);
-            localStorage.setItem('accessToken', token);
+            state.isAuthenticated = !isTokenExpired(token);
+            state.role = tokenData ? tokenData.role : null;
+            state.userId = tokenData ? tokenData.userId : null;
+            localStorage.setItem("accessToken", token);
         },
         logout: (state) => {
             state.accessToken = null;
             state.isAuthenticated = false;
             state.role = null;
-            localStorage.removeItem('accessToken');
+            state.userId = null;
+            localStorage.removeItem("accessToken");
         },
     },
 });
@@ -70,4 +78,3 @@ const authSlice = createSlice({
 // Export the actions and reducer
 export const { loginSuccess, logout } = authSlice.actions;
 export default authSlice.reducer;
-

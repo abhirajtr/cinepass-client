@@ -19,7 +19,7 @@ const Nav = () => {
 
     return (
 
-        <nav className="bg-grey-11/30 text-gray-800 border-b border-grey-15 sticky top-0 z-10 backdrop-blur-lg">
+        <nav className="bg-absolute-white/10 text-gray-800 border-b border-grey-15 sticky top-0 z-10 backdrop-blur-lg">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-4">
 
                 <div className="relative flex h-16 items-center justify-between">
@@ -86,7 +86,7 @@ const Nav = () => {
                             {
                                 !isAuthenticated ?
                                     <Link to="/login"
-                                        className="block w-full rounded-md bg-green-60 px-3.5 py-2.5 text-center text-grey-10 text-sm font-semibold text-white shadow-sm hover:bg-green-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                        className="block w-full rounded-md bg-green-60 px-3.5 py-2.5 text-center text-grey-10 text-sm font-semibold  shadow-sm hover:bg-green-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                         Sign In
                                     </Link> :
 
@@ -97,7 +97,7 @@ const Nav = () => {
                                             <FaUserCircle className="h-8 w-8 text-absolute-white" />
                                             {/* <img className="h-8 w-8 rounded-full" src="" alt="" /> */}
                                         </button>
-                                        <div className="group-hover:block hidden  absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-absolute-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
+                                        <div className="group-hover:block hidden  absolute right-0 z-10 mt-1 w-48 origin-top-right rounded-md bg-absolute-white/90 backdrop-blur-lg py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
                                             <Link to="/" className="hover:bg-green-60/60 block px-4 py-2 text-sm text-grey-10" role="menuitem" id="user-menu-item-0">Your Profile</Link>
                                             <Link to="/" className="hover:bg-green-60/60 block px-4 py-2 text-sm text-grey-10" role="menuitem" id="user-menu-item-1">Settings</Link>
                                             <Link to="/" className="hover:bg-green-60/60 block px-4 py-2 text-sm text-grey-10" role="menuitem" id="user-menu-item-2"

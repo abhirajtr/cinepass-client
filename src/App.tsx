@@ -3,12 +3,15 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import ForgotPassword from "./pages/ForgotPassword"
 import Home from "./pages/Home";
-import UserLayout from "./UserLayout";
+import UserLayout from "./layout/UserLayout";
 // import AdminLogin from './pages/Admin/Login';
-import AdminLayout from "./AdminLayout";
-import TheatreOwnerLayout from "./TheatreOwnerLayout";
+import AdminLayout from "./layout/AdminLayout";
 import Users from "./pages/Admin/Users";
 import Movies from "./pages/Admin/Movies";
+import TheatreOwnerLayout from "./layout/TheatreOwnerLayout";
+import Theatres from "./pages/TheatreOwner/Theatres";
+// import Dashboard from "./pages/TheatreOwner/Dashboard";
+import AddTheatre from "./pages/TheatreOwner/AddTheatre";
 // import MyComponent from "./components/MyComponent";
 
 
@@ -41,7 +44,10 @@ const App = () => {
         <Route path="movies" element={<Movies />} />
       </Route>
       <Route path="/theatreOwner" element={<TheatreOwnerLayout />}>
-        {/* <Route path="/" element={} /> */}
+        <Route path="" element={<Theatres />} />
+        <Route path="theatres" element={<Theatres />} />
+        {/* <Route path="" element={<Dashboard />} /> */}
+        <Route path="theatres/add-theatre" element={<AddTheatre />} />
       </Route>
 
     </Routes>

@@ -1,10 +1,14 @@
 // tailwind.config.js
 
 const colors = require('tailwindcss/colors');
+const { nextui } = require("@nextui-org/theme");
 
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // Adjust according to your project structure
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
@@ -45,5 +49,6 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [nextui()]
 };
