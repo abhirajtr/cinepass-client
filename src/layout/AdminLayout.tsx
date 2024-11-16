@@ -1,45 +1,44 @@
-import { Outlet, useNavigate } from "react-router-dom"
-import Navbar from "../components/Admin/Navbar"
-import Sidebar from "../components/Admin/Sidebar"
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { logout } from "../feature/authSlice";
-import { useEffect } from "react";
-// import { useContext } from "react"
-// import Login from "./components/Admin/Login";
-// import { AdminContext } from "./context/AdminContext";
+'use client'
+
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { Outlet } from 'react-router-dom'
+import NavbarAdmin from './components/NavbarAdmin'
+import SidebarAdmin from "./components/SidebarAdmin"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store"
+import { useEffect } from "react"
 
 
 const AdminLayout = () => {
+    // Removed 'useSidebar' from here to ensure proper usage.
 
-    const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
-    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
+    const { adminToken } = useSelector((state: RootState) => state.authReducer);
 
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/login");
-    };
     useEffect(() => {
-        if (!isAuthenticated || role !== "admin") {
-            navigate("/login");
-        } 
-    }, [isAuthenticated, role, navigate]);
 
-    if (!isAuthenticated || role !== "admin") return null;
+    }, []);
+
+    if (!adminToken) return null;
 
     return (
-        <div className="bg-grey-10 min-h-screen flex flex-col">
-            <Navbar logout={handleLogout} userRole="Admin" />
-            <hr />
-            <div className="flex flex-1 w-full h-full">
-                <Sidebar />
-                <div className="w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-absolute-white text-base max-h-full">
-                    <Outlet />
+        <SidebarProvider>
+            <div className="flex h-screen bg-gray-100 container">
+                {/* Sidebar */}
+                <SidebarAdmin />
+
+                {/* Main Content */}
+                <div className="flex flex-col flex-1 overflow-hidden transition-all duration-300 ease-in-out">
+                    {/* Navbar */}
+                    <NavbarAdmin />
+
+                    {/* Main Section */}
+                    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-6">
+                        <Outlet />
+                    </main>
                 </div>
             </div>
-        </div>
+        </SidebarProvider>
     )
 }
 
-export default AdminLayout
+export default AdminLayout;

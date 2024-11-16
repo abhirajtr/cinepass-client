@@ -1,57 +1,52 @@
-import { Route, Routes } from "react-router-dom"
-import Login from "./pages/Login"
-import Signup from "./pages/Signup"
-import ForgotPassword from "./pages/ForgotPassword"
-import Home from "./pages/Home";
-import UserLayout from "./layout/UserLayout";
-// import AdminLogin from './pages/Admin/Login';
+import { Route, Routes } from "react-router-dom";
+import LoginPageUser from "./pages/User/LoginPageUser";
+import ForgotPasswordPageUser from "./pages/User/ForgotPasswordPageUser";
+import ResetPasswordPageUser from "./pages/User/ResetPasswordPageUser";
+import VerifyOtpPageUser from "./pages/User/VerifyOtpPageUser";
+import HomePageUser from "./pages/User/HomePageUser";
+import UserLayout from "./layout/NewUserLayout";
+import SignupPageTheatreOwner from "./pages/TheatreOwner/SignupPageTheatreOwner";
+import SignupPageUser from "./pages/User/SignupPageUser";
+import VerifyOtpPageTheatreOwner from "./pages/TheatreOwner/VerifyOtpPageTheatreOwner";
+import LoginPageTheatreOwner from "./pages/TheatreOwner/LoginPageTheatreOwner";
+import ForgotPasswordPageTheatreOwner from "./pages/TheatreOwner/ForgotPasswordPageTheatreOwner";
+import ResetPasswordPageTheatreOwner from "./pages/TheatreOwner/ResetPasswordPageTheatreOwner";
+import LoginPageAdmin from "./pages/Admin/LoginPageAdmin";
+import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 import AdminLayout from "./layout/AdminLayout";
-import Users from "./pages/Admin/Users";
-import Movies from "./pages/Admin/Movies";
-import TheatreOwnerLayout from "./layout/TheatreOwnerLayout";
-import Theatres from "./pages/TheatreOwner/Theatres";
-// import Dashboard from "./pages/TheatreOwner/Dashboard";
-import AddTheatre from "./pages/TheatreOwner/AddTheatre";
-// import MyComponent from "./components/MyComponent";
 
 
 const App = () => {
   return (
+
     <Routes>
-      {/* Login */}
-      <Route path="/login" element={<Login />} />
-      {/* <Route path="/theatreOwner/login" element={<Login user="theatreOwner" />} />
-      <Route path="/admin/login" element={<Login user="admin" />} /> */}
+      {/* Theatre Owner Routes */}
+      <Route path="/admin" element={<AdminLayout />} >
+        <Route path="/admin" element={<AdminDashboardPage />} />
+      </Route>
+      <Route path="/theatreOwner/signup" element={<SignupPageTheatreOwner />} />
+      <Route path="/theatreOwner/verify-otp" element={<VerifyOtpPageTheatreOwner />} />
+      <Route path="/theatreOwner/login" element={<LoginPageTheatreOwner />} />
+      <Route path="/theatreOwner/forgot-password" element={<ForgotPasswordPageTheatreOwner />} />
+      <Route path="/theatreOwner/reset-password" element={<ResetPasswordPageTheatreOwner />} />
+      {/* UserRoutes */}
+      <Route path="/signup" element={<SignupPageUser />} />
+      <Route path="/verify-otp" element={<VerifyOtpPageUser />} />
+      <Route path="/login" element={<LoginPageUser />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPageUser />} />
+      <Route path="/reset-password" element={<ResetPasswordPageUser />} />
+      {/* User */}
+      <Route path="/admin/login" element={<LoginPageAdmin />} />
 
-      {/* Signup */}
-      <Route path="/signup" element={<Signup user="user" />} />
-      <Route path="/theatreOwner/signup" element={<Signup user="theatreOwner" />} />
-
-      {/* Forgot Password */}
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      {/* <Route path="/theatreOwnner/forgot-password" element={<ForgotPassword  />} /> */}
-
-      {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
       <Route path="/" element={<UserLayout />}>
-        {/* <Route path="/" element={<MyComponent />} /> */}
-        <Route path="/" element={<Home />} />
-        <Route path="/movies" element={<Home />} />
-        <Route path="/theatres" element={<Home />} />
-        <Route path="/about-us" element={<Home />} />
+        <Route index element={<HomePageUser />} />
+        <Route path="/home" element={<HomePageUser />} />
+        <Route path="*" element={<div>Not found</div>} />
       </Route>
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route path="users" element={<Users />} />
-        <Route path="movies" element={<Movies />} />
-      </Route>
-      <Route path="/theatreOwner" element={<TheatreOwnerLayout />}>
-        <Route path="" element={<Theatres />} />
-        <Route path="theatres" element={<Theatres />} />
-        {/* <Route path="" element={<Dashboard />} /> */}
-        <Route path="theatres/add-theatre" element={<AddTheatre />} />
-      </Route>
-
+      {/* <Route path="/" element={<UserLayout />}> */}
+      {/* </Route> */}
     </Routes>
-  )
-}
+  );
+};
 
-export default App
+export default App;

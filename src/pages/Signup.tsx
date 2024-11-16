@@ -1,15 +1,16 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import OtpInput from '../components/OtpInput';
 import { toast } from 'sonner';
 import { backendUrl, UserRole } from '../constants';
+import { motion } from 'framer-motion';
+import useRoleRedirect from '../hook/useRoleRedirect';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { motion } from 'framer-motion';
 
 interface SignupFormValues {
     email: string;
@@ -24,22 +25,15 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
     const [isSignupSuccessful, setIsSignupSuccessful] = useState(false);
     const [otpSentEmail, setOtpSentEmail] = useState('');
 
-    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
-    const navigate = useNavigate();
+    const { isAuthenticatedUser, isAuthenticatedTheaterOwner } = useSelector((state: RootState) => state.authReducer)
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            if (role === "regularUser") {
-                navigate('/');
-            } else if (role === "admin") {
-                navigate('/admin');
-            } else if (role === "theatreOwner") {
-                navigate('/theatreOwner');
-            } else {
-                navigate('/login'); // Redirect to login if the role is undefined or empty
-            }
-        }
-    }, [isAuthenticated, navigate, role]);
+    const navigate = useNavigate();
+    if (user === "user" && isAuthenticatedUser) {
+        navigate("/");
+    } else if (user === "theatreOwner" && isAuthenticatedTheaterOwner) {
+        navigate("/theatreOwner/theatres");
+    }
+    useRoleRedirect();
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -96,7 +90,7 @@ const Signup: FC<{ user: UserRole }> = ({ user }) => {
             const response = await axios.post(backendUrl + `/auth/verify-otp`, { email: otpSentEmail, otp });
             console.log(response);
             toast.success(response.data?.message);
-            navigate("/login");
+            navigate("/user/login");
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.success(error?.response?.data?.message);

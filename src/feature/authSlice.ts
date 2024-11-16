@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode} from "jwt-decode";
 
 // Define the structure of the JWT payload
 interface JwtPayload {
@@ -34,21 +34,37 @@ const isTokenExpired = (token: string): boolean => {
 
 // Define the initial state of the authentication slice
 interface AuthState {
-    accessToken: string | null;
-    isAuthenticated: boolean;
-    role: string | null;
+    adminToken: string | null;
+    userToken: string | null;
+    theaterOwnerToken: string | null;
+    isAuthenticatedAdmin: boolean;
+    isAuthenticatedUser: boolean;
+    isAuthenticatedTheaterOwner: boolean;
+    adminId: string | null;
     userId: string | null;
+    theaterOwnerId: string | null;
 }
 
-// Retrieve accessToken from localStorage and validate expiration and payload
-const accessToken = localStorage.getItem("accessToken");
-const tokenData = accessToken ? getRoleAndUserIdFromToken(accessToken) : null;
+// Helper function to get and validate tokens from localStorage
+const getTokenData = (key: string): { token: string | null; isAuthenticated: boolean } => {
+    const token = localStorage.getItem(key);
+    return {
+        token,
+        isAuthenticated: token ? !isTokenExpired(token) : false,
+    };
+};
 
 const initialState: AuthState = {
-    accessToken,
-    isAuthenticated: accessToken ? !isTokenExpired(accessToken) : false,
-    role: tokenData ? tokenData.role : null,
-    userId: tokenData ? tokenData.userId : null,
+    ...getTokenData("adminToken"),
+    adminToken: localStorage.getItem("adminToken"),
+    userToken: localStorage.getItem("userToken"),
+    theaterOwnerToken: localStorage.getItem("theaterOwnerToken"),
+    isAuthenticatedAdmin: !!getTokenData("adminToken").isAuthenticated,
+    isAuthenticatedUser: !!getTokenData("userToken").isAuthenticated,
+    isAuthenticatedTheaterOwner: !!getTokenData("theaterOwnerToken").isAuthenticated,
+    adminId: null,
+    userId: null,
+    theaterOwnerId: null,
 };
 
 // Create the auth slice
@@ -56,25 +72,51 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        loginSuccess: (state, action: PayloadAction<string>) => {
+        loginAdminSuccess: (state, action: PayloadAction<string>) => {
             const token = action.payload;
             const tokenData = getRoleAndUserIdFromToken(token);
-            state.accessToken = token;
-            state.isAuthenticated = !isTokenExpired(token);
-            state.role = tokenData ? tokenData.role : null;
-            state.userId = tokenData ? tokenData.userId : null;
-            localStorage.setItem("accessToken", token);
+            state.adminToken = token;
+            state.isAuthenticatedAdmin = !isTokenExpired(token);
+            state.adminId = tokenData ? tokenData.userId : null;
+            localStorage.setItem("adminToken", token);
         },
-        logout: (state) => {
-            state.accessToken = null;
-            state.isAuthenticated = false;
-            state.role = null;
+        loginUserSuccess: (state, action: PayloadAction<string>) => {
+            const token = action.payload;
+            const tokenData = getRoleAndUserIdFromToken(token);
+            state.userToken = token;
+            state.isAuthenticatedUser = !isTokenExpired(token);
+            state.userId = tokenData ? tokenData.userId : null;
+            localStorage.setItem("userToken", token);
+        },
+        loginTheaterOwnerSuccess: (state, action: PayloadAction<string>) => {
+            const token = action.payload;
+            const tokenData = getRoleAndUserIdFromToken(token);
+            state.theaterOwnerToken = token;
+            state.isAuthenticatedTheaterOwner = !isTokenExpired(token);
+            state.theaterOwnerId = tokenData ? tokenData.userId : null;
+            localStorage.setItem("theaterOwnerToken", token);
+        },
+        logoutAdmin: (state) => {
+            state.adminToken = null;
+            state.isAuthenticatedAdmin = false;
+            state.adminId = null;
+            localStorage.removeItem("adminToken");
+        },
+        logoutUser: (state) => {
+            state.userToken = null;
+            state.isAuthenticatedUser = false;
             state.userId = null;
-            localStorage.removeItem("accessToken");
+            localStorage.removeItem("userToken");
+        },
+        logoutTheaterOwner: (state) => {
+            state.theaterOwnerToken = null;
+            state.isAuthenticatedTheaterOwner = false;
+            state.theaterOwnerId = null;
+            localStorage.removeItem("theaterOwnerToken");
         },
     },
 });
 
 // Export the actions and reducer
-export const { loginSuccess, logout } = authSlice.actions;
+export const { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess, logoutAdmin, logoutUser, logoutTheaterOwner } = authSlice.actions;
 export default authSlice.reducer;

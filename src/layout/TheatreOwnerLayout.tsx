@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import Navbar from "../components/Admin/Navbar"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import { logout } from "../feature/authSlice";
+import { logoutAdmin } from "../feature/authSlice";
 import { useEffect } from "react";
 import Sidebar from "../components/TheatreOwner/Sidebar";
 
@@ -12,20 +12,20 @@ const AdminLayout = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
+    const { isAuthenticatedTheaterOwner } = useSelector((state: RootState) => state.authReducer);
 
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(logoutAdmin());
         navigate("/login");
     };
     
     useEffect(() => {
-        if (!isAuthenticated || role !== "theatreOwner") {
+        if (!isAuthenticatedTheaterOwner) {
             navigate("/login");
         }
-    }, [isAuthenticated, role, navigate]);
+    }, [isAuthenticatedTheaterOwner, navigate]);
 
-    if (!isAuthenticated || role !== "theatreOwner") return null;
+    if (!isAuthenticatedTheaterOwner) return null;
 
     return (
         <div className="bg-grey-10 min-h-screen flex flex-col">

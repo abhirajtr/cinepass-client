@@ -1,15 +1,16 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../feature/authThunk';
+import { loginAdmin, loginTheatreOwner, loginUser } from '../feature/authThunk';
 import { AppDispatch, RootState } from '../store';
 import { motion } from 'framer-motion';
+import { UserRole } from '../constants';
 // import { UserRole } from '../constants';
 
 interface LoginFormValues {
@@ -17,27 +18,22 @@ interface LoginFormValues {
     password: string;
 }
 
-const Login: FC = () => {
+const Login: FC<{ userRole: UserRole }> = ({ userRole }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const { isAuthenticatedAdmin, isAuthenticatedTheaterOwner, isAuthenticatedUser } = useSelector((state: RootState) => state.authReducer)
 
     const dispatch = useDispatch<AppDispatch>();
+
     const navigate = useNavigate();
 
-    const { isAuthenticated, role } = useSelector((state: RootState) => state.authReducer);
+    if (isAuthenticatedAdmin && userRole === "admin") {
+        navigate("/admin/users");
+    } else if (isAuthenticatedTheaterOwner && userRole === "theatreOwner") {
+        navigate("/theatreOwner/theatres");
+    } else if (isAuthenticatedUser && userRole === "user") {
+        navigate("/");
+    }
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            if (role === "regularUser") {
-                navigate('/');
-            } else if (role === "admin") {
-                navigate('/admin');
-            } else if (role === "theatreOwner") {
-                navigate('/theatreOwner/theatres');
-            } else {
-                navigate('/login'); // Redirect to login if the role is undefined or empty
-            }
-        }
-    }, [isAuthenticated, navigate, role]);
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -52,19 +48,17 @@ const Login: FC = () => {
     const onSubmit = async (values: LoginFormValues) => {
         console.log('Form data:', values);
         try {
-            await dispatch(login(values));
-            // switch (user) {
-            //     case 'user':
-            //         break;
-            //     case 'admin':
-            //         await dispatch(loginAdmin(values));
-            //         break;
-            //     case 'theatreOwner':
-            //         await dispatch(loginTheatre(values));
-            //         break;
-            //     default:
-            //         await dispatch(login(values));
-            // }
+            switch (userRole) {
+                case 'user':
+                    await dispatch(loginUser(values));
+                    break;
+                case 'admin':
+                    await dispatch(loginAdmin(values));
+                    break;
+                case 'theatreOwner':
+                    await dispatch(loginTheatreOwner(values));
+                    break;
+            }
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error?.response?.data?.message);
@@ -75,7 +69,7 @@ const Login: FC = () => {
         }
     };
 
-    return isAuthenticated ? null : (
+    return (
         <div className="flex items-center justify-center min-h-screen bg-grey-10 px-4">
             <div className="w-full max-w-md p-6 rounded-lg shadow-lg border border-grey-15">
                 <h1 className="text-3xl font-semibold text-center text-green-60 mb-4">Welcome back!</h1>
@@ -140,7 +134,7 @@ const Login: FC = () => {
                 <div className="mt-6 text-center">
                     <p className="text-sm text-grey-70">
                         Don't have an account?{' '}
-                        <Link to="/signup" className="text-absolute-white hover:underline">
+                        <Link to="/user/signup" className="text-absolute-white hover:underline">
                             Sign up
                         </Link>
                     </p>

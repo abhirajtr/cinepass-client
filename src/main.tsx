@@ -7,15 +7,18 @@ import { Toaster } from 'sonner'
 import { Provider } from 'react-redux'
 import { store } from './store.ts'
 import { NextUIProvider } from '@nextui-org/react'
+import { ThemeProvider } from './context/theme-provider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
-    <Provider store={store}>
-      <Toaster />
-      <NextUIProvider>
-        <App />
-      </NextUIProvider>
-    </Provider>
+    <ThemeProvider defaultTheme='dark'>
+      <Provider store={store}>
+        <Toaster />
+        <NextUIProvider>
+          <App />
+        </NextUIProvider>
+      </Provider>
+    </ThemeProvider>
   </BrowserRouter>
 
 )

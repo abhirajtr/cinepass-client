@@ -15,7 +15,7 @@ interface LoginFormValues {
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
-    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated);
+    const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticatedAdmin);
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -78,3 +78,8 @@ export const sampleMovies = [
         posterUrl: "https://img.freepik.com/free-psd/action-movie-poster-template_23-2148571244.jpg?w=740",
     },
 ];
+
+//to format data and time
+export const formatDate = (datestring: string): string => {
+    return new Date(datestring).toISOString().slice(0, 16).replace("T", " ");
+}

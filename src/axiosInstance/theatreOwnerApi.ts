@@ -11,7 +11,7 @@ const theatreOwnerApi = (() => {
 
     instance.interceptors.request.use((config) => {
         const state = store.getState();
-        const accessToken = state.authReducer?.accessToken;
+        const accessToken = state.authReducer?.theaterOwnerToken;
 
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;

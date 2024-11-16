@@ -1,17 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginSuccess } from "./authSlice";
+import { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess } from "./authSlice";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { backendUrl } from "../constants";
 
-
-export const login = createAsyncThunk(
-    'auth/login',
+// Login thunk for regular user
+export const loginUser = createAsyncThunk(
+    'auth/loginUser',
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
-            const response = await axios.post(backendUrl + `/auth/login`, loginData, { withCredentials: true });
+            const response = await axios.post(backendUrl + `/user/login`, loginData, { withCredentials: true });
             toast.success(response.data?.message);
-            dispatch(loginSuccess(response.data.accessToken));
+            dispatch(loginUserSuccess(response.data.accessToken));
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -20,14 +20,16 @@ export const login = createAsyncThunk(
             console.log(error);
         }
     }
-)
+);
+
+// Login thunk for admin
 export const loginAdmin = createAsyncThunk(
     'auth/loginAdmin',
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
             const response = await axios.post(backendUrl + `/admin/login`, loginData, { withCredentials: true });
             toast.success(response.data?.message);
-            dispatch(loginSuccess(response.data.accessToken));
+            dispatch(loginAdminSuccess(response.data.accessToken));
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -36,14 +38,16 @@ export const loginAdmin = createAsyncThunk(
             console.log(error);
         }
     }
-)
-export const loginTheatre = createAsyncThunk(
-    'auth/loginAdmin',
+);
+
+// Login thunk for theatre owner
+export const loginTheatreOwner = createAsyncThunk(
+    'auth/loginTheatre',
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
-            const response = await axios.post(backendUrl + `/theatre/login`, loginData, { withCredentials: true });
+            const response = await axios.post(backendUrl + `/theatreOwner/login`, loginData, { withCredentials: true });
             toast.success(response.data?.message);
-            dispatch(loginSuccess(response.data.accessToken));
+            dispatch(loginTheaterOwnerSuccess(response.data.accessToken));
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -52,4 +56,4 @@ export const loginTheatre = createAsyncThunk(
             console.log(error);
         }
     }
-)
+);

@@ -1,17 +1,18 @@
-import { Outlet } from "react-router-dom"
-import Footer from "../components/Footer"
-// import Navbar from "./components/Navbar"
-import Nav from "../components/Nav"
+import HeaderUser from "@/components/User/HeaderUser";
+import type { PropsWithChildren } from "react"
 
-const UserLayout = () => {
+const UserLayout = ({ children }: PropsWithChildren) => {
     return (
-        <div className="bg-grey-10 min-h-[100vh]">
-            {/* <Navbar /> */}
-            <Nav />
-            <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-                <Outlet />
-            </div>
-            <Footer />
+        <div className="bg-gradient-to-br from-background to-muted">
+            <HeaderUser />
+            <main className="min-h-screen container mx-auto px-4 py-8">
+                {children} Hello
+            </main>
+            <footer className="border-t backdrop-blur py-12 supports-[backdrop-filter]:bg-background/60">
+                <div className="container mx-auto px-4 text-center text-gray-400">
+                    <p>Made with love by Abhi</p>
+                </div>
+            </footer>
         </div>
     )
 }

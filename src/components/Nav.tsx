@@ -3,18 +3,18 @@ import { FaUserCircle } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom"
 import { AppDispatch, RootState } from "../store";
-import { logout } from "../feature/authSlice";
+import { logoutUser } from "../feature/authSlice";
 
 const Nav = () => {
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { isAuthenticated } = useSelector((state: RootState) => state.authReducer);
+    const { isAuthenticatedUser } = useSelector((state: RootState) => state.authReducer);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const handleLogout = async() => {
-        await dispatch(logout());
-        navigate("/login"); 
+        await dispatch(logoutUser());
+        navigate("/user/login"); 
     }
 
     return (
@@ -84,8 +84,8 @@ const Nav = () => {
 
                         <div className="flex items-center gap-1">
                             {
-                                !isAuthenticated ?
-                                    <Link to="/login"
+                                !isAuthenticatedUser ?
+                                    <Link to="/user/login"
                                         className="block w-full rounded-md bg-green-60 px-3.5 py-2.5 text-center text-grey-10 text-sm font-semibold  shadow-sm hover:bg-green-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                         Sign In
                                     </Link> :
