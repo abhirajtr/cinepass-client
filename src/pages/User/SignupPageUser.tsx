@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -13,12 +13,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { backendUrl } from '@/constants'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
     phoneNumber: z.string()
-    .regex(/^\d+$/, { message: "Phone number must contain only digits" })
-    .min(10, { message: "Phone number must be at least 10 digits" }),
+        .regex(/^\d+$/, { message: "Phone number must contain only digits" })
+        .min(10, { message: "Phone number must be at least 10 digits" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
     confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
@@ -30,6 +32,11 @@ const SignupPageUser = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const navigate = useNavigate();
+    const { userToken } = useSelector((state: RootState) => state.authReducer);
+
+    useEffect(() => {
+        if (userToken) navigate("/");
+    }, [userToken, navigate]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,7 +51,7 @@ const SignupPageUser = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
         try {
-            const response = await axios.post(`${backendUrl}/user/signup`, { email: values.email,phoneNumeber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
+            const response = await axios.post(`${backendUrl}/user/signup`, { email: values.email, phoneNumeber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
             toast.error(response.data.message);
             navigate('/verify-otp', { state: { email: values.email } });
         } catch (error) {
@@ -58,12 +65,14 @@ const SignupPageUser = () => {
         // Here you would typically send the form data to your backend
     }
 
+    if (userToken) return null;
+
     return (
         <div className='flex justify-center min-h-screen items-center'>
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle>Sign Up</CardTitle>
-                    <CardDescription>Create a new account to get started.</CardDescription>
+                    <CardTitle>Welcome to CinePass</CardTitle>
+                    <CardDescription>Join us and experience the magic of movies. Book tickets effortlessly and never miss a blockbuster!</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>

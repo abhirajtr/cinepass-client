@@ -1,44 +1,44 @@
-import { Outlet, useNavigate } from "react-router-dom"
-import Navbar from "../components/Admin/Navbar"
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { logoutAdmin } from "../feature/authSlice";
-import { useEffect } from "react";
-import Sidebar from "../components/TheatreOwner/Sidebar";
+'use client'
 
+import { SidebarProvider } from '@/components/ui/sidebar'
+import SidebarTheatreOwner from './components/SidebarTheatreOwner'
+import NavbarTheatreOwner from './components/NavbarTheatreOwner'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@/store'
+import { logoutTheaterOwner } from '@/feature/authSlice'
+import { useEffect } from 'react'
 
+export default function TheatreOwnerLayout() {
 
-const AdminLayout = () => {
+    const { theaterOwnerToken } = useSelector((state: RootState) => state.authReducer);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
-    const { isAuthenticatedTheaterOwner } = useSelector((state: RootState) => state.authReducer);
 
     const handleLogout = () => {
-        dispatch(logoutAdmin());
-        navigate("/login");
-    };
-    
-    useEffect(() => {
-        if (!isAuthenticatedTheaterOwner) {
-            navigate("/login");
-        }
-    }, [isAuthenticatedTheaterOwner, navigate]);
+        dispatch(logoutTheaterOwner());
+    }
 
-    if (!isAuthenticatedTheaterOwner) return null;
+    useEffect(() => {
+        if (!theaterOwnerToken) {
+            navigate("/theatreOwner/login");
+        }
+    }, [theaterOwnerToken, navigate])
+
+    if (!theaterOwnerToken) return null;
 
     return (
-        <div className="bg-grey-10 min-h-screen flex flex-col">
-            <Navbar logout={handleLogout} userRole="Theatre Owner"  />
-            <hr />
-            <div className="flex flex-1 w-full h-full">
-                <Sidebar />
-                <div className="w-[70%] mx-auto ml-[max(5vw, 25px)] my-8 text-absolute-white text-base max-h-full">
-                    <Outlet />
+        <SidebarProvider>
+            <div className="flex h-screen bg-background container">
+                <SidebarTheatreOwner />
+                <div className="flex flex-col flex-1 overflow-hidden">
+                    <NavbarTheatreOwner logout={handleLogout} />
+                    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background">
+                        <Outlet />
+                    </main>
                 </div>
             </div>
-        </div>
+        </SidebarProvider>
     )
 }
-
-export default AdminLayout

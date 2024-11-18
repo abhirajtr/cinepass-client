@@ -4,7 +4,7 @@ import ForgotPasswordPageUser from "./pages/User/ForgotPasswordPageUser";
 import ResetPasswordPageUser from "./pages/User/ResetPasswordPageUser";
 import VerifyOtpPageUser from "./pages/User/VerifyOtpPageUser";
 import HomePageUser from "./pages/User/HomePageUser";
-import UserLayout from "./layout/NewUserLayout";
+import UserLayout from "./layout/UserLayout";
 import SignupPageTheatreOwner from "./pages/TheatreOwner/SignupPageTheatreOwner";
 import SignupPageUser from "./pages/User/SignupPageUser";
 import VerifyOtpPageTheatreOwner from "./pages/TheatreOwner/VerifyOtpPageTheatreOwner";
@@ -14,6 +14,12 @@ import ResetPasswordPageTheatreOwner from "./pages/TheatreOwner/ResetPasswordPag
 import LoginPageAdmin from "./pages/Admin/LoginPageAdmin";
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 import AdminLayout from "./layout/AdminLayout";
+import NotFoundPage from "./pages/NotFoundPage";
+import UserManagementPageAdmin from "./pages/Admin/UserManagementPageAdmin";
+import TheatreOwnerLayout from "./layout/TheatreOwnerLayout";
+import TheatreOwnerManagementPageAdmin from "./pages/Admin/TheatreOwnerManagementPageAdmin";
+import TheatresPageTheatreOwner from "./pages/TheatreOwner/TheatresPageTheatreOwner";
+import DashboardTheatreOwner from "./pages/TheatreOwner/DashBoardTheatreOwner";
 
 
 const App = () => {
@@ -21,8 +27,14 @@ const App = () => {
 
     <Routes>
       {/* Theatre Owner Routes */}
+      <Route path="/theatreOwner" element={<TheatreOwnerLayout />} >
+        <Route path="/theatreOwner" element={<DashboardTheatreOwner />} />
+        <Route path="theatres" element={<TheatresPageTheatreOwner />} />
+      </Route>
       <Route path="/admin" element={<AdminLayout />} >
         <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="users" element={<UserManagementPageAdmin />} />
+        <Route path="theatreOwners" element={<TheatreOwnerManagementPageAdmin />} />
       </Route>
       <Route path="/theatreOwner/signup" element={<SignupPageTheatreOwner />} />
       <Route path="/theatreOwner/verify-otp" element={<VerifyOtpPageTheatreOwner />} />
@@ -41,10 +53,8 @@ const App = () => {
       <Route path="/" element={<UserLayout />}>
         <Route index element={<HomePageUser />} />
         <Route path="/home" element={<HomePageUser />} />
-        <Route path="*" element={<div>Not found</div>} />
       </Route>
-      {/* <Route path="/" element={<UserLayout />}> */}
-      {/* </Route> */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

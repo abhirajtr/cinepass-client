@@ -19,8 +19,8 @@ import { RootState } from '@/store'
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
     phoneNumber: z.string()
-    .regex(/^\d+$/, { message: "Phone number must contain only digits" })
-    .min(10, { message: "Phone number must be at least 10 digits" }),
+        .regex(/^\d+$/, { message: "Phone number must contain only digits" })
+        .min(10, { message: "Phone number must be at least 10 digits" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
     confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
@@ -71,8 +71,8 @@ const SignupPageTheatreOwner = () => {
         <div className='flex justify-center min-h-screen items-center'>
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle>Sign Up</CardTitle>
-                    <CardDescription>Create a new account to get started.</CardDescription>
+                    <CardTitle>Partner with CinePass</CardTitle>
+                    <CardDescription>Join CinePass to showcase your theatre, manage shows effortlessly, and reach more moviegoers.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>

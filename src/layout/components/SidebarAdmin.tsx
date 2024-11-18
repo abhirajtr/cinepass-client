@@ -1,5 +1,5 @@
-import { BarChart3, Film, Ticket, Users, Settings } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { BarChart3, Film, Theater, Ticket, Users } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom'; // Import useNavigate for navigation
 
 import {
     Sidebar,
@@ -10,50 +10,42 @@ import {
     SidebarMenuButton,
 } from "@/components/ui/sidebar";
 
+const sidebarItems = [
+    { icon: BarChart3, label: 'Dashboard', to: '/admin' },
+    { icon: Users, label: 'Users', to: '/admin/users' },
+    { icon: Users, label: 'Theatre Owners', to: '/admin/theatreOwners' },
+    { icon: Theater, label: 'Theatres', to: '/admin/theatres' },
+    { icon: Ticket, label: 'Bookings', to: '/admin/bookings' },
+]
+
 
 const SidebarAdmin = () => {
-    const location = useLocation(); // Hook to get the current route
-    const navigate = useNavigate(); // Hook to programmatically navigate
-   
-
-    // Function to check if the current route matches the sidebar item
+    const location = useLocation();
     const isActive = (path: string) => {
-        return location.pathname === path ? 'bg-accent text-primary' : ''; // Apply active styles
-    };
-
-    // Function to handle navigation on click
-    const handleNavigation = (path: string) => {
-        navigate(path); // Navigate to the provided route
+        return location.pathname === path ? 'bg-accent text-primary' : '';
     };
 
     return (
-        <Sidebar className="w-64 bg-white transition-all duration-300 ease-in-out" collapsible="icon">
+        <Sidebar className="w-64 transition-all duration-300 ease-in-out" collapsible="icon">
             <SidebarHeader className="p-4">
                 <div className="flex items-center space-x-2">
                     <Film className="h-6 w-6 text-primary" />
                     <span className="text-xl font-bold">CinePass Admin</span>
                 </div>
             </SidebarHeader>
-            <SidebarContent>
+            <SidebarContent className='px-4'>
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            className={isActive('/admin')}
-                            onClick={() => handleNavigation('/admin')}
-                        >
-                            <BarChart3 className="mr-2 h-4 w-4" />
-                            <span>Dashboard</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            className={isActive('/admin/bookings')}
-                            onClick={() => handleNavigation('/admin/bookings')}
-                        >
-                            <Ticket className="mr-2 h-4 w-4" />
-                            <span>Bookings</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    {sidebarItems.map((item) => (
+                        <SidebarMenuItem key={item.label}>
+                            <SidebarMenuButton asChild>
+                                <Link to={item.to} className={`${isActive(item.to)} flex items-center`}>
+                                    <item.icon className='mr-2 h-4 2-4' />
+                                    <span>{item.label}</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    ))}
+                    {/* 
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             className={isActive('/admin/movies')}
@@ -65,22 +57,13 @@ const SidebarAdmin = () => {
                     </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton
-                            className={isActive('/admin/users')}
-                            onClick={() => handleNavigation('/admin/users')}
-                        >
-                            <Users className="mr-2 h-4 w-4" />
-                            <span>Users</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
                             className={isActive('/admin/settings')}
                             onClick={() => handleNavigation('/admin/settings')}
                         >
                             <Settings className="mr-2 h-4 w-4" />
                             <span>Settings</span>
                         </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    </SidebarMenuItem> */}
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>

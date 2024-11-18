@@ -6,7 +6,7 @@ import { Search } from 'lucide-react'
 const HomePageUser = () => {
     return (
         <>
-            <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-black text-white">
+            <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-background text-primary">
                 <div className="container px-4 md:px-6">
                     <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
                         <img
@@ -18,10 +18,10 @@ const HomePageUser = () => {
                         />
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="space-y-2">
-                                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-foreground-900">
                                     Book Your Movie Tickets Now
                                 </h1>
-                                <p className="max-w-[600px] text-gray-300 md:text-xl">
+                                <p className="max-w-[600px] text-muted-foreground md:text-xl">
                                     Experience the latest blockbusters in stunning quality. Reserve your seats today and enjoy the show!
                                 </p>
                             </div>

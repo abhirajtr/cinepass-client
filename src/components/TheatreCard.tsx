@@ -1,81 +1,69 @@
-import React from 'react';
-import { BsGearFill, BsFillHouseFill, BsFillTelephoneFill } from 'react-icons/bs';
-import { FaKey } from 'react-icons/fa';
-import { MdVerified } from "react-icons/md";
+'use client'
 
-interface TheatreData {
-    theatreName: string;
-    theatreId: string;
-    contactEmail: string;
-    phoneNumber: string;
-    streetAddress: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    isVerified: boolean;
+import { useState } from 'react'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Settings, Eye, Edit } from 'lucide-react'
+import ViewTheatreDetailsModal from './TheatreOwner/ViewTheatreDetailsModal'
+// import ViewDetailsModal from './ViewDetailsModal'
+
+interface TheatreCardProps {
+    theatre: {
+        theatreId: string;
+        theatreName: string;
+        contactEmail: string;
+        contactNumber: string;
+        streetAddress: string;
+        city: string;
+        state: string;
+        zipCode: string;
+        status: string;
+    }
 }
 
-const TheatreCard: React.FC<{ theatreData: TheatreData; onConfigure: (theatreId: string) => void }> = ({
-    theatreData,
-    onConfigure,
-}) => {
-    const {
-        theatreName,
-        theatreId,
-        contactEmail,
-        phoneNumber,
-        streetAddress,
-        city,
-        state,
-        zipCode,
-        isVerified,
-    } = theatreData;
-
-    const address = `${streetAddress}, ${city}, ${state} ${zipCode}`;
-    const contact = `${contactEmail} | ${phoneNumber}`;
-
+export default function TheatreCard({ theatre }: TheatreCardProps) {
+    const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false);
+    const { status } = theatre;
+    const badgeVariant = status === "pending" ? 'secondary' : status === "rejected" ? "destructive" : "default";
     return (
-        <div className="relative max-w-sm p-6 bg-white rounded-lg shadow-md bg-grey-10 border border-grey-15 flex flex-col align-items-flex-start">
-            <div className='flex w-full items-center justify-end absolute right-0 top-0'>
-                <span
-                    className={`inline-flex items-center justify-center px-2 py-1  text-xs font-medium   border-b border-l border-grey-15 ${isVerified ? ' text-green-500' : 'text-yellow-500'}`}
-                >
-                    {isVerified && <MdVerified />}
-                    {isVerified ? 'Verified' : 'Not Verified'}
-                </span>
-            </div>
-            <div className="relative"> {/* Added align-items-flex-start */}
-                <h2 className="text-xl font-bold text-white min-w-[150px] break-words">
-                    {theatreName}
-                </h2>
-            </div>
-            <div className="flex items-center mb-1">
-                <FaKey className="mr-2 text-white w-4" />
-                <p className="text-grey-75 mb-1">ID: {theatreId}</p>
-            </div>
-            <div className="flex items-center mb-1">
-                <BsFillHouseFill className="mr-2 text-white w-4" />
-                <p className="text-grey-75 mb-1">Address: {address}</p>
-            </div>
-            <div className="flex items-center mb-1">
-                <BsFillTelephoneFill className="mr-2 text-white w-4" />
-                <p className="text-grey-75 mb-1">Contact: {contact}</p>
-            </div>
-
-            {/* Flex container for button alignment */}
-            <div className="flex justify-end mt-auto"
-            >
-                <button
-                    disabled={!isVerified}
-                    onClick={() => onConfigure(theatreId)}
-                    className="text-absolute-white border-1 border-green-60/50 hover:bg-green-60 hover:text-black font-bold py-1 px-2 rounded flex text-center items-center"
-                >
-                    <BsGearFill className="inline mr-2" /> Customize
-                </button>
-            </div>
-        </div>
-
-    );
-};
-
-export default TheatreCard;
+        <>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                        {theatre.theatreName}
+                    </CardTitle>
+                    <Badge variant={badgeVariant}>
+                        {theatre.status}
+                    </Badge>
+                    {/* <Badge variant={theatre.status ? "default" : "secondary"}>
+                        {theatre.status ? "Verified" : "Pending"}
+                    </Badge> */}
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">{theatre.city}, {theatre.state}</p>
+                    <p className="text-sm text-muted-foreground">{theatre.contactNumber}</p>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                    <Button variant="outline" size="sm">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Config
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setIsViewDetailsOpen(true)}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        View Details
+                    </Button>
+                    <Button variant="outline" size="sm">
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                    </Button>
+                </CardFooter>
+            </Card>
+            <ViewTheatreDetailsModal
+                theatre={theatre}
+                isOpen={isViewDetailsOpen}
+                onClose={() => setIsViewDetailsOpen(false)}
+            />
+        </>
+    )
+}

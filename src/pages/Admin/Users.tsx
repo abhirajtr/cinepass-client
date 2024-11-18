@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import Pagination from "../../components/Pagination";
 import Title from "../../components/Title";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import ConfirmationModal from "../../components/ConfirmModal";
 import Search from "../../components/Search";
 
 interface User {

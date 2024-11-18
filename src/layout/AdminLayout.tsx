@@ -1,7 +1,7 @@
 'use client'
 
 import { SidebarProvider } from "@/components/ui/sidebar"
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarAdmin from './components/NavbarAdmin'
 import SidebarAdmin from "./components/SidebarAdmin"
 import { useSelector } from "react-redux"
@@ -13,16 +13,17 @@ const AdminLayout = () => {
     // Removed 'useSidebar' from here to ensure proper usage.
 
     const { adminToken } = useSelector((state: RootState) => state.authReducer);
+    const navigate = useNavigate();
 
     useEffect(() => {
-
-    }, []);
+        if (!adminToken) navigate("/admin/login");
+    }, [adminToken, navigate]);
 
     if (!adminToken) return null;
 
     return (
         <SidebarProvider>
-            <div className="flex h-screen bg-gray-100 container">
+            <div className="flex h-screen bg-background container">
                 {/* Sidebar */}
                 <SidebarAdmin />
 
