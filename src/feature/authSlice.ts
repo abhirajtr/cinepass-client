@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 // Define the structure of the JWT payload
 interface JwtPayload {
@@ -74,10 +74,7 @@ const authSlice = createSlice({
     reducers: {
         loginAdminSuccess: (state, action: PayloadAction<string>) => {
             const token = action.payload;
-            const tokenData = getRoleAndUserIdFromToken(token);
             state.adminToken = token;
-            state.isAuthenticatedAdmin = !isTokenExpired(token);
-            state.adminId = tokenData ? tokenData.userId : null;
             localStorage.setItem("adminToken", token);
         },
         loginUserSuccess: (state, action: PayloadAction<string>) => {
@@ -98,8 +95,6 @@ const authSlice = createSlice({
         },
         logoutAdmin: (state) => {
             state.adminToken = null;
-            state.isAuthenticatedAdmin = false;
-            state.adminId = null;
             localStorage.removeItem("adminToken");
         },
         logoutUser: (state) => {
@@ -114,9 +109,12 @@ const authSlice = createSlice({
             state.theaterOwnerId = null;
             localStorage.removeItem("theaterOwnerToken");
         },
+        setAdminToken: (state, action: PayloadAction<{ accessToken: string }>) => {
+            state.adminToken = action.payload.accessToken;
+        }
     },
 });
 
 // Export the actions and reducer
-export const { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess, logoutAdmin, logoutUser, logoutTheaterOwner } = authSlice.actions;
+export const { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess, logoutAdmin, logoutUser, logoutTheaterOwner, setAdminToken } = authSlice.actions;
 export default authSlice.reducer;

@@ -20,6 +20,8 @@ import TheatreOwnerLayout from "./layout/TheatreOwnerLayout";
 import TheatreOwnerManagementPageAdmin from "./pages/Admin/TheatreOwnerManagementPageAdmin";
 import TheatresPageTheatreOwner from "./pages/TheatreOwner/TheatresPageTheatreOwner";
 import DashboardTheatreOwner from "./pages/TheatreOwner/DashBoardTheatreOwner";
+import TheatreManagementPageAdmin from "./pages/Admin/TheatreManagementPageAdmin";
+import HomePage from "./pages/User/HomePage";
 
 
 const App = () => {
@@ -27,33 +29,38 @@ const App = () => {
 
     <Routes>
       {/* Theatre Owner Routes */}
-      <Route path="/theatreOwner" element={<TheatreOwnerLayout />} >
-        <Route path="/theatreOwner" element={<DashboardTheatreOwner />} />
-        <Route path="theatres" element={<TheatresPageTheatreOwner />} />
-      </Route>
-      <Route path="/admin" element={<AdminLayout />} >
-        <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="users" element={<UserManagementPageAdmin />} />
-        <Route path="theatreOwners" element={<TheatreOwnerManagementPageAdmin />} />
-      </Route>
       <Route path="/theatreOwner/signup" element={<SignupPageTheatreOwner />} />
       <Route path="/theatreOwner/verify-otp" element={<VerifyOtpPageTheatreOwner />} />
       <Route path="/theatreOwner/login" element={<LoginPageTheatreOwner />} />
       <Route path="/theatreOwner/forgot-password" element={<ForgotPasswordPageTheatreOwner />} />
       <Route path="/theatreOwner/reset-password" element={<ResetPasswordPageTheatreOwner />} />
+      <Route path="/theatreOwner" element={<TheatreOwnerLayout />} >
+        <Route path="/theatreOwner" element={<DashboardTheatreOwner />} />
+        <Route path="theatres" element={<TheatresPageTheatreOwner />} />
+      </Route>
+
+      {/* Admin Routes */}
+      <Route path="/admin/login" element={<LoginPageAdmin />} />
+      <Route path="/admin" element={<AdminLayout />} >
+        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="users" element={<UserManagementPageAdmin />} />
+        <Route path="theatreOwners" element={<TheatreOwnerManagementPageAdmin />} />
+        <Route path="theatres" element={<TheatreManagementPageAdmin />} />
+      </Route>
+
+
       {/* UserRoutes */}
       <Route path="/signup" element={<SignupPageUser />} />
       <Route path="/verify-otp" element={<VerifyOtpPageUser />} />
       <Route path="/login" element={<LoginPageUser />} />
       <Route path="/forgot-password" element={<ForgotPasswordPageUser />} />
       <Route path="/reset-password" element={<ResetPasswordPageUser />} />
-      {/* User */}
-      <Route path="/admin/login" element={<LoginPageAdmin />} />
-
       <Route path="/" element={<UserLayout />}>
-        <Route index element={<HomePageUser />} />
+        <Route index element={<HomePage />} />
         <Route path="/home" element={<HomePageUser />} />
       </Route>
+
+      {/* Not Found Page */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

@@ -11,11 +11,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import axios from 'axios'
-import { backendUrl } from '@/constants'
 import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockConfirmationModal'
 import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
 import { UserTable } from '@/components/Admin/UserTable'
+import adminApi from '@/axiosInstance/adminApi'
 
 interface User {
     userId: string;
@@ -42,7 +41,7 @@ export default function TheatreOwnerManagementPageAdmin() {
         const fetchUsers = async () => {
             try {
                 const params = { search: searchTerm, status: statusFilter, usersPerPage, currentPage }
-                const response = await axios.get<{ users: User[], totalUsers: number }>(`${backendUrl}/admin/theatreOwners`, { params });
+                const response = await adminApi.get<{ users: User[], totalUsers: number }>(`/theatreOwners`, { params });
                 setUsers(response.data.users);
                 setTotalUsers(response.data.totalUsers);
             } catch (error) {
@@ -62,7 +61,7 @@ export default function TheatreOwnerManagementPageAdmin() {
     const confirmBlockToggle = async () => {
         if (userToToggle) {
             try {
-                await axios.patch(`${backendUrl}/admin/theatreOwners/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
+                await adminApi.patch(`/theatreOwners/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
                 const updatedUsers = users.map(u =>
                     u.userId === userToToggle.userId ? { ...u, isBlocked: !u.isBlocked } : u
                 );

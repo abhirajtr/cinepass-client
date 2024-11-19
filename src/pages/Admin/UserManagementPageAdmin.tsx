@@ -16,6 +16,7 @@ import { backendUrl } from '@/constants'
 import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockConfirmationModal'
 import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
 import { UserTable } from '@/components/Admin/UserTable'
+import adminApi from '@/axiosInstance/adminApi'
 
 interface User {
     userId: string;
@@ -42,7 +43,7 @@ export default function UserManagementPageAdmin() {
         const fetchUsers = async () => {
             try {
                 const params = { search: searchTerm, status: statusFilter, usersPerPage, currentPage }
-                const response = await axios.get<{ users: User[], totalUsers: number }>(`${backendUrl}/admin/users`, { params });
+                const response = await adminApi.get<{ users: User[], totalUsers: number }>(`/users`, { params });
                 setUsers(response.data.users);
                 setTotalUsers(response.data.totalUsers);
             } catch (error) {

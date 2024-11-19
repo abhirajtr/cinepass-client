@@ -4,9 +4,10 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarAdmin from './components/NavbarAdmin'
 import SidebarAdmin from "./components/SidebarAdmin"
-import { useSelector } from "react-redux"
-import { RootState } from "@/store"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "@/store"
 import { useEffect } from "react"
+import { refershTokenAdminThunk } from "@/feature/authThunk"
 
 
 const AdminLayout = () => {
@@ -14,7 +15,12 @@ const AdminLayout = () => {
 
     const { adminToken } = useSelector((state: RootState) => state.authReducer);
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
+    useEffect(() => {
+        dispatch(refershTokenAdminThunk());
+    }, [dispatch]);
+    
     useEffect(() => {
         if (!adminToken) navigate("/admin/login");
     }, [adminToken, navigate]);

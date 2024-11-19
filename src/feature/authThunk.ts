@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess } from "./authSlice";
+import { loginAdminSuccess, loginUserSuccess, loginTheaterOwnerSuccess, setAdminToken, logoutAdmin } from "./authSlice";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { backendUrl } from "../constants";
+import { AppDispatch } from "@/store";
+import adminApi from "@/axiosInstance/adminApi";
 
 // Login thunk for regular user
 export const loginUser = createAsyncThunk(
@@ -57,3 +59,16 @@ export const loginTheatreOwner = createAsyncThunk(
         }
     }
 );
+
+export const refershTokenAdminThunk = () => async (dispatch: AppDispatch) => {
+    try {
+        const response = await adminApi.post(`/refresh-token`, {}, { withCredentials: true });
+        const { accessToken } = response.data;
+        console.log(response.data);
+        dispatch(setAdminToken({ accessToken }));
+    } catch (error) {
+        dispatch(logoutAdmin());
+        window.location.href = '/admin/login';
+        console.log(error);
+    }
+}

@@ -36,8 +36,8 @@ const SidebarAdmin = () => {
             <SidebarContent className='px-4'>
                 <SidebarMenu>
                     {sidebarItems.map((item) => (
-                        <SidebarMenuItem key={item.label}>
-                            <SidebarMenuButton asChild>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild className='hover:bg-secondary hover:text-primary'>
                                 <Link to={item.to} className={`${isActive(item.to)} flex items-center`}>
                                     <item.icon className='mr-2 h-4 2-4' />
                                     <span>{item.label}</span>
@@ -45,25 +45,6 @@ const SidebarAdmin = () => {
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}
-                    {/* 
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            className={isActive('/admin/movies')}
-                            onClick={() => handleNavigation('/admin/movies')}
-                        >
-                            <Film className="mr-2 h-4 w-4" />
-                            <span>Movies</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            className={isActive('/admin/settings')}
-                            onClick={() => handleNavigation('/admin/settings')}
-                        >
-                            <Settings className="mr-2 h-4 w-4" />
-                            <span>Settings</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem> */}
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
