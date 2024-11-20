@@ -11,10 +11,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 // import { toast } from "@/components/ui/use-toast"
 
 const VerifyOtpPageTheatreOwner = () => {
-    const [otp, setOtp] = useState(['', '', '', ''])
-    const [isResendDisabled, setIsResendDisabled] = useState(false)
-    const [resendTimer, setResendTimer] = useState(0)
-    const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+    const [otp, setOtp] = useState(['', '', '', '']);
+    const [isResendDisabled, setIsResendDisabled] = useState(false);
+    const [resendTimer, setResendTimer] = useState(60);
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -65,13 +65,11 @@ const VerifyOtpPageTheatreOwner = () => {
         const otpString = otp.join('');
         try {
             const response = await axios.post(`${backendUrl}/theatreOwner/verify-otp`, { email, otp: otpString })
-            toast.error(response.data.message);
+            toast.error(response.data.responseMessage);
             navigate("/theatreOwner/login");
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
@@ -80,12 +78,10 @@ const VerifyOtpPageTheatreOwner = () => {
     const handleResend = async () => {
         try {
             const response = await axios.post(`${backendUrl}/user/resent-otp`, { email })
-            toast.error(response.data.message);
+            toast.error(response.data.responseMessage);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
@@ -95,7 +91,6 @@ const VerifyOtpPageTheatreOwner = () => {
     }
 
     if (!email) {
-        // Handle error if email isn't passed (e.g., redirect to home)
         navigate("/signup");
         return null;
     }

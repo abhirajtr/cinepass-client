@@ -32,11 +32,11 @@ const SignupPageTheatreOwner = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const navigate = useNavigate();
-    const { theaterOwnerToken } = useSelector((state: RootState) => state.authReducer);
+    const { theatreOwnerToken } = useSelector((state: RootState) => state.authReducer);
 
     useEffect(() => {
-        if (theaterOwnerToken) navigate("/theatreOwner/");
-    }, [theaterOwnerToken, navigate]);
+        if (theatreOwnerToken) navigate("/theatreOwner/");
+    }, [theatreOwnerToken, navigate]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -52,20 +52,17 @@ const SignupPageTheatreOwner = () => {
         console.log(values);
         try {
             const response = await axios.post(`${backendUrl}/theatreOwner/signup`, { email: values.email, phoneNumeber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
-            toast.error(response.data.message);
+            toast.error(response.data.responseMessage);
             navigate('/theatreOwner/verify-otp', { state: { email: values.email } });
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
-        // Here you would typically send the form data to your backend
     }
 
-    if (theaterOwnerToken) return null;
+    if (theatreOwnerToken) return null;
 
     return (
         <div className='flex justify-center min-h-screen items-center'>

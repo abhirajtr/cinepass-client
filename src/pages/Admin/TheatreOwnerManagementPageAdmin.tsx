@@ -15,6 +15,8 @@ import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockCo
 import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
 import { UserTable } from '@/components/Admin/UserTable'
 import adminApi from '@/axiosInstance/adminApi'
+import { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 interface User {
     userId: string;
@@ -41,10 +43,13 @@ export default function TheatreOwnerManagementPageAdmin() {
         const fetchUsers = async () => {
             try {
                 const params = { search: searchTerm, status: statusFilter, usersPerPage, currentPage }
-                const response = await adminApi.get<{ users: User[], totalUsers: number }>(`/theatreOwners`, { params });
-                setUsers(response.data.users);
-                setTotalUsers(response.data.totalUsers);
+                const response = await adminApi.get(`/theatreOwners`, { params });
+                setUsers(response.data.responseData.users);
+                setTotalUsers(response.data.responseData.totalUsers);
             } catch (error) {
+                if (error instanceof AxiosError) {
+                    toast.error(error.response?.data.responseMessage || "An unexpected error occured");
+                }
                 console.error('Error fetching users:', error);
             }
         }
@@ -61,12 +66,16 @@ export default function TheatreOwnerManagementPageAdmin() {
     const confirmBlockToggle = async () => {
         if (userToToggle) {
             try {
-                await adminApi.patch(`/theatreOwners/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
+                const response = await adminApi.patch(`/theatreOwners/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
                 const updatedUsers = users.map(u =>
                     u.userId === userToToggle.userId ? { ...u, isBlocked: !u.isBlocked } : u
                 );
                 setUsers(updatedUsers);
+                toast.success(response.data.responseMessage);
             } catch (error) {
+                if (error instanceof AxiosError) {
+                    toast.success(error.response?.data.responseMessage || "An unexpected error occured");
+                }
                 console.error('Error toggling user block status:', error);
             }
         }

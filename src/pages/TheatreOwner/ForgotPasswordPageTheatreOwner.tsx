@@ -29,21 +29,13 @@ const ForgotPasswordPageTheatreOwner = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const response = await axios.post(`${backendUrl}/theatreOwner/forgot-password`, { email: values.email });
-            toast.success(response.data.message);
-            // alert("Password reset link has been sent to your email.");
+            toast.success(response.data.responseMessage);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("Failed to send reset link. Please try again.");
-
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
-        // try {
-        //     await dispatch(sendPasswordResetLink({ email: values.email })).unwrap();
-        // } catch (error) {
-        // }
     }
 
     return (

@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/store"
 import { useEffect } from "react"
 import { logout } from "@/feature/authSlice"
+import axios, { AxiosError } from "axios"
+import { toast } from "sonner"
+import { backendUrl } from "@/constants"
 
 
 const AdminLayout = () => {
@@ -19,8 +22,16 @@ const AdminLayout = () => {
         if (!adminToken) navigate("/admin/login");
     }, [adminToken, navigate]);
 
-    const handleLogout = () => {
-        dispatch(logout("admin"));
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post(`${backendUrl}/admin/logout`, {}, { withCredentials: true });
+            dispatch(logout("admin"));
+            toast.success(response.data.responseMessage);
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
+            }
+        }
     }
 
     if (!adminToken) return null;

@@ -28,12 +28,12 @@ export const loginAdmin = createAsyncThunk(
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
             const response = await axios.post(backendUrl + `/admin/login`, loginData, { withCredentials: true });
-            toast.success(response.data?.message);
-            dispatch(setToken({ role: "admin", token: response.data.accessToken }));
+            dispatch(setToken({ role: "admin", token: response.data.responseData.accessToken }));
+            toast.success(response.data?.responseMessage);
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+                toast.error(error.response?.data?.responseMessage || "An unexpected error occurred. Please try again.");
             }
             console.log(error);
         }
@@ -42,16 +42,16 @@ export const loginAdmin = createAsyncThunk(
 
 // Login thunk for theatre owner
 export const loginTheatreOwner = createAsyncThunk(
-    'auth/loginTheatre',
+    'auth/loginTheatreOwner',
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
             const response = await axios.post(backendUrl + `/theatreOwner/login`, loginData, { withCredentials: true });
-            toast.success(response.data?.message);
-            dispatch(setToken({ role: "theatreOwner", token: response.data.accessToken }));
+            toast.success(response.data?.responseMessage);
+            dispatch(setToken({ role: "theatreOwner", token: response.data.responseData.accessToken }));
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+                toast.error(error.response?.data?.responseMessage || "An unexpected error occurred. Please try again.");
             }
             console.log(error);
         }

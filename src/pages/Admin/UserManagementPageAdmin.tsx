@@ -15,6 +15,8 @@ import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockCo
 import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
 import { UserTable } from '@/components/Admin/UserTable'
 import adminApi from '@/axiosInstance/adminApi'
+import { toast } from 'sonner'
+import { AxiosError } from 'axios'
 
 interface User {
     userId: string;
@@ -41,10 +43,13 @@ export default function UserManagementPageAdmin() {
         const fetchUsers = async () => {
             try {
                 const params = { search: searchTerm, status: statusFilter, usersPerPage, currentPage }
-                const response = await adminApi.get<{ users: User[], totalUsers: number }>(`/users`, { params });
-                setUsers(response.data.users);
-                setTotalUsers(response.data.totalUsers);
+                const response = await adminApi.get(`/users`, { params });
+                setUsers(response.data.responseData?.users);
+                setTotalUsers(response.data.responseData.totalUsers);
             } catch (error) {
+                if (error instanceof AxiosError) {
+                    toast.error(error.response?.data.responseMessage || "An unexpected error occured");
+                }
                 console.error('Error fetching users:', error);
             }
         }
@@ -65,12 +70,16 @@ export default function UserManagementPageAdmin() {
                     u.userId === userToToggle.userId ? { ...u, isBlocked: !u.isBlocked } : u
                 );
                 setUsers(updatedUsers);
-                await adminApi.patch(`/users/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
+                const response = await adminApi.patch(`/users/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
+                toast.success(response.data.responseMessage);
             } catch (error) {
                 const revertUsers = users.map(u =>
                     u.userId === userToToggle.userId ? { ...u, isBlocked: userToToggle.isBlocked } : u
                 );
                 setUsers(revertUsers);
+                if (error instanceof AxiosError) {
+                    toast.success(error.response?.data.responseMessage || "An unexpected error occured");
+                }
                 console.error('Error toggling user block status:', error);
             }
         }

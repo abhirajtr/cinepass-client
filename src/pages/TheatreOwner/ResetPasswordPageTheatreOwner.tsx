@@ -27,7 +27,7 @@ const ResetPasswordPageTheatreOwner = () => {
     const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isTokenValid, setIsTokenValid] = useState(true); // to check if the token is valid
+    const [isTokenValid, setIsTokenValid] = useState(true);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -46,21 +46,17 @@ const ResetPasswordPageTheatreOwner = () => {
             setIsTokenValid(false);
             return;
         }
-        // Optionally, you can verify the token with an API call to validate its expiration and correctness
-        // For now, let's assume token validation is done on form submission.
     }, [resetToken]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(resetToken, values);
         try {
             const response = await axios.post(`${backendUrl}/theatreOwner/reset-password`, { token: resetToken, newPassword: values.password, confirmPassword: values.confirmPassword });
-            toast.success(response.data.message);
+            toast.success(response.data.responseMessage);
             navigate("/theatreOwner/login");
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.success(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.success(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }

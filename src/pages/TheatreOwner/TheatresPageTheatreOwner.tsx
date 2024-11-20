@@ -44,17 +44,15 @@ const TheatresPageTheatreOwner = () => {
     const [theatres, setTheatres] = useState<Theatre[]>([])
     const [isAddingTheatre, setIsAddingTheatre] = useState(false);
 
-    
+
     useEffect(() => {
         const fetchTheatres = async () => {
             try {
                 const response = await theatreOwnerApi.get("/getAllTheatres");
-                setTheatres(response.data.theatres);
+                setTheatres(response.data.responseData.theatres);
             } catch (error) {
                 if (error instanceof AxiosError) {
-                    toast.error(error.response?.data.message);
-                } else {
-                    toast.error("An unexpected error occured");
+                    toast.error(error.response?.data.responseMessage || "An unexpected error occured");
                 }
                 console.log(error);
             }
@@ -77,17 +75,15 @@ const TheatresPageTheatreOwner = () => {
         formData.append("verificationDocument", newTheatre.verificationDocument);
         try {
             console.log("New Theatre Data:", newTheatre);
-            
+
             const response = await theatreOwnerApi.post(`${backendUrl}/theatreOwner/theatres/add`, formData);
             setTheatres((prevTheatres) => [...prevTheatres, response.data.theatre]);
             console.log(response);
-            toast.success(response.data.message);
+            toast.success(response.data.responseMessage);
             setIsAddingTheatre(false);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
