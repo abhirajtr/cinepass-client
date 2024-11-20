@@ -7,23 +7,21 @@ import SidebarAdmin from "./components/SidebarAdmin"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/store"
 import { useEffect } from "react"
-import { refershTokenAdminThunk } from "@/feature/authThunk"
+import { logout } from "@/feature/authSlice"
 
 
 const AdminLayout = () => {
-    // Removed 'useSidebar' from here to ensure proper usage.
-
     const { adminToken } = useSelector((state: RootState) => state.authReducer);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        dispatch(refershTokenAdminThunk());
-    }, [dispatch]);
-    
-    useEffect(() => {
         if (!adminToken) navigate("/admin/login");
     }, [adminToken, navigate]);
+
+    const handleLogout = () => {
+        dispatch(logout("admin"));
+    }
 
     if (!adminToken) return null;
 
@@ -36,7 +34,7 @@ const AdminLayout = () => {
                 {/* Main Content */}
                 <div className="flex flex-col flex-1 overflow-hidden transition-all duration-300 ease-in-out">
                     {/* Navbar */}
-                    <NavbarAdmin />
+                    <NavbarAdmin logoutAction={handleLogout} />
 
                     {/* Main Section */}
                     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-6">

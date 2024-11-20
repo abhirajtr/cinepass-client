@@ -18,29 +18,29 @@ const featuredMovie: Movie & { duration: string; releaseDate: string; rating: nu
 
 const nowShowingMovies: Movie[] = [
     { id: 1, title: "Oppenheimer", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.9 },
-    { id: 2, title: "Barbie", image: "https://picperf.io/https://i.imgur.com/Ue7hLVZ.jpg", rating: 4.7 },
-    { id: 3, title: "The Batman", image: "https://picperf.io/https://i.imgur.com/AQwTfWI.jpg", rating: 4.6 },
-    { id: 4, title: "Top Gun: Maverick", image: "https://picperf.io/https://i.imgur.com/Ue7hLVZ.jpg", rating: 4.8 },
+    { id: 2, title: "Barbie", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.7 },
+    { id: 3, title: "The Batman", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.6 },
+    { id: 4, title: "Top Gun: Maverick", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.8 },
 ]
 
 const trendingMovies: Movie[] = [
-    { id: 5, title: "Inception", image: "https://picperf.io/https://i.imgur.com/Uy3Xwjm.jpg", rating: 4.9 },
-    { id: 6, title: "The Dark Knight", image: "https://picperf.io/https://i.imgur.com/AQwTfWI.jpg", rating: 4.8 },
-    { id: 7, title: "Interstellar", image: "https://picperf.io/https://i.imgur.com/X6xtLGi.jpg", rating: 4.7 },
-    { id: 8, title: "Pulp Fiction", image: "https://picperf.io/https://i.imgur.com/Ue7hLVZ.jpg", rating: 4.6 },
+    { id: 5, title: "Inception", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.9 },
+    { id: 6, title: "The Dark Knight", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.8 },
+    { id: 7, title: "Interstellar", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.7 },
+    { id: 8, title: "Pulp Fiction", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", rating: 4.6 },
 ]
 
 const comingSoonMovies: Movie[] = [
-    { id: 9, title: "Furiosa", image: "https://picperf.io/https://i.imgur.com/AQwTfWI.jpg", releaseDate: "May 24, 2024" },
-    { id: 10, title: "Mission: Impossible 8", image: "https://picperf.io/https://i.imgur.com/Uy3Xwjm.jpg", releaseDate: "June 28, 2024" },
-    { id: 11, title: "Joker: Folie à Deux", image: "https://picperf.io/https://i.imgur.com/X6xtLGi.jpg", releaseDate: "October 4, 2024" },
-    { id: 12, title: "Gladiator 2", image: "https://picperf.io/https://i.imgur.com/Ue7hLVZ.jpg", releaseDate: "November 22, 2024" },
+    { id: 9, title: "Furiosa", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", releaseDate: "May 24, 2024" },
+    { id: 10, title: "Mission: Impossible 8", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", releaseDate: "June 28, 2024" },
+    { id: 11, title: "Joker: Folie à Deux", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", releaseDate: "October 4, 2024" },
+    { id: 12, title: "Gladiator 2", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg", releaseDate: "November 22, 2024" },
 ]
 
 const watchlist: Movie[] = [
-    { id: 13, title: "The Godfather", image: "https://picperf.io/https://i.imgur.com/Uy3Xwjm.jpg" },
-    { id: 14, title: "Schindler's List", image: "https://picperf.io/https://i.imgur.com/AQwTfWI.jpg" },
-    { id: 15, title: "12 Angry Men", image: "https://picperf.io/https://i.imgur.com/X6xtLGi.jpg" },
+    { id: 13, title: "The Godfather", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg" },
+    { id: 14, title: "Schindler's List", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg" },
+    { id: 15, title: "12 Angry Men", image: "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg" },
 ]
 
 const cinemaLocations: Cinema[] = [

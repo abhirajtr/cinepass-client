@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { store } from '../store';
 import { backendUrl } from '../constants';
-import { logoutAdmin, setAdminToken } from '@/feature/authSlice';
+import { logout, setToken } from '@/feature/authSlice';
 
 const adminApi = (() => {
     const instance = axios.create({
@@ -61,7 +61,7 @@ const adminApi = (() => {
                     console.log('New Access Token:', newAccessToken);
 
                     // Update Redux store with new token
-                    store.dispatch(setAdminToken({ accessToken: newAccessToken }));
+                    store.dispatch(setToken({ role: 'admin', token: newAccessToken }));
                     console.log('Redux store updated with new token.');
 
                     // Update Authorization header
@@ -74,7 +74,7 @@ const adminApi = (() => {
                     console.error('Failed to refresh access token:', refreshError);
 
                     // Logout admin if refresh fails
-                    store.dispatch(logoutAdmin());
+                    store.dispatch(logout('admin'));
                     console.log('User logged out due to failed token refresh.');
                 }
             } else {

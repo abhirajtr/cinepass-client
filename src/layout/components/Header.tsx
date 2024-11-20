@@ -10,7 +10,7 @@ import { Film, Menu, User, LogOut, X } from 'lucide-react'
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/store"
-import { logoutUser } from "@/feature/authSlice"
+import { logout } from "@/feature/authSlice"
 
 export default function Header() {
     const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +22,7 @@ export default function Header() {
     }
 
     const handleLogout = () => {
-        dispatch(logoutUser());
+        dispatch(logout("user"));
     }
 
     return (

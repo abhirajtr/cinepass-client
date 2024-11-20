@@ -6,27 +6,36 @@ import NavbarTheatreOwner from './components/NavbarTheatreOwner'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/store'
-import { logoutTheaterOwner } from '@/feature/authSlice'
 import { useEffect } from 'react'
+import { logout } from '@/feature/authSlice'
 
 export default function TheatreOwnerLayout() {
 
-    const { theaterOwnerToken } = useSelector((state: RootState) => state.authReducer);
+    const { theatreOwnerToken } = useSelector((state: RootState) => state.authReducer);
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const dispatch = useDispatch<AppDispatch>();
-
+    // const handleLogout = async () => {
+    //     try {
+    //         await axios.post(`${backendUrl}/theatreOwner/logout`, {}, { withCredentials: true });
+    //         dispatch(logout('theatreOwner'));
+    //         // navigate("/theatreOwner/login");
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     const handleLogout = () => {
-        dispatch(logoutTheaterOwner());
+        dispatch(logout('theatreOwner'));
     }
 
     useEffect(() => {
-        if (!theaterOwnerToken) {
+        if (!theatreOwnerToken) {
             navigate("/theatreOwner/login");
         }
-    }, [theaterOwnerToken, navigate])
+    }, [theatreOwnerToken, navigate]);
 
-    if (!theaterOwnerToken) return null;
+    if (!theatreOwnerToken) return null;
+
 
     return (
         <SidebarProvider>

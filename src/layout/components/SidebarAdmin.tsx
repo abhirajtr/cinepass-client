@@ -36,7 +36,7 @@ const SidebarAdmin = () => {
             <SidebarContent className='px-4'>
                 <SidebarMenu>
                     {sidebarItems.map((item) => (
-                        <SidebarMenuItem>
+                        <SidebarMenuItem key={item.label}>
                             <SidebarMenuButton asChild className='hover:bg-secondary hover:text-primary'>
                                 <Link to={item.to} className={`${isActive(item.to)} flex items-center`}>
                                     <item.icon className='mr-2 h-4 2-4' />

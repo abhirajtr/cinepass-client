@@ -35,7 +35,7 @@ export function UserTable({ users, onViewDetails, onBlockToggle }: UserTableProp
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Name</TableHead>
+                    {/* <TableHead>Name</TableHead> */}
                     <TableHead>Email</TableHead>
                     <TableHead className="hidden md:table-cell">Phone</TableHead>
                     <TableHead className="hidden md:table-cell">Created At</TableHead>
@@ -46,7 +46,7 @@ export function UserTable({ users, onViewDetails, onBlockToggle }: UserTableProp
             <TableBody>
                 {users.map((user) => (
                     <TableRow key={user.userId}>
-                        <TableCell className="font-medium">{user.name}</TableCell>
+                        {/* <TableCell className="font-medium">{user.name}</TableCell> */}
                         <TableCell>{user.email}</TableCell>
                         <TableCell className="hidden md:table-cell">{user.phone}</TableCell>
                         <TableCell className="hidden md:table-cell">{dateFormat(user.createdAt)}</TableCell>

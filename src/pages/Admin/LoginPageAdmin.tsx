@@ -44,6 +44,7 @@ const LoginPageAdmin = () => {
             navigate("/admin");
         }
     }, [adminToken, navigate]);
+
     if (adminToken) return null;
 
     return (

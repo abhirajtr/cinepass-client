@@ -23,8 +23,13 @@ const LoginPageTheatreOwner = () => {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { theaterOwnerToken } = useSelector((state: RootState) => state.authReducer);
-
+    const { theatreOwnerToken } = useSelector((state: RootState) => state.authReducer);
+    useEffect(() => {
+        if (theatreOwnerToken) {
+            navigate("/theatreOwner");
+        }
+    }, [theatreOwnerToken, navigate]);
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -32,20 +37,14 @@ const LoginPageTheatreOwner = () => {
             password: "",
         },
     })
-
+    
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
         dispatch(loginTheatreOwner({ email: values.email, password: values.password }));
-        // Here you would typically send the form data to your backend
     }
-
-    useEffect(() => {
-        if (theaterOwnerToken) {
-            navigate("/theatreOwner");
-        }
-    }, [theaterOwnerToken, navigate]);
-    if (theaterOwnerToken) return null;
-
+    
+    if (theatreOwnerToken) return null;
+    
     return (
         <div className='flex justify-center min-h-screen items-center'>
             <Card className="w-[350px]">

@@ -20,18 +20,20 @@ const SidebarTheatreOwner = () => {
     }
 
     return (
-        <Sidebar className="w-64 border-r">
+        <Sidebar className="w-64 transition-all duration-300 ease-in-out" collapsible="icon">
             <SidebarHeader className="p-4">
-                <h2 className="text-2xl font-bold text-primary">CinePass</h2>
-                <p className="text-sm text-muted-foreground">Theatre Management</p>
+                <div className="flex items-center space-x-2">
+                    <Film className="h-6 w-6 text-primary" />
+                    <span className="text-xl font-bold">CinePass TheatreOwner</span>
+                </div>
             </SidebarHeader>
-            <SidebarContent>
+            <SidebarContent className='px-4'>
                 <SidebarMenu>
                     {sidebarItems.map((item) => (
                         <SidebarMenuItem key={item.label}>
-                            <SidebarMenuButton asChild>
-                                <Link to={item.to} className={`${isActive(item.to)}flex items-center`}>
-                                    <item.icon className="mr-2 h-4 w-4" />
+                            <SidebarMenuButton asChild className='hover:bg-secondary hover:text-primary'>
+                                <Link to={item.to} className={`${isActive(item.to)} flex items-center`}>
+                                    <item.icon className='mr-2 h-4 2-4' />
                                     <span>{item.label}</span>
                                 </Link>
                             </SidebarMenuButton>
@@ -40,6 +42,26 @@ const SidebarTheatreOwner = () => {
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
+        // <Sidebar className="w-64 border-r">
+        //     <SidebarHeader className="p-4">
+        //         <h2 className="text-2xl font-bold text-primary">CinePass</h2>
+        //         <p className="text-sm text-muted-foreground">Theatre Management</p>
+        //     </SidebarHeader>
+        //     <SidebarContent>
+        //         <SidebarMenu>
+        //             {sidebarItems.map((item) => (
+        //                 <SidebarMenuItem key={item.label}>
+        //                     <SidebarMenuButton asChild>
+        //                         <Link to={item.to} className={`${isActive(item.to)}flex items-center`}>
+        //                             <item.icon className="mr-2 h-4 w-4" />
+        //                             <span>{item.label}</span>
+        //                         </Link>
+        //                     </SidebarMenuButton>
+        //                 </SidebarMenuItem>
+        //             ))}
+        //         </SidebarMenu>
+        //     </SidebarContent>
+        // </Sidebar>
     )
 }
 

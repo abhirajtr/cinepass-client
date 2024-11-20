@@ -8,22 +8,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { logoutAdmin } from "@/feature/authSlice"
-import { AppDispatch } from "@/store"
 import { LogOut, Menu, Settings, User, Users } from "lucide-react"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { FC } from "react"
 
 
-const NavbarAdmin = () => {
 
-    const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
 
-    const handleLogout = () => {
-        dispatch(logoutAdmin());
-        navigate("/admin/login");
-    }
+const NavbarAdmin: FC<{ logoutAction: () => void }> = ({ logoutAction }) => {
+
 
 
     return (
@@ -52,7 +44,7 @@ const NavbarAdmin = () => {
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Settings</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={logoutAction}>
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Log out</span>
                     </DropdownMenuItem>

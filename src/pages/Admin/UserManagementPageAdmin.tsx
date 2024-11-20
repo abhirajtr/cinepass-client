@@ -11,8 +11,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import axios from 'axios'
-import { backendUrl } from '@/constants'
 import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockConfirmationModal'
 import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
 import { UserTable } from '@/components/Admin/UserTable'
@@ -63,12 +61,16 @@ export default function UserManagementPageAdmin() {
     const confirmBlockToggle = async () => {
         if (userToToggle) {
             try {
-                await axios.patch(`${backendUrl}/admin/users/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
                 const updatedUsers = users.map(u =>
                     u.userId === userToToggle.userId ? { ...u, isBlocked: !u.isBlocked } : u
                 );
                 setUsers(updatedUsers);
+                await adminApi.patch(`/users/${userToToggle.userId}/toggle-block`, { blockStatus: userToToggle.isBlocked ? false : true });
             } catch (error) {
+                const revertUsers = users.map(u =>
+                    u.userId === userToToggle.userId ? { ...u, isBlocked: userToToggle.isBlocked } : u
+                );
+                setUsers(revertUsers);
                 console.error('Error toggling user block status:', error);
             }
         }

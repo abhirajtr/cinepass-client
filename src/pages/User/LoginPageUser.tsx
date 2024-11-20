@@ -34,7 +34,7 @@ const LoginPageUser = () => {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+        // console.log(values)
         dispatch(loginUser({ email: values.email, password: values.password }));
         // Here you would typically send the form data to your backend
     }
@@ -44,6 +44,7 @@ const LoginPageUser = () => {
             navigate("/");
         }
     }, [userToken, navigate]);
+
     if (userToken) return null;
 
     return (
