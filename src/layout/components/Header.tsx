@@ -29,7 +29,7 @@ export default function Header() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
             <div className="container flex h-16 items-center">
                 <Link to="/" className="flex items-center space-x-2 md:mr-6">
-                    <Film className="h-6 w-6" />
+                    <Film className="h-6 w-6 text-primary" />
                     <span className="font-bold">CinePass</span>
                 </Link>
                 <nav className="hidden md:flex flex-1 justify-center gap-6">

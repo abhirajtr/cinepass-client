@@ -1,58 +1,72 @@
-// import { Link } from "react-router-dom";
+import { Facebook, Twitter, Instagram } from 'lucide-react'
+import { Link } from 'react-router-dom';
 
-// const Footer = () => {
-//     return (
-//         <footer className="border-t">
-//             <div className="container flex flex-col gap-2 py-6 md:flex-row md:gap-4 md:py-8 px-6">
-//                 <p className="text-xs text-gray-500 md:text-sm">© 2024 CinePass. All rights reserved.</p>
-//                 <nav className="flex gap-4 sm:ml-auto sm:gap-6">
-//                     <Link className="text-xs hover:underline underline-offset-4 md:text-sm" to="/tems-of-service">
-//                         Terms of Service
-//                     </Link>
-//                     <Link className="text-xs hover:underline underline-offset-4 md:text-sm" to="/privacy">
-//                         Privacy
-//                     </Link>
-//                     <Link className="text-xs hover:underline underline-offset-4 md:text-sm" to="/contact">
-//                         Contact
-//                     </Link>
-//                 </nav>
-//             </div>
-//         </footer>
-//     )
-// }
-
-// export default Footer;
-
-import React from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
-export const Footer: React.FC = () => {
+const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-gray-400 py-8 px-4 md:px-8">
-            <div className="flex flex-wrap justify-between">
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                    <h3 className="text-xl font-bold mb-4">CinePass</h3>
-                    <p>Your ultimate movie ticket booking app.</p>
+        <footer className="bg-secondary py-8 px-6">
+            <div className="container">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 className="font-semibold text-lg mb-4">MovieTickets</h3>
+                        <p className="text-sm text-muted-foreground">Your one-stop destination for movie tickets and more.</p>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold mb-4">Quick Links</h4>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground">
+                                    About Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/faq" className="text-sm text-muted-foreground hover:text-foreground">
+                                    FAQs
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground">
+                                    Contact Us
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold mb-4">Legal</h4>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                                    Terms of Service
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+                                    Privacy Policy
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold mb-4">Follow Us</h4>
+                        <div className="flex space-x-4">
+                            <Link to="#" className="text-muted-foreground hover:text-foreground">
+                                <Facebook className="h-5 w-5" />
+                            </Link>
+                            <Link to="#" className="text-muted-foreground hover:text-foreground">
+                                <Twitter className="h-5 w-5" />
+                            </Link>
+                            <Link to="#" className="text-muted-foreground hover:text-foreground">
+                                <Instagram className="h-5 w-5" />
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                    <h4 className="font-semibold mb-4">Quick Links</h4>
-                    <ul className="space-y-2">
-                        <li><a href="#" className="hover:text-white">About Us</a></li>
-                        <li><a href="#" className="hover:text-white">FAQs</a></li>
-                        <li><a href="#" className="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                    </ul>
+                <div className="mt-8 pt-8 border-t text-center">
+                    <p className="text-sm text-muted-foreground">&copy; 2024 MovieTickets. All rights reserved.</p>
                 </div>
-                <div className="w-full md:w-1/3">
-                    <h4 className="font-semibold mb-4">Stay Connected</h4>
-                    <Input type="email" placeholder="Enter your email" className="mb-2" />
-                    <Button>Subscribe</Button>
-                </div>
-            </div>
-            <div className="mt-8 text-center">
-                <p>&copy; 2024 CinePass. All rights reserved.</p>
             </div>
         </footer>
     )
 }
+
+
+export default Footer;

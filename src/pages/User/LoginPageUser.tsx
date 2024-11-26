@@ -121,7 +121,7 @@ const LoginPageUser = () => {
                         Log In with Google
                     </Button>
                     <p className="text-sm text-center">
-                        Dont have an account?{" "}
+                        Don't have an account?{" "}
                         <Link to="/signup" className="text-primary hover:underline">
                             Sign up
                         </Link>

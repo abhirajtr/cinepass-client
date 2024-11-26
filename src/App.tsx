@@ -21,7 +21,8 @@ import TheatreOwnerManagementPageAdmin from "./pages/Admin/TheatreOwnerManagemen
 import TheatresPageTheatreOwner from "./pages/TheatreOwner/TheatresPageTheatreOwner";
 import DashboardTheatreOwner from "./pages/TheatreOwner/DashBoardTheatreOwner";
 import TheatreManagementPageAdmin from "./pages/Admin/TheatreManagementPageAdmin";
-import HomePage from "./pages/User/HomePage";
+import AddTheatre from "./pages/TheatreOwner/AddTheatre";
+// import HomePage from "./pages/User/HomePage";
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
       <Route path="/theatreOwner" element={<TheatreOwnerLayout />} >
         <Route path="/theatreOwner" element={<DashboardTheatreOwner />} />
         <Route path="theatres" element={<TheatresPageTheatreOwner />} />
+        <Route path="theatres/add-theatre" element={<AddTheatre />} />
       </Route>
 
       {/* Admin Routes */}
@@ -56,8 +58,8 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPageUser />} />
       <Route path="/reset-password" element={<ResetPasswordPageUser />} />
       <Route path="/" element={<UserLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/home" element={<HomePageUser />} />
+        <Route index element={<HomePageUser />} />
+        {/* <Route path="/home" element={<HomePageUser />} /> */}
       </Route>
 
       {/* Not Found Page */}

@@ -6,7 +6,7 @@ const sidebarItems = [
     { icon: Home, label: 'Dashboard', to: '/theatreOwner' },
     { icon: LayoutGrid, label: 'Theatres', to: '/theatreOwner/theatres' },
     { icon: Film, label: 'Movies', to: '/theatreOwner/movies' },
-    { icon: Calendar, label: 'Showtimes', to: '/theatreOwner/showtimes' },
+    { icon: Calendar, label: 'Show Time', to: '/theatreOwner/showtime' },
     { icon: Users, label: 'Customers', to: '/theatreOwner/customers' },
     { icon: Settings, label: 'Settings', to: '/theatreOwner/settings' },
 ]

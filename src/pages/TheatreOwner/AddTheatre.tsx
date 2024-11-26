@@ -1,215 +1,382 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { AxiosError } from 'axios';
-import { toast } from 'sonner';
-import Title from '../../components/Title';
-import { Button } from '@nextui-org/react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi';
+'use client'
 
-interface AddTheatreFormValues {
-    theatreName: string;
-    contactEmail: string;
-    phoneNumber: string;
-    streetAddress: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    verificationDocument: File | null;
+import { useState, useEffect, useRef, useCallback } from 'react'
+import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import axios, { AxiosError } from 'axios'
+import { toast } from 'sonner'
+
+// Replace with your actual Mapbox access token
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOXGL_ACCESSTOKEN;
+
+interface MapboxFeature {
+    place_name: string;
+    context: Array<{
+        id: string;
+        text: string;
+    }>;
 }
 
+const theatreSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    phone: z.string()
+        .min(10, "Phone is required")
+        .max(10, "phone number must be 10 digits")
+        .regex(/^\+?[\d\s-()]+$/, "Invalid phone number format"),
+    email: z.string().email("Invalid email"),
+    address: z.string().min(1, "Address is required"),
+    city: z.string().min(1, "City is required"),
+    state: z.string().min(1, "State is required"),
+    country: z.string().min(1, "Country is required"),
+    zipCode: z.string().min(1, "Zip Code is required"),
+    latitude: z.number().nullable(),
+    longitude: z.number().nullable(),
+    licenseNumber: z.string().min(1, "License number is required"),
+    verificationDocument: z.instanceof(File)
+        .refine(
+            (file) => file.size <= 5000000,
+            `Max file size is 5MB.`
+        )
+        .refine(
+            (file) => ['application/pdf'].includes(file.type),
+            "Only PDF files are allowed"
+        )
+})
+
+type TheatreDetails = z.infer<typeof theatreSchema>
+
 const AddTheatre = () => {
-    const ownerId = useSelector((state: RootState) => state.authReducer.userId)
-    const initialValues: AddTheatreFormValues = {
-        theatreName: '',
-        contactEmail: '',
-        phoneNumber: '',
-        streetAddress: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        verificationDocument: null,
-    };
+    const [mapCenter, setMapCenter] = useState<[number, number]>([-74.5, 40])
+    const [isMapReady, setIsMapReady] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const mapContainer = useRef<HTMLDivElement>(null)
+    const map = useRef<mapboxgl.Map | null>(null)
+    const marker = useRef<mapboxgl.Marker | null>(null);
 
-    const validationSchema = Yup.object({
-        theatreName: Yup.string().required('Theatre Name is required'),
-        contactEmail: Yup.string().email('Invalid email format').required('Email is required'),
-        phoneNumber: Yup.string()
-            .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
-            .required('Phone number is required'),
-        streetAddress: Yup.string().required('Street is required'),
-        city: Yup.string().required('City is required'),
-        state: Yup.string().required('State is required'),
-        zipCode: Yup.string()
-            .matches(/^[0-9]{6}$/, 'Zip Code must be 6 digits')
-            .required('Zip Code is required'),
-        verificationDocument: Yup.mixed()
-            .required("PDF verificationDocument is required")
-            .test("fileFormat", "Only PDF files are allowed", (value) => {
-                return value && (value as File).type === "application/pdf";
-            })
-            .test("fileSize", "File size should be less than 5MB", (value) => {
-                return value && (value as File).size <= 5 * 1024 * 1024;
-            }),
+    const form = useForm<TheatreDetails>({
+        resolver: zodResolver(theatreSchema),
+        defaultValues: {
+            name: '',
+            phone: '',
+            email: '',
+            address: '',
+            city: '',
+            state: '',
+            country: '',
+            zipCode: '',
+            latitude: null,
+            longitude: null,
+            licenseNumber: '',
+            verificationDocument: undefined,
+        },
+    })
 
-    });
-
-    const onSubmit = async (values: AddTheatreFormValues) => {
-        console.log('Form data:', values);
-
+    const updateFormWithLocation = useCallback(async (coords: [number, number]) => {
+        setIsLoading(true);
         try {
-            const formData = new FormData();
-            Object.entries(values).forEach(([key, value]) => {
-                formData.append(key, value as string | Blob);
-            });
-            formData.append("ownerId", ownerId as string);
+            const [lng, lat] = coords
+            form.setValue('latitude', lat)
+            form.setValue('longitude', lng)
 
-            const response = await theatreOwnerApi.post(`/theatre/add`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            console.log(response);
-            toast.success(response.data?.message);
+            const response = await fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxgl.accessToken}`
+            )
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error('Failed to fetch address details')
+            }
+
+            if (data.features && data.features.length > 0) {
+                const features = data.features[0] as MapboxFeature;
+                const context = features.context;
+
+                const street = features.place_name;
+                const city = context.find((item) => item.id.startsWith('place'))?.text || '';
+                const state = context.find((item) => item.id.startsWith('region'))?.text || '';
+                const country = context.find((item) => item.id.startsWith('country'))?.text || '';
+                const postalCode = context.find((item) => item.id.startsWith('postcode'))?.text || '';
+
+                form.setValue('address', street)
+                form.setValue('city', city)
+                form.setValue('state', state)
+                form.setValue('country', country)
+                form.setValue('zipCode', postalCode)
+            }
         } catch (error) {
-            const errorMessage = error instanceof AxiosError
-                ? error?.response?.data?.message
-                : "Something went wrong. Please try again.";
-            toast.error(errorMessage);
-            console.log(error);
+            console.error('Error fetching address:', error);
+            form.setError('address', {
+                type: 'manual',
+                message: 'Failed to fetch address details'
+            });
+        } finally {
+            setIsLoading(false)
         }
-    };
+    }, [form, setIsLoading]);
 
+    const initializeMap = useCallback((center: [number, number]) => {
+        if (!mapContainer.current) return;
+
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: center,
+            zoom: 13
+        })
+
+        map.current.addControl(new mapboxgl.NavigationControl())
+
+        map.current.on('load', () => {
+            setIsMapReady(true)
+            marker.current = new mapboxgl.Marker()
+                .setLngLat(center)
+                .addTo(map.current!)
+
+            updateFormWithLocation(center)
+        })
+
+        map.current.on('click', (e) => {
+            const { lng, lat } = e.lngLat
+            marker.current?.setLngLat([lng, lat])
+            updateFormWithLocation([lng, lat])
+        })
+    }, [updateFormWithLocation])
+
+    useEffect(() => {
+        if (!mapContainer.current || map.current) return
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords
+                setMapCenter([longitude, latitude])
+                initializeMap([longitude, latitude])
+            },
+            () => {
+                console.error("Unable to retrieve your location")
+                initializeMap(mapCenter)
+            }
+        )
+    }, [mapCenter, initializeMap])
+
+    useEffect(() => {
+        return () => {
+            if (map.current) {
+                map.current.remove();
+                map.current = null;
+            }
+            if (marker.current) {
+                marker.current.remove();
+                marker.current = null;
+            }
+        };
+    }, []);
+
+    const onSubmit = async (data: TheatreDetails) => {
+        try {
+            setIsLoading(true);
+            const response = await theatreOwnerApi.post("/theatres/add", data);
+            console.log("r----->", response);
+            await axios.put(response.data?.responseData.presignedUrl, data.verificationDocument);
+
+            // console.log(JSON.stringify(data, null, 2))
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.responseMessage);
+            }
+            console.error('Error submitting form:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
-        <>
-            <div className='text-3xl'>
-                <Title text1='Add' text2='Theatre' />
-            </div>
-
-            <div className="w-full">
-                <p className="text-lg text-white-90 mb-6">Fill out the form below to add a new theatre</p>
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-                    {({ setFieldValue }) => (
-                        <Form>
-                            <div className="flex flex-wrap -mx-4">
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="theatreName" className="block text-grey-75 mb-2">Theatre Name</label>
-                                    <Field
-                                        type="text"
-                                        id="theatreName"
-                                        name="theatreName"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
-                                        placeholder="Enter theatre name"
-                                    />
-                                    <ErrorMessage name="theatreName" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="contactEmail" className="block text-grey-75 mb-2">Contact Email</label>
-                                    <Field
-                                        type="email"
-                                        id="contactEmail"
-                                        name="contactEmail"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white rounded-md focus:outline-none border border-grey-15 placeholder:text-grey-35 focus:ring-1 focus:ring-green-80"
-                                        placeholder="Enter contact email"
-                                    />
-                                    <ErrorMessage name="contactEmail" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="phoneNumber" className="block text-grey-75 mb-2">Phone Number</label>
-                                    <Field
-                                        type="text"
-                                        id="phoneNumber"
-                                        name="phoneNumber"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
-                                        placeholder="Enter phone number"
-                                        maxLength={10}
-                                    />
-                                    <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="streetAddress" className="block text-grey-75 mb-2">Street Address</label>
-                                    <Field
-                                        type="text"
-                                        id="streetAddress"
-                                        name="streetAddress"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
-                                        placeholder="Enter streetAddress address"
-                                    />
-                                    <ErrorMessage name="streetAddress" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="city" className="block text-grey-75 mb-2">City</label>
-                                    <Field
-                                        type="text"
-                                        id="city"
-                                        name="city"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
-                                        placeholder="Enter city"
-                                    />
-                                    <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="state" className="block text-grey-75 mb-2">State</label>
-                                    <Field
-                                        type="text"
-                                        id="state"
-                                        name="state"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
-                                        placeholder="Enter state"
-                                    />
-                                    <ErrorMessage name="state" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="zipCode" className="block text-grey-75 mb-2">Zip Code</label>
-                                    <Field
-                                        type="text"
-                                        id="zipCode"
-                                        name="zipCode"
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 placeholder:text-grey-35 focus:ring-green-80"
-                                        placeholder="Enter zip code"
-                                    />
-                                    <ErrorMessage name="zipCode" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
-
-                                <div className="w-full md:w-1/2 px-4 mb-4">
-                                    <label htmlFor="verificationDocument" className="block text-grey-75 mb-2">Verification Document (PDF)</label>
-                                    <input
-                                        type="file"
-                                        id="verificationDocument"
-                                        name="verificationDocument"
-                                        accept=".pdf"
-                                        onChange={(event) => {
-                                            const file = event.currentTarget.files ? event.currentTarget.files[0] : null;
-                                            setFieldValue("verificationDocument", file);
-                                        }}
-                                        className="w-full px-4 py-2 bg-grey-10 text-absolute-white border border-grey-15 rounded-md focus:outline-none focus:ring-1 focus:ring-green-80"
-                                    />
-                                    <ErrorMessage name="verificationDocument" component="div" className="text-red-500 text-sm mt-1" />
-                                </div>
+        <div className="container">
+            <div className="w-full max-w-4xl">
+                {isLoading && (
+                    <div className="text-center py-2">
+                        <p className="text-sm text-gray-500">Loading address details...</p>
+                    </div>
+                )}
+                <CardHeader>
+                    <CardTitle>Theatre Details Form</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Theatre Name</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="phone"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Phone</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="email" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="licenseNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>License Number</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
 
-                            <div className='w-full py-2'>
-                                <Button 
-                                    className=' bg-green-60 text-grey-15 py-2 rounded-md hover:bg-green-80 transition duration-300'
-                                    type='submit'
-                                >
-                                    Add Theatre
-                                </Button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="address"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Address</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} readOnly />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="city"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>City</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} readOnly />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="state"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>State</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} readOnly />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="country"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Country</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} readOnly />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="zipCode"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Zip Code</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} readOnly />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
-                        </Form>
-                    )}
-                </Formik>
+                            <div ref={mapContainer} className="h-64 w-full rounded-md" />
+
+                            {isMapReady && form.watch('latitude') && form.watch('longitude') && (
+                                <p className="text-sm text-gray-500">
+                                    Selected coordinates: {form.watch('latitude')?.toFixed(6)}, {form.watch('longitude')?.toFixed(6)}
+                                </p>
+                            )}
+
+                            <FormField
+                                control={form.control}
+                                name="verificationDocument"
+                                render={({ field: { onChange, value, ...field } }) => (
+                                    <FormItem>
+                                        <FormLabel>Verification Document</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="file"
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    const file = e.target.files?.[0]
+                                                    if (file) onChange(file)
+                                                }}
+                                                {...field}
+                                                value={value instanceof File ? undefined : value as unknown as string}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>Upload a verification document (PDF, JPEG, or PNG, max 5MB)</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <Button
+                                type="submit"
+                                className="w-full sm:w-1/2"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Loading..." : "Submit"}
+                            </Button>
+                        </form>
+                    </Form>
+                </CardContent>
             </div>
-        </>
-    );
-};
+        </div>
+    )
+}
 
 export default AddTheatre;

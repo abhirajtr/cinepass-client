@@ -10,12 +10,12 @@ export const loginUser = createAsyncThunk(
     async (loginData: { email: string, password: string }, { dispatch }) => {
         try {
             const response = await axios.post(backendUrl + `/user/login`, loginData, { withCredentials: true });
-            toast.success(response.data?.message);
-            dispatch(setToken({ role: "user", token: response.data.accessToken }));
+            toast.success(response.data?.responseMessage);
+            dispatch(setToken({ role: "user", token: response.data.responseData.accessToken }));
             console.log(response);
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+                toast.error(error.response?.data?.responseMessage || "An unexpected error occurred. Please try again.");
             }
             console.log(error);
         }
