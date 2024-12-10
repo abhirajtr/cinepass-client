@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { Search } from 'lucide-react'
 import { Button } from "@/components/ui/button"
@@ -17,6 +15,7 @@ import { UserTable } from '@/components/Admin/UserTable'
 import adminApi from '@/axiosInstance/adminApi'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
+import { useDebounce } from '@/hooks/useDebounce'
 
 interface User {
     userId: string;
@@ -29,7 +28,7 @@ interface User {
 
 export default function UserManagementPageAdmin() {
     const [users, setUsers] = useState<User[]>([]);
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
     const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
@@ -38,11 +37,12 @@ export default function UserManagementPageAdmin() {
     const [statusFilter, setStatusFilter] = useState('all')
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
     const [userToToggle, setUserToToggle] = useState<User | null>(null)
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const params = { search: searchTerm, status: statusFilter, usersPerPage, currentPage }
+                const params = { search: debouncedSearchTerm, status: statusFilter, usersPerPage, currentPage }
                 const response = await adminApi.get(`/users`, { params });
                 setUsers(response.data.responseData?.users);
                 setTotalUsers(response.data.responseData.totalUsers);
@@ -54,7 +54,7 @@ export default function UserManagementPageAdmin() {
             }
         }
         fetchUsers();
-    }, [searchTerm, statusFilter, currentPage, usersPerPage]);
+    }, [debouncedSearchTerm, statusFilter, currentPage, usersPerPage]);
 
     const totalPages = Math.ceil(totalUsers / usersPerPage);
 

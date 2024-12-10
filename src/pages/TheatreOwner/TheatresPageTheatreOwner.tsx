@@ -16,26 +16,32 @@ import { buttonVariants } from '@/components/ui/button'
 
 interface Theatre {
     theatreId: string;
-    theatreName: string;
-    contactEmail: string;
-    contactNumber: string;
-    streetAddress: string;
+    ownerId: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
     city: string;
     state: string;
     zipCode: string;
+    licenseNumber: string;
     verificationDocument: string;
     status: string;
 }
 
 export interface AddTheatre {
-    theatreName: string;
-    contactEmail: string;
-    contactNumber: string;
-    streetAddress: string;
+    theatreId: string;
+    ownerId: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
     city: string;
     state: string;
     zipCode: string;
-    verificationDocument: File | null;
+    licenseNumber: string;
+    verificationDocument: string;
+    status: string;
 }
 
 
@@ -58,36 +64,6 @@ const TheatresPageTheatreOwner = () => {
         }
         fetchTheatres();
     }, []);
-    // const handleAddTheatre = async (newTheatre: AddTheatre) => {
-    //     if (!newTheatre.verificationDocument) {
-    //         alert("Verification document is required.");
-    //         return;
-    //     }
-    //     const formData = new FormData();
-    //     formData.append("theatreName", newTheatre.theatreName);
-    //     formData.append("contactEmail", newTheatre.contactEmail);
-    //     formData.append("contactNumber", newTheatre.contactNumber);
-    //     formData.append("streetAddress", newTheatre.streetAddress);
-    //     formData.append("city", newTheatre.city);
-    //     formData.append("state", newTheatre.state);
-    //     formData.append("zipCode", newTheatre.zipCode);
-    //     formData.append("verificationDocument", newTheatre.verificationDocument);
-    //     try {
-    //         console.log("New Theatre Data:", newTheatre);
-
-    //         const response = await theatreOwnerApi.post(`${backendUrl}/theatreOwner/theatres/add`, formData);
-    //         setTheatres((prevTheatres) => [...prevTheatres, response.data.theatre]);
-    //         console.log(response);
-    //         toast.success(response.data.responseMessage);
-    //         setIsAddingTheatre(false);
-    //     } catch (error) {
-    //         if (error instanceof AxiosError) {
-    //             toast.error(error.response?.data.responseMessage || "An unexpected error occured");
-    //         }
-    //         console.log(error);
-    //     }
-    //     // setTheatres([...theatres, { ...newTheatre, id: Date.now().toString() }])
-    // }
 
     return (
         <div className="container mx-auto p-6">

@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -51,14 +49,12 @@ const SignupPageUser = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
         try {
-            const response = await axios.post(`${backendUrl}/user/signup`, { email: values.email, phoneNumeber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
-            toast.error(response.data.message);
+            const response = await axios.post(`${backendUrl}/user/signup`, { email: values.email, phoneNumber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
+            toast.success(response.data.responseMessage);
             navigate('/verify-otp', { state: { email: values.email } });
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message);
-            } else {
-                toast.error("An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
             console.log(error);
         }
@@ -178,9 +174,9 @@ const SignupPageUser = () => {
                     </Form>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                    <Button variant="outline" className="w-full">
+                    {/* <Button variant="outline" className="w-full">
                         Sign up with Google
-                    </Button>
+                    </Button> */}
                     <p className="text-sm text-center">
                         Already have an account?{" "}
                         <Link to="/login" className="text-primary hover:underline">

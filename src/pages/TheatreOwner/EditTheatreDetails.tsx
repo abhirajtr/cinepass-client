@@ -13,7 +13,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOXGL_ACCESSTOKEN;
 
@@ -40,27 +40,20 @@ const theatreSchema = z.object({
     latitude: z.number().nullable(),
     longitude: z.number().nullable(),
     licenseNumber: z.string().min(1, "License number is required"),
-    verificationDocument: z.instanceof(File)
-        .refine(
-            (file) => file.size <= 5000000,
-            `Max file size is 5MB.`
-        )
-        .refine(
-            (file) => ['application/pdf'].includes(file.type),
-            "Only PDF files are allowed"
-        )
+    verificationDocument: z.any().optional()
 })
 
 type TheatreDetails = z.infer<typeof theatreSchema>
 
-const AddTheatre = () => {
+const EditTheatre = () => {
     const [mapCenter, setMapCenter] = useState<[number, number]>([-74.5, 40])
     const [isMapReady, setIsMapReady] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const mapContainer = useRef<HTMLDivElement>(null)
     const map = useRef<mapboxgl.Map | null>(null)
-    const marker = useRef<mapboxgl.Marker | null>(null);
-    const navigate = useNavigate();
+    const marker = useRef<mapboxgl.Marker | null>(null)
+    const navigate = useNavigate()
+    const { theatreId } = useParams<{ theatreId: string }>()
 
     const form = useForm<TheatreDetails>({
         resolver: zodResolver(theatreSchema),
@@ -76,9 +69,41 @@ const AddTheatre = () => {
             latitude: null,
             longitude: null,
             licenseNumber: '',
-            verificationDocument: undefined,
         },
     })
+
+    useEffect(() => {
+        const fetchTheatreDetails = async () => {
+            console.log(theatreId);
+            
+            if (!theatreId) return
+            setIsLoading(true)
+            try {
+                const response = await theatreOwnerApi.get(`/theatres/${theatreId}`)
+                console.log(response);
+                const theatreData = response.data.responseData.theatre
+                form.reset(theatreData)
+                if (theatreData.latitude && theatreData.longitude) {
+                    setMapCenter([theatreData.longitude, theatreData.latitude])
+                    if (map.current) {
+                        map.current.setCenter([theatreData.longitude, theatreData.latitude])
+                        if (marker.current) {
+                            marker.current.setLngLat([theatreData.longitude, theatreData.latitude])
+                        }
+                    }
+                }
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    toast.error(error.response?.data.responseMessage || "Failed to fetch theatre details")
+                }
+                console.error('Error fetching theatre details:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchTheatreDetails()
+    }, [theatreId, form])
 
     const updateFormWithLocation = useCallback(async (coords: [number, number]) => {
         setIsLoading(true);
@@ -180,14 +205,19 @@ const AddTheatre = () => {
     }, []);
 
     const onSubmit = async (data: TheatreDetails) => {
-        try { 
+        if (!theatreId) return
+        try {
             setIsLoading(true);
-            const response = await theatreOwnerApi.post("/theatres/add", data);
-            await axios.put(response.data?.responseData.presignedUrl, data.verificationDocument);
+            const response = await theatreOwnerApi.patch(`/theatres/${theatreId}/edit`, data);
+            if (data.verificationDocument instanceof File) {
+                toast.info("uploading file")
+                await axios.put(response.data?.responseData.presignedUrl, data.verificationDocument);
+            }
+            toast.success("Theatre updated successfully")
             navigate("/theatreOwner/theatres");
         } catch (error) {
             if (error instanceof AxiosError) {
-                toast.error(error.response?.data.responseMessage || "An unexpected error occured");
+                toast.error(error.response?.data.responseMessage || "An unexpected error occurred");
             }
             console.error('Error submitting form:', error);
         } finally {
@@ -200,11 +230,11 @@ const AddTheatre = () => {
             <div className="w-full max-w-4xl">
                 {isLoading && (
                     <div className="text-center py-2">
-                        <p className="text-sm text-gray-500">Loading address details...</p>
+                        <p className="text-sm text-gray-500">Loading...</p>
                     </div>
                 )}
                 <CardHeader>
-                    <CardTitle>Theatre Details Form</CardTitle>
+                    <CardTitle>Edit Theatre Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -354,10 +384,9 @@ const AddTheatre = () => {
                                                     if (file) onChange(file)
                                                 }}
                                                 {...field}
-                                                value={value instanceof File ? undefined : value as unknown as string}
                                             />
                                         </FormControl>
-                                        <FormDescription>Upload a verification document (PDF, JPEG, or PNG, max 5MB)</FormDescription>
+                                        <FormDescription>Upload a new verification document if needed (PDF, JPEG, or PNG, max 5MB)</FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -368,7 +397,7 @@ const AddTheatre = () => {
                                 className="w-full sm:w-1/2"
                                 disabled={isLoading}
                             >
-                                {isLoading ? "Loading..." : "Submit"}
+                                {isLoading ? "Updating..." : "Update Theatre"}
                             </Button>
                         </form>
                     </Form>
@@ -378,4 +407,4 @@ const AddTheatre = () => {
     )
 }
 
-export default AddTheatre;
+export default EditTheatre

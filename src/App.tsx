@@ -22,6 +22,12 @@ import TheatresPageTheatreOwner from "./pages/TheatreOwner/TheatresPageTheatreOw
 import DashboardTheatreOwner from "./pages/TheatreOwner/DashBoardTheatreOwner";
 import TheatreManagementPageAdmin from "./pages/Admin/TheatreManagementPageAdmin";
 import AddTheatre from "./pages/TheatreOwner/AddTheatre";
+import MovieManagementPage from "./pages/Admin/MovieManagementPage";
+import AddMoviePageAdmin from "./pages/Admin/AddMoviePageAdmin";
+import ScreensPageTheatreOwner from "./pages/TheatreOwner/ScreenManagementPageTheatreOwner";
+import EditTheatre from "./pages/TheatreOwner/EditTheatreDetails";
+import MoviesTheatreOwnerPage from "./pages/TheatreOwner/MoviesTheatreOwnerPage";
+import ScreenConfig from "./pages/TheatreOwner/TheaterSeatArrangementTool";
 // import HomePage from "./pages/User/HomePage";
 
 
@@ -39,6 +45,11 @@ const App = () => {
         <Route path="/theatreOwner" element={<DashboardTheatreOwner />} />
         <Route path="theatres" element={<TheatresPageTheatreOwner />} />
         <Route path="theatres/add-theatre" element={<AddTheatre />} />
+        <Route path="theatres/:theatreId/screens" element={<ScreensPageTheatreOwner />} />
+        <Route path="theatres/:theatreId/edit" element={<EditTheatre />} />
+        <Route path="theatres/:theatreId/add-screen" element={<ScreenConfig />} />
+        <Route path="movies" element={<MoviesTheatreOwnerPage />} />
+        
       </Route>
 
       {/* Admin Routes */}
@@ -47,7 +58,9 @@ const App = () => {
         <Route path="/admin" element={<AdminDashboardPage />} />
         <Route path="users" element={<UserManagementPageAdmin />} />
         <Route path="theatreOwners" element={<TheatreOwnerManagementPageAdmin />} />
+        <Route path="movies" element={<MovieManagementPage />} />
         <Route path="theatres" element={<TheatreManagementPageAdmin />} />
+        <Route path="movies/add-movie" element={<AddMoviePageAdmin />} />
       </Route>
 
 

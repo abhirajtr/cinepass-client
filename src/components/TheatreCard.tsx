@@ -2,22 +2,26 @@
 
 import { useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Settings, Eye, Edit } from 'lucide-react'
+import { Eye, Edit, ScreenShare } from 'lucide-react'
 import ViewTheatreDetailsModal from './TheatreOwner/ViewTheatreDetailsModal'
+import { Link } from 'react-router-dom'
 // import ViewDetailsModal from './ViewDetailsModal'
 
 interface TheatreCardProps {
     theatre: {
         theatreId: string;
-        theatreName: string;
-        contactEmail: string;
-        contactNumber: string;
-        streetAddress: string;
+        ownerId: string;
+        name: string;
+        email: string;
+        phone: string;
+        address: string;
         city: string;
         state: string;
         zipCode: string;
+        licenseNumber: string;
+        verificationDocument: string;
         status: string;
     }
 }
@@ -31,7 +35,7 @@ export default function TheatreCard({ theatre }: TheatreCardProps) {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                        {theatre.theatreName}
+                        {theatre.name}
                     </CardTitle>
                     <Badge variant={badgeVariant}>
                         {theatre.status}
@@ -42,20 +46,23 @@ export default function TheatreCard({ theatre }: TheatreCardProps) {
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground">{theatre.city}, {theatre.state}</p>
-                    <p className="text-sm text-muted-foreground">{theatre.contactNumber}</p>
+                    <p className="text-sm text-muted-foreground">{theatre.phone}</p>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline" size="sm">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Config
-                    </Button>
+                    <Link to={`${theatre.theatreId}/screens`} className={buttonVariants({ variant: "outline" })} >
+                        <ScreenShare className="mr-2 h-4 w-4" />
+                        Screens
+                    </Link>
                     <Button variant="outline" size="sm" onClick={() => setIsViewDetailsOpen(true)}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Link to={`${theatre.theatreId}/edit`} className={buttonVariants({ variant: "outline" })}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
+                    </Link>
+
+                    <Button variant="outline" size="sm" asChild>
                     </Button>
                 </CardFooter>
             </Card>

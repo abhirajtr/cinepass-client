@@ -1,5 +1,3 @@
-'use client'
-
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarAdmin from './components/NavbarAdmin'

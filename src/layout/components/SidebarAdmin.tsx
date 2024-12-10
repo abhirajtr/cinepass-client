@@ -1,4 +1,4 @@
-import { BarChart3, Film, Theater, Ticket, Users } from 'lucide-react';
+import { BarChart3, Clapperboard, Film, Theater, Ticket, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom'; // Import useNavigate for navigation
 
 import {
@@ -15,6 +15,7 @@ const sidebarItems = [
     { icon: Users, label: 'Users', to: '/admin/users' },
     { icon: Users, label: 'Theatre Owners', to: '/admin/theatreOwners' },
     { icon: Theater, label: 'Theatres', to: '/admin/theatres' },
+    { icon: Clapperboard, label: 'Movies', to: '/admin/movies' },
     { icon: Ticket, label: 'Bookings', to: '/admin/bookings' },
 ]
 
