@@ -1,12 +1,11 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { MovieCard } from "./MovieCard"
 
 interface HorizontalMovieSectionProps {
     title: string
     movies: Array<{
         title: string
-        imageUrl: string
-        rating: number
+        posterPath: string
+        // rating: number
     }>
 }
 
@@ -16,11 +15,11 @@ export function HorizontalMovieSection({ title, movies }: HorizontalMovieSection
             <div className="container">
                 <h2 className="text-2xl font-bold mb-4">{title}</h2>
                 <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-                    <div className="flex w-max space-x-4 p-4">
+                    {/* <div className="flex w-max space-x-4 p-4">
                         {movies.map((movie) => (
                             <MovieCard key={movie.title} {...movie} />
                         ))}
-                    </div>
+                    </div> */}
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
             </div>

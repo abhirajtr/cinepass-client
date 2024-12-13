@@ -1,29 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Plus, Settings, Eye } from 'lucide-react'
+import { Plus, Settings, Eye, Edit, Film } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { buttonVariants } from "@/components/ui/button"
-
+import { AxiosError } from 'axios'
+import { toast } from 'sonner'
+import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 
 interface Screen {
     id: string
     name: string
     capacity: number
-    type: string
-    features: string[]
 }
 
-const mockScreens: Screen[] = [
-    { id: '1', name: 'Screen 1', capacity: 150, type: 'Standard', features: ['Dolby Audio', '4K Projection'] },
-    { id: '2', name: 'Screen 2', capacity: 200, type: 'IMAX', features: ['IMAX 3D', 'Dolby Atmos'] },
-    { id: '3', name: 'Screen 3', capacity: 100, type: 'VIP', features: ['Recliner Seats', 'In-seat Service'] },
-    { id: '4', name: 'Screen 4', capacity: 180, type: 'Standard', features: ['3D Capable', 'Surround Sound'] },
-]
-
-const ScreenCard: React.FC<{ screen: Screen }> = ({ screen }) => {
+const ScreenCard: React.FC<{ screen: Screen, theatreId: string }> = ({ screen, theatreId }) => {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
     return (
@@ -38,9 +31,8 @@ const ScreenCard: React.FC<{ screen: Screen }> = ({ screen }) => {
             </CardHeader>
             <CardContent>
                 <p>Capacity: {screen.capacity}</p>
-                <p>Type: {screen.type}</p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col space-y-2">
                 <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
                     <DialogTrigger asChild>
                         <Button variant="outline" className="w-full">
@@ -61,39 +53,55 @@ const ScreenCard: React.FC<{ screen: Screen }> = ({ screen }) => {
                                     <p>{screen.capacity} seats</p>
                                 </div>
                                 <div>
-                                    <h4 className="font-semibold">Type</h4>
-                                    <p>{screen.type}</p>
-                                </div>
-                                <div>
                                     <h4 className="font-semibold">Features</h4>
-                                    <ul className="list-disc list-inside">
-                                        {screen.features.map((feature, index) => (
-                                            <li key={index}>{feature}</li>
-                                        ))}
-                                    </ul>
+                                    {/* Add features here if available */}
                                 </div>
                             </div>
                         </ScrollArea>
                     </DialogContent>
                 </Dialog>
+                <Link to={`/theatreOwner/theatres/${theatreId}/screens/${screen.id}/edit`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
+                    <Edit className="mr-2 h-4 w-4" /> Edit Screen
+                </Link>
+                <Link to={`/theatreOwner/theatres/${theatreId}/screens/${screen.id}/show-management`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
+                    <Film className="mr-2 h-4 w-4" /> Manage Shows
+                </Link>
             </CardFooter>
         </Card>
     )
 }
 
 const ScreenManagement: React.FC = () => {
+    const [screens, setScreens] = useState<Screen[]>([]);
     const { theatreId } = useParams();
+
+    useEffect(() => {
+        const fetchScreens = async () => {
+            try {
+                const response = await theatreOwnerApi.get(`/theatre/${theatreId}/getAllScreens`);
+                const screensData = response.data?.responseData?.screens || [];
+                setScreens(screensData);
+                console.log(response.data.responseData.screens);
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    toast.error(error.response?.data.responseMessage || "An unexpected error occurred");
+                }
+            }
+        }
+        fetchScreens();
+    }, [theatreId]);
+
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Screen Management</h1>
-                <Link className={buttonVariants({ variant: "outline" })} to={`/theatreOwner/theatres/${theatreId}/add-screen`} >
+                <Link className={buttonVariants({ variant: "outline" })} to={`/theatreOwner/theatres/${theatreId}/add-screen`}>
                     <Plus className="mr-2 h-4 w-4" /> Add Screen
                 </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {mockScreens.map((screen) => (
-                    <ScreenCard key={screen.id} screen={screen} />
+                {screens.map((screen) => (
+                    <ScreenCard key={screen.id} screen={screen} theatreId={theatreId!} />
                 ))}
             </div>
         </div>
@@ -101,3 +109,4 @@ const ScreenManagement: React.FC = () => {
 }
 
 export default ScreenManagement;
+

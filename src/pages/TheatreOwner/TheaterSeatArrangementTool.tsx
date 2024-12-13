@@ -49,10 +49,12 @@ const ScreenConfig = () => {
             if (!seats || seats.length === 0) {
                 return toast.error('Please generate the seats first');
             }
+            const capacity = seats.flat().filter(seat => seat.type !== "disabled").length;
             await theatreOwnerApi.post(`/theatre/${theatreId}/add-screen`, {
                 theatreId,
                 screenName,
                 seats,
+                capacity,
             });
             toast.success("Seat configuration saved successfully");
         } catch (error) {
@@ -79,7 +81,7 @@ const ScreenConfig = () => {
                 row.push({
                     id: `${i}-${j}`,
                     type: seatType,
-                    label: label ?? "gap",
+                    label: label,
                     price: price
                 })
                 if (seatType !== "disabled") {
@@ -103,7 +105,7 @@ const ScreenConfig = () => {
                 newSeats[rowIndex][i].label = `${String.fromCharCode(65 + rowIndex)}${seatNumber}`
                 seatNumber++
             } else {
-                newSeats[rowIndex][i].label = ""
+                newSeats[rowIndex][i].label = "null"
             }
         }
 

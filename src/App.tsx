@@ -3,7 +3,7 @@ import LoginPageUser from "./pages/User/LoginPageUser";
 import ForgotPasswordPageUser from "./pages/User/ForgotPasswordPageUser";
 import ResetPasswordPageUser from "./pages/User/ResetPasswordPageUser";
 import VerifyOtpPageUser from "./pages/User/VerifyOtpPageUser";
-import HomePageUser from "./pages/User/HomePageUser";
+// import HomePageUser from "./pages/User/HomePageUser";
 import UserLayout from "./layout/UserLayout";
 import SignupPageTheatreOwner from "./pages/TheatreOwner/SignupPageTheatreOwner";
 import SignupPageUser from "./pages/User/SignupPageUser";
@@ -28,6 +28,12 @@ import ScreensPageTheatreOwner from "./pages/TheatreOwner/ScreenManagementPageTh
 import EditTheatre from "./pages/TheatreOwner/EditTheatreDetails";
 import MoviesTheatreOwnerPage from "./pages/TheatreOwner/MoviesTheatreOwnerPage";
 import ScreenConfig from "./pages/TheatreOwner/TheaterSeatArrangementTool";
+// import ManageShowsPage from "./pages/TheatreOwner/ManageShowsPage";
+import HomePage from "./pages/User/HomePage";
+import MovieDetails from "./pages/User/MovieDetails";
+import CinemaList from "./pages/User/CinemaList";
+import ShowManagementPage from "./pages/TheatreOwner/ShowManagementPage";
+// import ShowListPage from "./components/TheatreOwner/ShowListPage";
 // import HomePage from "./pages/User/HomePage";
 
 
@@ -48,7 +54,9 @@ const App = () => {
         <Route path="theatres/:theatreId/screens" element={<ScreensPageTheatreOwner />} />
         <Route path="theatres/:theatreId/edit" element={<EditTheatre />} />
         <Route path="theatres/:theatreId/add-screen" element={<ScreenConfig />} />
+        {/* <Route path="theatres/:theatreId/screens/:screenId/manage-shows" element={<ShowListPage />} /> */}
         <Route path="movies" element={<MoviesTheatreOwnerPage />} />
+        <Route path="theatres/:theatreId/screens/:screenId/show-management" element={<ShowManagementPage />} />
         
       </Route>
 
@@ -71,8 +79,9 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPageUser />} />
       <Route path="/reset-password" element={<ResetPasswordPageUser />} />
       <Route path="/" element={<UserLayout />}>
-        <Route index element={<HomePageUser />} />
-        {/* <Route path="/home" element={<HomePageUser />} /> */}
+        <Route index element={<HomePage />} />
+        <Route path="/movie/:movieId/details" element={<MovieDetails />} />
+        <Route path="/movie/:movieId/book" element={<CinemaList />} />
       </Route>
 
       {/* Not Found Page */}

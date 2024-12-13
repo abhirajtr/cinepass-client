@@ -83,3 +83,27 @@ export const sampleMovies = [
 export const formatDate = (datestring: string): string => {
     return new Date(datestring).toISOString().slice(0, 16).replace("T", " ");
 }
+
+
+const languageMap: { [key: string]: string } = {
+    en: "English",
+    ml: "Malayalam",
+    hi: "Hindi",
+    ta: "Tamil",
+    te: "Telugu",
+    kn: "Kannada",
+    // Add more languages as needed
+};
+
+export const getLanguageName = (languageCode: string | undefined) => {
+    return languageCode ? languageMap[languageCode] || languageCode : "Unknown";
+};
+
+export const formatVotes = (votes: number = 0): string => {
+    if (votes >= 1_000_000) {
+        return `${(votes / 1_000_000).toFixed(1)}M`;
+    } else if (votes >= 1_000) {
+        return `${(votes / 1_000).toFixed(1)}K`;
+    }
+    return votes.toString();
+};

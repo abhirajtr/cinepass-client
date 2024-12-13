@@ -31,7 +31,7 @@ const AddMoviePageAdmin = () => {
             try {
                 const response = await tmdbApiInstance.get('/movie/now_playing', {
                     params: {
-                        region: "US",
+                        region: "IN",
                     },
                 });
                 console.log(response);
