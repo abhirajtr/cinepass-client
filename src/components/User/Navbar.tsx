@@ -1,21 +1,34 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, User } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Search, User } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LocationDropdown } from "./LocationDropDown";
+import { LocationDropdown } from "./LocationDropdown";
+import { useDispatch } from "react-redux";
+import { logout } from "@/feature/authSlice";
 import FullScreenSearchModal from "./FullScreenSearchModal";
-
-const isLoggedIn = true; // This should be dynamically determined based on the user's auth state
 
 export default function Navbar() {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const { userToken } = useSelector((state: RootState) => state.authReducer);
+    const dispatch = useDispatch();
+
+    const handleLogout = async () => {
+        try {
+            dispatch(logout("user"));
+        } catch (error) {
+            console.log(error);
+            // handle error if needed
+        }
+    };
 
     return (
         <nav className="bg-background border-b">
@@ -40,12 +53,12 @@ export default function Navbar() {
                                 >
                                     Movies
                                 </Link>
-                                <Link
+                                {/* <Link
                                     to="/theatres"
                                     className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
                                 >
                                     Theatres
-                                </Link>
+                                </Link> */}
                             </div>
                         </div>
                     </div>
@@ -69,7 +82,7 @@ export default function Navbar() {
                     {/* Right Section */}
                     <div className="flex items-center space-x-4">
                         <LocationDropdown />
-                        {isLoggedIn ? (
+                        {userToken ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -84,12 +97,12 @@ export default function Navbar() {
                                         <Link to="/bookings">My Bookings</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <Link to="/logout">Logout</Link>
+                                        <span className="hover:cursor-pointer" onClick={handleLogout}>Logout</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Button variant="ghost">Sign In</Button>
+                            <Link to="/login" className={buttonVariants({ variant: "ghost" })}>Sign In</Link>
                         )}
                     </div>
                 </div>
@@ -98,4 +111,3 @@ export default function Navbar() {
         </nav>
     );
 }
-

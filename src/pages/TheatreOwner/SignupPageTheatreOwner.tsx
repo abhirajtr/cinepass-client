@@ -49,7 +49,7 @@ const SignupPageTheatreOwner = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
         try {
-            const response = await axios.post(`${backendUrl}/theatreOwner/signup`, { email: values.email, phoneNumeber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
+            const response = await axios.post(`${backendUrl}/theatreOwner/signup`, { email: values.email, phoneNumber: values.phoneNumber, password: values.password, confirmPassword: values.confirmPassword })
             toast.error(response.data.responseMessage);
             navigate('/theatreOwner/verify-otp', { state: { email: values.email } });
         } catch (error) {

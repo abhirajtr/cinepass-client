@@ -107,3 +107,45 @@ export const formatVotes = (votes: number = 0): string => {
     }
     return votes.toString();
 };
+
+
+export const extractTime = (isoTimestamp: string | Date): string | null => {
+    try {
+        const date = new Date(isoTimestamp);
+
+        if (isNaN(date.getTime())) {
+            return null;
+        }
+
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+        const strTime = `${hours}:${minutesStr} ${ampm}`;
+        return strTime;
+    } catch {
+        return null;
+    }
+};
+export const extractDate = (isoTimestamp: string | Date): string | null => {
+    try {
+        const date = new Date(isoTimestamp);
+        if (isNaN(date.getTime())) {
+            return null;
+        }
+        const year = date.getFullYear();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const day = date.getDate();
+        return `${day} ${month} ${year}`;
+    } catch {
+        return null;
+    }
+};
+
+
+export const convertCentsToINR = (cents: number): string  => {
+    const rupees = Math.floor(cents / 100);
+    return `₹${rupees.toLocaleString()}`;
+}

@@ -1,22 +1,26 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Film, Calendar, Users, Settings, LayoutGrid } from 'lucide-react'
+import { Home, Film, LayoutGrid } from 'lucide-react'
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
 
 const sidebarItems = [
-    { icon: Home, label: 'Dashboard', to: '/theatreOwner' },
+    { icon: Home, label: 'Dashboard', to: '/theatreOwner/dashboard' },
     { icon: LayoutGrid, label: 'Theatres', to: '/theatreOwner/theatres' },
     { icon: Film, label: 'Movies', to: '/theatreOwner/movies' },
-    { icon: Calendar, label: 'Show Time', to: '/theatreOwner/showtime' },
-    { icon: Users, label: 'Customers', to: '/theatreOwner/customers' },
-    { icon: Settings, label: 'Settings', to: '/theatreOwner/settings' },
+    // { icon: Calendar, label: 'Show Time', to: '/theatreOwner/showtime' },
+    // { icon: Users, label: 'Customers', to: '/theatreOwner/customers' },
+    // { icon: Settings, label: 'Settings', to: '/theatreOwner/settings' },
 ]
 
 const SidebarTheatreOwner = () => {
 
     const location = useLocation();
+    console.log(location);
+
 
     const isActive = (path: string) => {
-        return location.pathname === path ? 'bg-accent text-primary' : '';
+        console.log("isActive", location.pathname, path);
+
+        return location.pathname.toLowerCase().includes(path.toLowerCase()) ? 'bg-accent text-primary' : '';
     }
 
     return (

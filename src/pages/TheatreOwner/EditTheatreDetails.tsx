@@ -13,7 +13,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOXGL_ACCESSTOKEN;
 
@@ -75,7 +76,7 @@ const EditTheatre = () => {
     useEffect(() => {
         const fetchTheatreDetails = async () => {
             console.log(theatreId);
-            
+
             if (!theatreId) return
             setIsLoading(true)
             try {
@@ -234,6 +235,19 @@ const EditTheatre = () => {
                     </div>
                 )}
                 <CardHeader>
+                    <Breadcrumb className='mb-3'>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link to="/theatreOwner/theatres">Theatres</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Edit Theatre</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
                     <CardTitle>Edit Theatre Details</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -372,6 +386,7 @@ const EditTheatre = () => {
                             <FormField
                                 control={form.control}
                                 name="verificationDocument"
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                 render={({ field: { onChange, value, ...field } }) => (
                                     <FormItem>
                                         <FormLabel>Verification Document</FormLabel>

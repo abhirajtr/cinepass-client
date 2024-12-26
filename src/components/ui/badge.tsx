@@ -15,6 +15,9 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
         outline: "text-foreground",
+        verified: "border-transparent bg-green-500 text-primary-foreground shadow",
+        pending: "border-transparent bg-yellow-500 text-primary-foreground shadow",
+        rejected: "border-transparent bg-red-500 text-primary-foreground shadow",
       },
     },
     defaultVariants: {
@@ -33,4 +36,5 @@ function Badge({ className, variant, ...props }: BadgeProps) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { Badge, badgeVariants }

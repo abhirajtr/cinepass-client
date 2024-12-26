@@ -3,12 +3,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Plus, Settings, Eye, Edit, Film } from 'lucide-react'
+import { Plus, Eye, Edit, Film } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { buttonVariants } from "@/components/ui/button"
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 
 interface Screen {
     id: string
@@ -24,9 +25,9 @@ const ScreenCard: React.FC<{ screen: Screen, theatreId: string }> = ({ screen, t
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     <span>{screen.name}</span>
-                    <Button variant="outline" size="icon">
+                    {/* <Button variant="outline" size="icon">
                         <Settings className="h-4 w-4" />
-                    </Button>
+                    </Button> */}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -72,6 +73,7 @@ const ScreenCard: React.FC<{ screen: Screen, theatreId: string }> = ({ screen, t
 }
 
 const ScreenManagement: React.FC = () => {
+
     const [screens, setScreens] = useState<Screen[]>([]);
     const { theatreId } = useParams();
 
@@ -93,7 +95,21 @@ const ScreenManagement: React.FC = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <Breadcrumb className='mb-3'>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink asChild>
+                            <Link to="/theatreOwner/theatres">Theatres</Link>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Screens</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <div className="flex justify-between items-center mb-6">
+
                 <h1 className="text-2xl font-bold">Screen Management</h1>
                 <Link className={buttonVariants({ variant: "outline" })} to={`/theatreOwner/theatres/${theatreId}/add-screen`}>
                     <Plus className="mr-2 h-4 w-4" /> Add Screen

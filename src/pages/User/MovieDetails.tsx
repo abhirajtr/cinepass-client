@@ -1,6 +1,6 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Cast, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/axiosInstance";
@@ -84,7 +84,7 @@ const MovieDetailsPage = () => {
                             {movieDetails?.genre.join(', ')} • UA • {movieDetails?.releaseDate}
                         </p>
                         <Link
-                            to={`/movie/:movieId/book`}
+                            to={`/movie/${movieId}/theatres`}
                             className={`${buttonVariants({ variant: "default" })} mt-6 bg-red-600`}
                         >
                             Book Tickets
@@ -136,7 +136,7 @@ const MovieDetailsPage = () => {
             </div>
 
             {/* Reviews Section */}
-            <div className="container mx-auto px-4 py-8">
+            {/* <div className="container mx-auto px-4 py-8">
                 <h2 className="text-2xl font-semibold mb-4">Top Reviews</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[1, 2].map((review) => (
@@ -153,10 +153,10 @@ const MovieDetailsPage = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
 
             {/* Recommendations Section */}
-            <div className="container mx-auto px-4 py-8">
+            {/* <div className="container mx-auto px-4 py-8">
                 <h2 className="text-2xl font-semibold mb-4">You Might Also Like</h2>
                 <div className="flex overflow-x-auto gap-6">
                     {[1, 2, 3, 4].map((movie) => (
@@ -170,7 +170,7 @@ const MovieDetailsPage = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

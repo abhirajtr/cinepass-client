@@ -38,7 +38,7 @@ export default function ShowList() {
             }
         }
         fetchShows()
-    }, [])
+    }, [screenId])
 
     const handleEdit = (show: IShow) => {
         // Implement edit functionality

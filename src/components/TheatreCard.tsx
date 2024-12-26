@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Eye, Edit, ScreenShare } from 'lucide-react'
 import ViewTheatreDetailsModal from './TheatreOwner/ViewTheatreDetailsModal'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 // import ViewDetailsModal from './ViewDetailsModal'
 
 interface TheatreCardProps {
@@ -29,9 +29,11 @@ interface TheatreCardProps {
 export default function TheatreCard({ theatre }: TheatreCardProps) {
     const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false);
     const { status } = theatre;
-    const badgeVariant = status === "pending" ? 'secondary' : status === "rejected" ? "destructive" : "default";
+    const navigate = useNavigate();
+    const badgeVariant = status === "pending" ? 'pending' : status === "rejected" ? "rejected" : "verified";
     return (
         <>
+
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -49,21 +51,21 @@ export default function TheatreCard({ theatre }: TheatreCardProps) {
                     <p className="text-sm text-muted-foreground">{theatre.phone}</p>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Link to={`${theatre.theatreId}/screens`} className={buttonVariants({ variant: "outline" })} >
+                    <Button variant="outline" onClick={() => navigate(`${theatre.theatreId}/screens`)} disabled={theatre.status !== "verified"} >
                         <ScreenShare className="mr-2 h-4 w-4" />
-                        Screens
-                    </Link>
+                        Screen
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => setIsViewDetailsOpen(true)}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                     </Button>
-                    <Link to={`${theatre.theatreId}/edit`} className={buttonVariants({ variant: "outline" })}>
+                    <Button onClick={() => navigate(`${theatre.theatreId}/edit`)} disabled={theatre.status !== "verified"}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
-                    </Link>
-
-                    <Button variant="outline" size="sm" asChild>
                     </Button>
+
+                    {/* <Button variant="outline" size="sm" asChild>
+                    </Button> */}
                 </CardFooter>
             </Card>
             <ViewTheatreDetailsModal

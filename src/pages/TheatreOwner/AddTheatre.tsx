@@ -13,7 +13,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOXGL_ACCESSTOKEN;
 
@@ -111,6 +112,8 @@ const AddTheatre = () => {
                 form.setValue('country', country)
                 form.setValue('zipCode', postalCode)
             }
+            console.log(data);
+
         } catch (error) {
             console.error('Error fetching address:', error);
             form.setError('address', {
@@ -180,7 +183,7 @@ const AddTheatre = () => {
     }, []);
 
     const onSubmit = async (data: TheatreDetails) => {
-        try { 
+        try {
             setIsLoading(true);
             const response = await theatreOwnerApi.post("/theatres/add", data);
             await axios.put(response.data?.responseData.presignedUrl, data.verificationDocument);
@@ -204,6 +207,19 @@ const AddTheatre = () => {
                     </div>
                 )}
                 <CardHeader>
+                    <Breadcrumb className='mb-3'>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link to="/theatreOwner/theatres">Theatres</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Add Theatre</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
                     <CardTitle>Theatre Details Form</CardTitle>
                 </CardHeader>
                 <CardContent>

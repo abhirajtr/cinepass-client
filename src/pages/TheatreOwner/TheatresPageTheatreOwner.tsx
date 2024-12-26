@@ -1,8 +1,4 @@
-'use client'
-
 import { useEffect, useState } from 'react'
-// import { PlusCircle } from 'lucide-react'
-// import { Button } from "@/components/ui/button"
 import TheatreCard from '@/components/TheatreCard'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
@@ -10,9 +6,7 @@ import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 import { Link } from 'react-router-dom'
 import { PlusCircle } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
-// import TheatreCard from './TheatreCard'
-// import AddTheatreButton from './AddTheatreButton'
-// import AddTheatreForm from './AddTheatreForm'
+
 
 interface Theatre {
     theatreId: string;
@@ -49,7 +43,6 @@ const TheatresPageTheatreOwner = () => {
     const [theatres, setTheatres] = useState<Theatre[]>([])
     // const [isAddingTheatre, setIsAddingTheatre] = useState(false);
 
-
     useEffect(() => {
         const fetchTheatres = async () => {
             try {
@@ -67,8 +60,19 @@ const TheatresPageTheatreOwner = () => {
 
     return (
         <div className="container mx-auto p-6">
+            {/* <PathNavigator pathSegments={pathSegments} /> */}
+
+            {/* <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Theatres</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb> */}
+
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Your Theatres</h1>
+
+                <h1 className="text-3xl font-bold">Theatre Management</h1>
                 <Link to="add-theatre" className={buttonVariants({ variant: "outline" })}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Theatre

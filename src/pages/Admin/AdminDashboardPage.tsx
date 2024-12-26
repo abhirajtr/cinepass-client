@@ -8,21 +8,57 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { useEffect, useState } from "react"
+import adminApi from "@/axiosInstance/adminApi"
+import { convertCentsToINR, extractDate, extractTime } from "@/constants"
 
 
 // Mock data
-const recentBookings = [
-    { id: 1, movie: "Inception", user: "John Doe", date: "2023-06-15", seats: "A1, A2" },
-    { id: 2, movie: "The Dark Knight", user: "Jane Smith", date: "2023-06-14", seats: "B3, B4" },
-    { id: 3, movie: "Interstellar", user: "Bob Johnson", date: "2023-06-13", seats: "C5, C6" },
-]
+// const recentBookings = [
+//     { id: 1, movie: "Inception", user: "John Doe", date: "2023-06-15", seats: "A1, A2" },
+//     { id: 2, movie: "The Dark Knight", user: "Jane Smith", date: "2023-06-14", seats: "B3, B4" },
+//     { id: 3, movie: "Interstellar", user: "Bob Johnson", date: "2023-06-13", seats: "C5, C6" },
+// ]
+interface RecentBookings {
+    bookingId: string;  // Unique identifier for the booking
+    movieTitle: string; // The title of the movie
+    userId: string;     // The ID of the user who made the booking
+    showTime: Date;     // The showtime of the movie
+}
+// interface UpcomingMovies {
+
+// }
+
 
 const upcomingMovies = [
     { id: 1, title: "Dune: Part Two", releaseDate: "2023-10-20" },
     { id: 2, title: "The Marvels", releaseDate: "2023-11-10" },
-    { id: 3, title: "Oppenheimer", releaseDate: "2023-07-21" },
 ]
 const AdminDashboardPage = () => {
+    const [totalRevenue, setTotalRevenue] = useState<number>(0);
+    const [bookings, setBookings] = useState<number>(0);
+    const [recentBookings, setRecentBookings] = useState<RecentBookings[]>([]);
+    useEffect(() => {
+        const fetchTotalRevenue = async () => {
+            try {
+                const { data } = await adminApi.get('/total-revenue');
+                setTotalRevenue(data.responseData?.totalRevenue);
+                setBookings(data.responseData?.bookings);
+                setRecentBookings(data.responseData?.recentBookings);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchTotalRevenue();
+        const fetchUpcomingMovies = async () => {
+            try {
+                const response = await adminApi.get('/upcoming-movies');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+    }, [])
     return (
         <div>
 
@@ -33,8 +69,8 @@ const AdminDashboardPage = () => {
                         <BarChart3 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">₹45,231.89</div>
-                        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                        <div className="text-2xl font-bold">{convertCentsToINR(totalRevenue)}</div>
+                        {/* <p className="text-xs text-muted-foreground">+20.1% from last month</p> */}
                     </CardContent>
                 </Card>
                 <Card>
@@ -43,8 +79,8 @@ const AdminDashboardPage = () => {
                         <Ticket className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+2350</div>
-                        <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                        <div className="text-2xl font-bold">{bookings}</div>
+                        {/* <p className="text-xs text-muted-foreground">+180.1% from last month</p> */}
                     </CardContent>
                 </Card>
                 <Card>
@@ -63,8 +99,8 @@ const AdminDashboardPage = () => {
                         <Calendar className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+573</div>
-                        <p className="text-xs text-muted-foreground">+201 from last month</p>
+                        <div className="text-2xl font-bold">+03</div>
+                        {/* <p className="text-xs text-muted-foreground">+201 from last month</p> */}
                     </CardContent>
                 </Card>
             </div>
@@ -79,18 +115,18 @@ const AdminDashboardPage = () => {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Movie</TableHead>
-                                    <TableHead>User</TableHead>
-                                    <TableHead>Date</TableHead>
-                                    <TableHead>Seats</TableHead>
+                                    <TableHead>User Id</TableHead>
+                                    <TableHead>Show Time</TableHead>
+                                    {/* <TableHead>Seats</TableHead> */}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {recentBookings.map((booking) => (
-                                    <TableRow key={booking.id}>
-                                        <TableCell>{booking.movie}</TableCell>
-                                        <TableCell>{booking.user}</TableCell>
-                                        <TableCell>{booking.date}</TableCell>
-                                        <TableCell>{booking.seats}</TableCell>
+                                    <TableRow key={booking.bookingId}>
+                                        <TableCell>{booking.movieTitle}</TableCell>
+                                        <TableCell>{booking.userId}</TableCell>
+                                        <TableCell>{extractDate(booking.showTime)}{extractTime(booking.showTime)}</TableCell>
+                                        {/* <TableCell>{booking.}</TableCell> */}
                                     </TableRow>
                                 ))}
                             </TableBody>

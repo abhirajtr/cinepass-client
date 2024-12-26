@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,14 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
 import theatreOwnerApi from "@/axiosInstance/theatreOwnerApi"
-import { useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
 
 interface Seat {
     id: string
     type: string
     label: string
     price: number
+    isBooked: boolean
 }
+
+
+
 
 interface SeatTier {
     name: string
@@ -34,6 +38,7 @@ const ScreenConfig = () => {
     const [newTierName, setNewTierName] = useState("")
     const [newTierPrice, setNewTierPrice] = useState("")
     const { theatreId } = useParams();
+    const navigate = useNavigate();
 
     const handleSave = async () => {
         try {
@@ -41,11 +46,9 @@ const ScreenConfig = () => {
             if (!screenName) {
                 return toast.error('Please enter a screen name');
             }
-
             if (rows <= 0 || columns <= 0) {
                 return toast.error('Rows and columns must be greater than zero');
             }
-
             if (!seats || seats.length === 0) {
                 return toast.error('Please generate the seats first');
             }
@@ -57,18 +60,14 @@ const ScreenConfig = () => {
                 capacity,
             });
             toast.success("Seat configuration saved successfully");
+            navigate(-1);
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error.response?.data.responseMessage || "An unexpected error occurred");
             }
         }
     }
-
-    useEffect(() => {
-        generateSeats(rows, columns)
-    }, [rows, columns])
-
-    const generateSeats = (rowCount: number, columnCount: number) => {
+    const generateSeats = useCallback((rowCount: number, columnCount: number) => {
         const newSeats: Seat[][] = []
         for (let i = 0; i < rowCount; i++) {
             const row: Seat[] = []
@@ -77,12 +76,13 @@ const ScreenConfig = () => {
                 const existingSeat = seats[i]?.[j]
                 const seatType = existingSeat?.type || "standard"
                 const label = seatType !== "disabled" ? `${String.fromCharCode(65 + i)}${seatNumber}` : "null"
-                const price = seatType !== "disabled" ? seatTiers.find(tier => tier.name === selectedType)?.price || 100 : 0
+                const price = seatType !== "disabled" ? seatTiers.find(tier => tier.name.toLowerCase() === seatType.toLowerCase())?.price || 0 : 0
                 row.push({
                     id: `${i}-${j}`,
                     type: seatType,
                     label: label,
-                    price: price
+                    price: price,
+                    isBooked: false
                 })
                 if (seatType !== "disabled") {
                     seatNumber++
@@ -91,14 +91,22 @@ const ScreenConfig = () => {
             newSeats.push(row)
         }
         setSeats(newSeats)
-    }
+    }, [seats, seatTiers]);
+
+    useEffect(() => {
+        generateSeats(rows, columns)
+    }, [rows, columns, generateSeats]);
+
+
 
     const handleSeatClick = (rowIndex: number, colIndex: number) => {
         const newSeats = [...seats]
         const currentType = newSeats[rowIndex][colIndex].type
         const newType = currentType === "disabled" ? "standard" : selectedType
         newSeats[rowIndex][colIndex].type = newType
-
+        newSeats[rowIndex][colIndex].price = newType !== "disabled"
+            ? seatTiers.find(tier => tier.name.toLowerCase() === newType.toLowerCase())?.price || 0
+            : 0
         let seatNumber = 1
         for (let i = 0; i < newSeats[rowIndex].length; i++) {
             if (newSeats[rowIndex][i].type !== "disabled") {
@@ -108,7 +116,6 @@ const ScreenConfig = () => {
                 newSeats[rowIndex][i].label = "null"
             }
         }
-
         setSeats(newSeats)
     }
 
@@ -126,7 +133,10 @@ const ScreenConfig = () => {
             newSeats[selectedRow] = newSeats[selectedRow].map((seat, index) => ({
                 ...seat,
                 type: selectedType,
-                label: selectedType !== "disabled" ? `${String.fromCharCode(65 + selectedRow)}${index + 1}` : "",
+                label: selectedType !== "disabled" ? `${String.fromCharCode(65 + selectedRow)}${index + 1}` : "null",
+                price: selectedType !== "disabled"
+                    ? seatTiers.find(tier => tier.name.toLowerCase() === selectedType.toLowerCase())?.price || 0
+                    : 0
             }))
             setSeats(newSeats)
         }
@@ -139,7 +149,10 @@ const ScreenConfig = () => {
                 newRow[selectedColumn] = {
                     ...newRow[selectedColumn],
                     type: selectedType,
-                    label: selectedType !== "disabled" ? `${String.fromCharCode(65 + rowIndex)}${selectedColumn + 1}` : "",
+                    label: selectedType !== "disabled" ? `${String.fromCharCode(65 + rowIndex)}${selectedColumn + 1}` : "null",
+                    price: selectedType !== "disabled"
+                        ? seatTiers.find(tier => tier.name.toLowerCase() === selectedType.toLowerCase())?.price || 0
+                        : 0
                 };
                 return newRow;
             });
@@ -151,11 +164,10 @@ const ScreenConfig = () => {
                         row[i].label = `${String.fromCharCode(65 + rowIndex)}${seatNumber}`;
                         seatNumber++;
                     } else {
-                        row[i].label = "";
+                        row[i].label = "null";
                     }
                 }
             });
-
             setSeats(newSeats);
         }
     };
@@ -176,6 +188,25 @@ const ScreenConfig = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <Breadcrumb className='mb-3'>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink asChild>
+                            <Link to="/theatreOwner/theatres">Theatres</Link>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink asChild>
+                            <Link to={`/theatreOwner/theatres/${theatreId}/screens`}>Screens</Link>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Add Screen</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <h1 className="text-2xl font-bold mb-4">Screen Configuration</h1>
             <div className="flex flex-col md:flex-row gap-4">
                 <Card className="w-full md:w-1/4">
@@ -276,7 +307,6 @@ const ScreenConfig = () => {
                                 </Button>
                             </div>
                         </div>
-
                         <div>
                             <Label>Fill Column</Label>
                             <div className="flex space-x-2">
@@ -321,7 +351,7 @@ const ScreenConfig = () => {
                                                     }`}
                                                 onClick={() => handleSeatClick(rowIndex, parseInt(seat.id.split('-')[1]))}
                                             >
-                                                {seat.label}
+                                                {seat.label != "null" ? seat.label : ""}
                                             </button>
                                         ))}
                                     </>
@@ -334,5 +364,5 @@ const ScreenConfig = () => {
         </div>
     )
 }
-
 export default ScreenConfig;
+
