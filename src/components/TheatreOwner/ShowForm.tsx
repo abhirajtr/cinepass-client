@@ -107,7 +107,11 @@ export default function ShowForm({ onSubmit, initialData }: ShowFormProps) {
                                 <FaCalendarAlt className="mr-2" /> Show Start Time
                             </FormLabel>
                             <FormControl>
-                                <Input type="datetime-local" {...field} />
+                                <Input className="" type="datetime-local" {...field} 
+                                    min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+                                        .toISOString()
+                                        .slice(0, 16)}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

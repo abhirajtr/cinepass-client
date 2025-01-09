@@ -1,16 +1,14 @@
-'use client'
-
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
 import { Link } from 'react-router-dom'
-// import { sendPasswordResetLink } from '@/feature/authThunk'
+// import { sendPasswordResetLink } from '../../feature/authThunk'
 import axios, { AxiosError } from 'axios'
-import { backendUrl } from '@/constants'
+import { backendUrl } from '../../constants'
 import { toast } from 'sonner'
 
 const formSchema = z.object({

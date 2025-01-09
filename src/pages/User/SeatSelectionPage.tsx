@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "@/axiosInstance";
+import axiosInstance from "../../axiosInstance.ts";
 import { useParams } from "react-router-dom";
-import SeatBooking from "@/components/User/SeatBooking";
+import SeatBooking from "../../components/User/SeatBooking";
 
 
 // Define the types for Show and Seat
@@ -29,15 +29,15 @@ export default function SeatSelectionPage() {
     const [show, setShow] = useState<IShow | null>(null); // State to store the show data
     const [loading, setLoading] = useState(true); // Loading state
 
-    
-    
+
+
     // Fetch show details from the backend
     useEffect(() => {
         const fetchShowDetails = async () => {
             try {
                 const response = await axiosInstance.get(`/user/seat-selection/${showId}`);
                 console.log(response);
-                
+
                 setShow(response.data.responseData?.show); // Set the fetched show data to state
             } catch (error) {
                 console.error("Error fetching show details:", error);

@@ -1,20 +1,18 @@
-'use client'
-
 import { useState, useEffect, useRef, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
+import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '../../components/ui/breadcrumb'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOXGL_ACCESSTOKEN;
 

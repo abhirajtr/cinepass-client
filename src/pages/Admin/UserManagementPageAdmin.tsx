@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
 import { Search } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { BlockUnblockConfirmationModal } from '@/components/Admin/BlockUnblockConfirmationModal'
-import { UserDetailsModal } from '@/components/Admin/UserDetailsModal'
-import { UserTable } from '@/components/Admin/UserTable'
-import adminApi from '@/axiosInstance/adminApi'
+} from "../../components/ui/select"
+import { BlockUnblockConfirmationModal } from '../../components/Admin/BlockUnblockConfirmationModal'
+import { UserDetailsModal } from '../../components/Admin/UserDetailsModal'
+import { UserTable } from '../../components/Admin/UserTable'
+import adminApi from '../../axiosInstance/adminApi'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
-import { useDebounce } from '@/hooks/useDebounce'
+import { useDebounce } from '../../hooks/useDebounce'
 
 interface User {
     userId: string;

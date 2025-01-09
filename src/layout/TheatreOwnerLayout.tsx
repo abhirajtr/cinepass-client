@@ -1,15 +1,13 @@
-'use client'
-
-import { SidebarProvider } from '@/components/ui/sidebar'
+import { SidebarProvider } from '../components/ui/sidebar'
 import SidebarTheatreOwner from './components/SidebarTheatreOwner'
 import NavbarTheatreOwner from './components/NavbarTheatreOwner'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/store'
+import { AppDispatch, RootState } from '../store'
 import { useEffect } from 'react'
-import { logout } from '@/feature/authSlice'
+import { logout } from '../feature/authSlice'
 
-export default function TheatreOwnerLayout() {
+const TheatreOwnerLayout= () => {
 
     const { theatreOwnerToken } = useSelector((state: RootState) => state.authReducer);
     const dispatch = useDispatch<AppDispatch>();
@@ -51,3 +49,5 @@ export default function TheatreOwnerLayout() {
         </SidebarProvider>
     )
 }
+
+export default TheatreOwnerLayout;

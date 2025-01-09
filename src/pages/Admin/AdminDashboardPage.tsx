@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { BarChart3, Calendar, Ticket, Users } from "lucide-react"
 import {
     Table,
@@ -7,10 +7,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "../../components/ui/table"
 import { useEffect, useState } from "react"
-import adminApi from "@/axiosInstance/adminApi"
-import { convertCentsToINR, extractDate, extractTime } from "@/constants"
+import adminApi from "../../axiosInstance/adminApi"
+import { convertCentsToINR, extractDate, extractTime } from "../../constants"
 
 
 // Mock data
@@ -50,13 +50,13 @@ const AdminDashboardPage = () => {
             }
         }
         fetchTotalRevenue();
-        const fetchUpcomingMovies = async () => {
-            try {
-                const response = await adminApi.get('/upcoming-movies');
-            } catch (error) {
-                console.log(error);
-            }
-        }
+        // const fetchUpcomingMovies = async () => {
+        //     try {
+        //         const response = await adminApi.get('/upcoming-movies');
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
 
     }, [])
     return (

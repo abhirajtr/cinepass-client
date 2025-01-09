@@ -59,7 +59,7 @@ export default function TheatreCard({ theatre }: TheatreCardProps) {
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                     </Button>
-                    <Button onClick={() => navigate(`${theatre.theatreId}/edit`)} disabled={theatre.status !== "verified"}>
+                    <Button onClick={() => navigate(`${theatre.theatreId}/edit`)} >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                     </Button>

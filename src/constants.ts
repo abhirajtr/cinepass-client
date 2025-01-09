@@ -147,5 +147,5 @@ export const extractDate = (isoTimestamp: string | Date): string | null => {
 
 export const convertCentsToINR = (cents: number): string  => {
     const rupees = Math.floor(cents / 100);
-    return `₹${rupees.toLocaleString()}`;
+    return `${rupees.toLocaleString()}`;
 }

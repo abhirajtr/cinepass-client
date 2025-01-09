@@ -1,10 +1,10 @@
-import { buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import { Star } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axiosInstance from "@/axiosInstance";
-import { formatVotes, getLanguageName } from "@/constants";
+import axiosInstance from "../../axiosInstance.ts";
+import { formatVotes, getLanguageName } from "../../constants";
 
 type CastMember = {
     id: number;

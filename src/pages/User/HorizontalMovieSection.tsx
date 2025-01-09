@@ -9,7 +9,7 @@ interface HorizontalMovieSectionProps {
     }>
 }
 
-export function HorizontalMovieSection({ title, movies }: HorizontalMovieSectionProps) {
+export function HorizontalMovieSection({ title }: HorizontalMovieSectionProps) {
     return (
         <section className="py-6">
             <div className="container">

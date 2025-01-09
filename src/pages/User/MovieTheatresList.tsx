@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 import { useNavigate, useParams } from 'react-router-dom';
-import axiosInstance from '@/axiosInstance';
-import { extractTime, getLanguageName } from '@/constants';
+import axiosInstance from '../../axiosInstance.ts';
+import { extractTime, getLanguageName } from '../../constants';
 
 // Cast member type
 export interface CastMember {

@@ -1,11 +1,10 @@
-import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
-import { Separator } from '@radix-ui/react-dropdown-menu'
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { useEffect } from 'react'
+import { Separator } from '../ui/separator'
 
-export default function TicketPage() {
-    // In a real application, you would fetch these details from your backend or state management
+const TicketPage = () => {
     const ticketDetails = {
         movie: "Inception",
         theatre: "Cineplex Odeon",
@@ -61,3 +60,5 @@ export default function TicketPage() {
         </div>
     )
 }
+
+export default TicketPage;

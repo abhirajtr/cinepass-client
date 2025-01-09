@@ -1,18 +1,16 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
-import { backendUrl } from '@/constants'
+import { backendUrl } from '../../constants'
 import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card'
 
 const formSchema = z.object({
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),

@@ -1,10 +1,8 @@
-'use client'
-
 import { useState, useRef, useEffect } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { backendUrl } from '@/constants'
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
+import { backendUrl } from '../../constants'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { useLocation, useNavigate } from 'react-router-dom'

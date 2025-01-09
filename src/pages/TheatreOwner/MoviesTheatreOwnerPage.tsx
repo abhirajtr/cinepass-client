@@ -1,8 +1,8 @@
-import theatreOwnerApi from "@/axiosInstance/theatreOwnerApi"
-import { Card, CardHeader, CardContent, CardTitle, CardFooter } from "@/components/ui/card"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import theatreOwnerApi from "../../axiosInstance/theatreOwnerApi"
+import { Card, CardHeader, CardContent, CardTitle, CardFooter } from "../../components/ui/card"
+import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area"
 import { AxiosError } from "axios"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "../../components/ui/badge"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 

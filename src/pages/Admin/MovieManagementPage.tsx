@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button, buttonVariants } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
 import {
     Table,
     TableBody,
@@ -8,21 +8,21 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table'
+} from '../../components/ui/table'
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
+} from '../../components/ui/dialog'
+import { Label } from '../../components/ui/label'
 import { Trash2, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import adminApi from '@/axiosInstance/adminApi'
-import { useDebounce } from '@/hooks/useDebounce'
+import adminApi from '../../axiosInstance/adminApi'
+import { useDebounce } from '../../hooks/useDebounce'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,7 +33,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/ui/form'
+} from '../../components/ui/form'
 
 const movieSchema = z.object({
     id: z.string(),

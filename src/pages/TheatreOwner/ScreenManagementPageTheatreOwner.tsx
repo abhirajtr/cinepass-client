@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
+import { ScrollArea } from "../../components/ui/scroll-area"
 import { Plus, Eye, Edit, Film } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "../../components/ui/button"
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
+import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../../components/ui/breadcrumb'
 
 interface Screen {
     id: string

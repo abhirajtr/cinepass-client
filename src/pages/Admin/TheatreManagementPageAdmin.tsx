@@ -1,8 +1,9 @@
-import adminApi from "@/axiosInstance/adminApi";
-import TheatresTable from "@/components/Admin/TheatresTable";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useDebounce } from "@/hooks/useDebounce";
+import adminApi from "../../axiosInstance/adminApi";
+import TheatresTable from "../../components/Admin/TheatresTable";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { useDebounce } from "../../hooks/useDebounce";
 import { AxiosError } from "axios";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -27,6 +28,8 @@ const TheatreManagementPageAdmin = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebounce(searchTerm, 1000);
     const [statusFilter, setStatusFilter] = useState<string>("all");
+    const [theatresPerPage, setTheatresPerPage] = useState<number>(10);
+
 
     useEffect(() => {
         const fetchTheatres = async () => {
@@ -103,11 +106,42 @@ const TheatreManagementPageAdmin = () => {
                             <SelectItem value="rejected">Rejected</SelectItem>
                         </SelectContent>
                     </Select>
+                    <Select value={theatresPerPage.toString()} onValueChange={(value) => setTheatresPerPage(Number(value))}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Users per page" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="10">10 per page</SelectItem>
+                            <SelectItem value="20">20 per page</SelectItem>
+                            <SelectItem value="50">50 per page</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
             <div className="rounded-md border">
                 <TheatresTable theatres={theatres} onVerify={handleVerify} onReject={handleReject} />
             </div>
+                <div className="flex items-center justify-between space-x-2 py-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                    // onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    // disabled={currentPage === 1}
+                    >
+                        Previous
+                    </Button>
+                    <span className="text-sm font-medium">
+                        {/* Page {currentPage} of {totalPages} */}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                    // onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    // disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </Button>
+                </div>
         </div>
     )
 }

@@ -1,16 +1,14 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
+import { Input } from "../../components/ui/input"
+import { Button } from "../../components/ui/button"
+import { Label } from "../../components/ui/label"
 import { AlertCircle, Eye, EyeOff } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import axiosInstance from "@/axiosInstance"
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert"
+import axiosInstance from "../../axiosInstance"
 import { AxiosError } from "axios"
 
 // Define the schema for user information
@@ -30,6 +28,14 @@ const passwordChangeSchema = z.object({
 
 type UserInfoFormData = z.infer<typeof userInfoSchema>
 type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>
+interface PasswordInputProps {
+    register: ReturnType<typeof useForm<PasswordChangeFormData>>["register"]
+    name: keyof PasswordChangeFormData
+    label: string
+    error?: { message?: string }
+    show: boolean
+    setShow: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 export default function UserProfile() {
     const [isChangingPassword, setIsChangingPassword] = useState(false)
@@ -43,7 +49,6 @@ export default function UserProfile() {
     const [userPhone, setUserPhone] = useState("")
 
     const {
-        register: registerUserInfo,
         handleSubmit: handleSubmitUserInfo,
         formState: { errors: userInfoErrors },
         control: userInfoControl,
@@ -118,7 +123,7 @@ export default function UserProfile() {
             resetPasswordChange()
         } catch (error) {
             if (error instanceof AxiosError) {
-                setErrorMessage(error.response?.data?.responseMessage ||"Failed to change password. Please try again")
+                setErrorMessage(error.response?.data?.responseMessage || "Failed to change password. Please try again")
             }
             console.error('Error changing password:', error)
         }
@@ -128,7 +133,7 @@ export default function UserProfile() {
         }, 3000)
     }
 
-    const PasswordInput = ({ register, name, label, error, show, setShow }) => (
+    const PasswordInput = ({ register, name, label, error, show, setShow }: PasswordInputProps) => (
         <div className="space-y-2">
             <Label htmlFor={name}>{label}</Label>
             <div className="relative">

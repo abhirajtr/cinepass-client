@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import TheatreCard from '@/components/TheatreCard'
+import TheatreCard from '../../components/TheatreCard'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi'
 import { Link } from 'react-router-dom'
 import { PlusCircle } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '../../components/ui/button'
 
 
 interface Theatre {

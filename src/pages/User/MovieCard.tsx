@@ -8,7 +8,7 @@ interface MovieCardProps {
     rating: number
 }
 
-export function MovieCard({ title, posterPath, rating }: MovieCardProps) {
+export function MovieCard({ title, posterPath }: MovieCardProps) {
     return (
         <Card className="w-[250px] flex-shrink-0 hover:cursor-pointer">
             <CardContent className="p-3">

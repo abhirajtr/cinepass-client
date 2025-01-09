@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+const socket = io('http://localhost:3000', {
+    transports: ['websocket'],
+});
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -11,23 +15,44 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LocationDropdown } from "./LocationDropdown";
 import { useDispatch } from "react-redux";
 import { logout } from "@/feature/authSlice";
+import { LocationDropdown } from "./LocationDropdown";
 import FullScreenSearchModal from "./FullScreenSearchModal";
 
-export default function Navbar() {
+const Navbar = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const { userToken } = useSelector((state: RootState) => state.authReducer);
     const dispatch = useDispatch();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Step 1: Track dropdown state
+
+    useEffect(() => {
+        // Listen for connection
+        socket.on('connect', () => {
+            console.log('Connected to WebSocket:', socket.id);
+        });
+
+        socket.on('connect_error', (error) => {
+            console.log('WebSocket connection error:', error);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from WebSocket');
+        });
+    }, []);
 
     const handleLogout = async () => {
         try {
             dispatch(logout("user"));
+            setIsDropdownOpen(false); // Close dropdown after logout
         } catch (error) {
             console.log(error);
             // handle error if needed
         }
+    };
+
+    const handleDropdownClose = () => {
+        setIsDropdownOpen(false); // Step 2: Close dropdown when any item is clicked
     };
 
     return (
@@ -47,17 +72,11 @@ export default function Navbar() {
                                 >
                                     Home
                                 </Link>
-                                <Link
+                                {/* <Link
                                     to="/movies"
                                     className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
                                 >
                                     Movies
-                                </Link>
-                                {/* <Link
-                                    to="/theatres"
-                                    className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Theatres
                                 </Link> */}
                             </div>
                         </div>
@@ -83,21 +102,25 @@ export default function Navbar() {
                     <div className="flex items-center space-x-4">
                         <LocationDropdown />
                         {userToken ? (
-                            <DropdownMenu>
+                            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                                         <User className="h-5 w-5" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>
-                                        <Link to="/profile">Profile</Link>
+                                    <DropdownMenuItem onClick={handleDropdownClose}>
+                                        <Link className="w-full" to="/profile">Profile</Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link to="/bookings">My Bookings</Link>
+                                    <DropdownMenuItem onClick={handleDropdownClose}>
+                                        <Link className="w-full" to="/bookings">My Bookings</Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <span className="hover:cursor-pointer" onClick={handleLogout}>Logout</span>
+                                    <DropdownMenuItem onClick={handleDropdownClose}>
+                                        <Link className="w-full" to="/wallet">Wallet</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="hover:cursor-pointer"
+                                        onClick={() => { handleLogout(); handleDropdownClose(); }}>
+                                        Logout
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -111,3 +134,5 @@ export default function Navbar() {
         </nav>
     );
 }
+
+export default Navbar;

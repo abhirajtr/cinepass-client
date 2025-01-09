@@ -1,18 +1,16 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Eye, EyeOff } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '@/feature/authThunk'
-import { AppDispatch, RootState } from '@/store'
+import { loginUser } from '../../feature/authThunk'
+import { AppDispatch, RootState } from '../../store'
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),

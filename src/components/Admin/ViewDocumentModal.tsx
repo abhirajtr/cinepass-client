@@ -3,7 +3,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from 'lucide-react'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import adminApi from '@/axiosInstance/adminApi'
 import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
 
 interface ViewDocumentModalProps {

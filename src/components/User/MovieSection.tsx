@@ -20,7 +20,7 @@ interface MovieSectionProps {
     movies: Movie[];
 }
 
-export default function MovieSection({ title, movies }: MovieSectionProps) {
+const MovieSection = ({ title, movies }: MovieSectionProps) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const scroll = (direction: 'left' | 'right') => {
@@ -92,3 +92,5 @@ export default function MovieSection({ title, movies }: MovieSectionProps) {
         </section>
     );
 }
+
+export default MovieSection;

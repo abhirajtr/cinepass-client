@@ -3,16 +3,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Eye, EyeOff } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
 import { Link, useNavigate } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { backendUrl } from '@/constants'
+import { backendUrl } from '../../constants'
 import { useSelector } from 'react-redux'
-import { RootState } from '@/store'
+import { RootState } from '../../store'
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),

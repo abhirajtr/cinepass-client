@@ -54,6 +54,7 @@
 
 
 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -119,4 +120,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1);
+  cursor: pointer;
 }

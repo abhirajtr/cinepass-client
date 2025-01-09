@@ -20,7 +20,7 @@ interface SeatProps {
     onSelect: (label: string) => void; // Change parameter to label
 }
 
-const Seat = ({ id, label, isBooked, isSelected, onSelect }: SeatProps) => {
+const Seat = ({ label, isBooked, isSelected, onSelect }: SeatProps) => {
     if (label === "null") {
         return <div className="w-8 h-8 p-0 m-0.5" />; // Placeholder for spacing
     }
@@ -61,7 +61,7 @@ interface ShowProps {
     };
 }
 
-export default function SeatBooking({ show }: ShowProps) {
+const SeatBooking = ({ show }: ShowProps) => {
     const [selectedSeats, setSelectedSeats] = useState<string[]>([]); // Track seat labels
     const [isProcessing, setIsProcessing] = useState(false);
     const { userToken } = useSelector((state: RootState) => state.authReducer);
@@ -112,10 +112,8 @@ export default function SeatBooking({ show }: ShowProps) {
             if (result?.error) {
                 throw new Error(`Stripe redirect failed: ${result.error.message}`);
             }
-            // No need for further client-side confirmation after redirect
-        } catch (error: any) {
+        } catch (error) {
             console.error("Booking error:", error);
-            alert(`Failed to book seats: ${error.message}`); // More informative error message
         } finally {
             setIsProcessing(false);
         }
@@ -198,3 +196,5 @@ export default function SeatBooking({ show }: ShowProps) {
         </div>
     );
 }
+
+export default SeatBooking;

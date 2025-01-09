@@ -1,14 +1,14 @@
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarProvider } from "../components/ui/sidebar"
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarAdmin from './components/NavbarAdmin'
 import SidebarAdmin from "./components/SidebarAdmin"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/store"
 import { useEffect } from "react"
-import { logout } from "@/feature/authSlice"
+import { logout } from "../feature/authSlice"
 import axios, { AxiosError } from "axios"
 import { toast } from "sonner"
-import { backendUrl } from "@/constants"
+import { backendUrl } from "../constants"
 
 
 const AdminLayout = () => {

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react"
-import ShowForm from "@/components/TheatreOwner/ShowForm"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import theatreOwnerApi from "@/axiosInstance/theatreOwnerApi"
+import ShowForm from "../../components/TheatreOwner/ShowForm"
+import { Button } from "../../components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
+import theatreOwnerApi from "../../axiosInstance/theatreOwnerApi"
 import { useParams } from "react-router-dom"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"
 import { FaEdit, FaTrash } from "react-icons/fa"
-import { extractDate, extractTime } from "@/constants"
-import { Input } from "@/components/ui/input"
+import { extractDate, extractTime } from "../../constants"
+import { Input } from "../../components/ui/input"
 
 interface showDataProps {
     movieId: string;

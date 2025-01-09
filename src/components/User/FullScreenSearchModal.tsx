@@ -125,7 +125,7 @@ export default function FullScreenSearchModal({ isOpen, onClose }: FullScreenSea
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow overflow-hidden">
                         <TabsList className="w-full justify-start px-4 mt-2 bg-inherit">
                             <TabsTrigger value="movies" className="text-lg px-6">MOVIES</TabsTrigger>
-                            <TabsTrigger value="theatres" className="text-lg px-6">CINEMAS</TabsTrigger>
+                            {/* <TabsTrigger value="theatres" className="text-lg px-6">CINEMAS</TabsTrigger> */}
                         </TabsList>
                         <div className="flex-grow overflow-auto p-4">
                             <TabsContent value="movies">
