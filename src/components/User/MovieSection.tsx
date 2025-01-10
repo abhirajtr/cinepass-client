@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { formatVotes } from '@/constants';
+import { formatVotes } from '../../constants';
 
 interface Movie {
     movieId: string;

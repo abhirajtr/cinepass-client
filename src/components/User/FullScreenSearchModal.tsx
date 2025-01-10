@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Dialog, DialogContent } from '../../components/ui/dialog'
+import { Input } from '../../components/ui/input'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs'
 import { X, Search } from 'lucide-react'
-import axiosInstance from '@/axiosInstance'
+import axiosInstance from '../../axiosInstance.ts'
 import { Link } from 'react-router-dom'
 
 // interface Cinema {

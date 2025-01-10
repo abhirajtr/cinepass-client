@@ -8,7 +8,7 @@ import {
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
-} from "@/components/ui/sidebar";
+} from "../../components/ui/sidebar";
 
 const sidebarItems = [
     { icon: BarChart3, label: 'Dashboard', to: '/admin' },

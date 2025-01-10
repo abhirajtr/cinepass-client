@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Seat, SeatType, SeatTier } from '@/types/types';
+import { Card, CardContent } from "../components/ui/card"
+import { Seat, SeatType, SeatTier } from '../types/types';
 
 interface SeatGridProps {
     screenName: string;

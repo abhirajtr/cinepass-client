@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "../../components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,8 +6,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+} from "../../components/ui/dropdown-menu"
+import { SidebarTrigger } from "../../components/ui/sidebar"
 import { LogOut, Menu, Settings, User, Users } from "lucide-react"
 import { FC } from "react"
 

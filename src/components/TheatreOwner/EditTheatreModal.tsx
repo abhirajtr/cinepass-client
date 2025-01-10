@@ -1,17 +1,15 @@
-'use client'
-
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Button } from "@/components/ui/button"
+import { Button } from "../../components/ui/button"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter,
-} from "@/components/ui/dialog"
+} from "../../components/ui/dialog"
 import {
     Form,
     FormControl,
@@ -19,10 +17,10 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "../../components/ui/form"
+import { Input } from "../../components/ui/input"
 import { toast } from 'sonner'
-import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi'
 import { AxiosError } from 'axios'
 
 const theatreSchema = z.object({

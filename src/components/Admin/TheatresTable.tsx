@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table"
+import { Button } from "../../components/ui/button"
 import { Eye, MoreHorizontal } from 'lucide-react'
 import ViewTheatreDetailsModal from './ViewTheatreDetailsModal'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { Theatre } from '@/types/types'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem } from '../../components/ui/dropdown-menu'
+import { Theatre } from '../../types/types'
 
 
 interface TheatresTableProps {

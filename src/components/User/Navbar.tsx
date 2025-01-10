@@ -5,18 +5,18 @@ const socket = io('http://localhost:3000', {
 });
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button, buttonVariants } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "../../store";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../../components/ui/dropdown-menu";
 import { useDispatch } from "react-redux";
-import { logout } from "@/feature/authSlice";
+import { logout } from "../../feature/authSlice";
 import { LocationDropdown } from "./LocationDropdown";
 import FullScreenSearchModal from "./FullScreenSearchModal";
 

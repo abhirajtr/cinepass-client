@@ -1,6 +1,5 @@
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@radix-ui/react-dialog'
-import { DialogHeader, DialogFooter } from './ui/dialog'
-import { Button } from "@/components/ui/button"
+import { DialogHeader, DialogFooter, Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog'
+import { Button } from "../components/ui/button"
 
 interface ConfirmModalProps {
     isConfirmModalOpen: boolean;

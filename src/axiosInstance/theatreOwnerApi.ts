@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { store } from '../store';
 import { backendUrl } from '../constants';
-import { logout, setToken } from '@/feature/authSlice';
+import { logout, setToken } from '../feature/authSlice';
 
 const theatreOwnerApi = (() => {
     const instance = axios.create({

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { CardContent, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
-import axiosInstance from "@/axiosInstance";
+import { RootState } from "../../store";
+import axiosInstance from "../../axiosInstance.ts";
 import { loadStripe } from "@stripe/stripe-js"
 import { useNavigate } from "react-router-dom";
 const stripePromise = loadStripe('pk_test_51QUjWbGpRrmAMBxhHsnuwfIGcv2fiQHVSEmMZ54lQdvRzIAKLOb190Cb5a2lGQyIhA7deJ84U1APVfPy6B1EnKOh00L9Gvy34f'); 

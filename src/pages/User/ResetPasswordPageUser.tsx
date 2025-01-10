@@ -10,7 +10,7 @@ import axios, { AxiosError } from 'axios'
 import { backendUrl } from '../../constants'
 import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card'
 
 const formSchema = z.object({
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),

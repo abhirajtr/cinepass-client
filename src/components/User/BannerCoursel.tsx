@@ -1,12 +1,12 @@
 import { useRef } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "../../components/ui/card"
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-} from "@/components/ui/carousel"
+} from "../../components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { Button } from "@/components/ui/button"
+import { Button } from "../../components/ui/button"
 
 const banners = [
     {

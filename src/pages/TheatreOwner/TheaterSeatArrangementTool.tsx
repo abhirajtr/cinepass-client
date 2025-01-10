@@ -8,7 +8,7 @@ import { AxiosError } from "axios"
 import { toast } from "sonner"
 import theatreOwnerApi from "../../axiosInstance/theatreOwnerApi"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "../../components/ui/breadcrumb"
 
 interface Seat {
     id: string

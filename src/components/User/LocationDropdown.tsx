@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Check, ChevronDown, MapPin, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/button';
 import {
     Command,
     CommandEmpty,
@@ -9,15 +9,15 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from '@/components/ui/command';
+} from '../../components/ui/command';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from '@/components/ui/popover';
+} from '../../components/ui/popover';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLocation } from '@/feature/locationSlice';
-import { RootState } from '@/store';
+import { setLocation } from '../../feature/locationSlice';
+import { RootState } from '../../store';
 
 interface Location {
     id: string;

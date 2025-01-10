@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button } from "@/components/ui/button"
+import { Button } from "../../components/ui/button"
 import { Play } from 'lucide-react'
-import { Movie } from '@/types/types'
+import { Movie } from '../../types/types'
 
 interface WatchlistSectionProps {
     watchlist: Movie[]

@@ -1,4 +1,4 @@
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area"
 
 interface HorizontalMovieSectionProps {
     title: string

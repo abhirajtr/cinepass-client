@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { backendUrl } from "@/constants";
+import { backendUrl } from "../constants";
 import { setToken } from "./authSlice";
 
 export const refreshTheatreOwnerThunk = createAsyncThunk(

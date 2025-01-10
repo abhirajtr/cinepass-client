@@ -1,10 +1,8 @@
-'use client'
-
 import { useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Tabs, TabsList, TabsTrigger } from '../../components/ui/tabs'
+import { Dialog, DialogContent, DialogTrigger } from '../../components/ui/dialog'
+import { Button } from '../../components/ui/button'
 import { X, Search } from 'lucide-react'
 
 interface Cinema {

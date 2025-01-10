@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Home, Film, LayoutGrid } from 'lucide-react'
-import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '../../components/ui/sidebar'
 
 const sidebarItems = [
     { icon: Home, label: 'Dashboard', to: '/theatreOwner/dashboard' },

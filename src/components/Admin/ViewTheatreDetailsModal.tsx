@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../../components/ui/dialog"
+import { Button } from "../../components/ui/button"
 import { FileText, CheckCircle, XCircle } from 'lucide-react'
-import { Theatre } from '@/types/types'
+import { Theatre } from '../../types/types'
 import { ViewDocumentModal } from './ViewDocumentModal'
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Label } from "../../components/ui/label"
+import { Textarea } from "../../components/ui/textarea"
 
 interface ViewTheatreDetailsModalProps {
     theatre: Theatre | null

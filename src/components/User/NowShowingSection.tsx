@@ -1,11 +1,11 @@
 import React from 'react'
 import { useKeenSlider } from 'keen-slider/react'
 import "keen-slider/keen-slider.min.css"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "../../components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Badge } from "../../components/ui/badge"
 import { Star, Ticket } from 'lucide-react'
-import { Movie } from '@/types/types'
+import { Movie } from '../../types/types'
 
 interface NowShowingSectionProps {
     movies: Movie[]

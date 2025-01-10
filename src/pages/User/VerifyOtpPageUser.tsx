@@ -6,7 +6,6 @@ import { backendUrl } from '../../constants'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { useLocation, useNavigate } from 'react-router-dom'
-// import { toast } from "@/components/ui/use-toast"
 
 const VerifyOtpPageUser = () => {
     const [otp, setOtp] = useState(['', '', '', ''])

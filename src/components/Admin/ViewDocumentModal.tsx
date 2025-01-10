@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent } from "../../components/ui/dialog"
 import { Loader2 } from 'lucide-react'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import theatreOwnerApi from '@/axiosInstance/theatreOwnerApi'
+import theatreOwnerApi from '../../axiosInstance/theatreOwnerApi'
 
 interface ViewDocumentModalProps {
     isOpen: boolean

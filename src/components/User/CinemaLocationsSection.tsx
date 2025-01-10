@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "../../components/ui/card"
 import { MapPin } from 'lucide-react'
-import { Cinema } from '@/types/types'
+import { Cinema } from '../../types/types'
 
 interface CinemaLocationsSectionProps {
     cinemaLocations: Cinema[]
