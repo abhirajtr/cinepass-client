@@ -51,6 +51,7 @@ const TheatreManagementPageAdmin = () => {
     const handleVerify = async (theatreId: string) => {
         try {
             const response = await adminApi.patch(`/theatre/${theatreId}/verify`);
+            console.log("response",response);
             toast.success(response.data.responseMessage);
             setTheatres(
                 theatres.map((item) =>
@@ -59,8 +60,9 @@ const TheatreManagementPageAdmin = () => {
                         item
                 )
             );
+            
         } catch (error) {
-            console.log(error);
+            console.log("error",error);
             if (error instanceof AxiosError) {
                 toast.error(error.response?.data.responseMessage || "An unexpected error occured");
             }
