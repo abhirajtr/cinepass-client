@@ -43,6 +43,7 @@ import ScreenConfig from "./pages/TheatreOwner/TheaterSeatArrangementTool";
 
 import NotFoundPage from "./pages/NotFoundPage";
 import WalletPage from "./pages/User/WalletPage";
+import Notifications from "./components/User/Notifications";
 
 const App = () => {
   return (
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="bookings" element={<BookingHistoryPage />} />
         <Route path="ticket-details" element={<TicketDetails />} />
         <Route path="profile" element={<UserProfile />} />
+        <Route path="notifications" element={<Notifications />} />
       </Route>
 
       {/* Theatre Owner Routes */}
