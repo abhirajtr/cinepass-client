@@ -1,7 +1,11 @@
+import { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 
-const Balance = () => {
-    const balance = 150.00
+interface BalanceProps {
+    balance: number;
+}
+
+const Balance: FC<BalanceProps> = ({ balance }) => {
 
     return (
         <Card>
@@ -9,7 +13,7 @@ const Balance = () => {
                 <CardTitle>Current Balance</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="text-4xl font-bold">&#8377;{balance.toFixed(2)}</p>
+                <p className="text-4xl font-bold">&#8377;{balance / 100}</p>
             </CardContent>
         </Card>
     )
