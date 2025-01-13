@@ -8,7 +8,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from ".
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { extractDate, extractTime } from "../../constants"
 import { Input } from "../../components/ui/input"
-import { Eye } from "lucide-react"
+import { Eye } from 'lucide-react'
 
 interface showDataProps {
     movieId: string;
@@ -37,7 +37,8 @@ interface IShow {
 export default function ShowManagementPage() {
     const today = new Date().toISOString().split('T')[0];
     const [shows, setShows] = useState<IShow[]>([]);
-    const [isAddingShow, setIsAddingShow] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [editingShow, setEditingShow] = useState<IShow | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [dateFilter, setDateFilter] = useState(today);
     const { theatreId, screenId } = useParams();
@@ -60,7 +61,6 @@ export default function ShowManagementPage() {
         fetchShows();
     }, [screenId, searchQuery, dateFilter, fetchShows]);
 
-
     const handleAddShow = async (showData: showDataProps) => {
         try {
             await theatreOwnerApi.post("/theatre/screen/add-show", {
@@ -68,18 +68,32 @@ export default function ShowManagementPage() {
                 screenId,
                 ...showData,
             });
-            // const { show } = data.responseData;
-            // setShows((prevShows) => [...prevShows, show]);
             fetchShows();
-            setIsAddingShow(false);
+            setIsDialogOpen(false);
         } catch (error) {
             console.error("Error adding show:", error);
         }
     };
 
     const handleEdit = (show: IShow) => {
-        // Implement edit functionality
-        console.log("Edit show:", show);
+        setEditingShow(show);
+        setIsDialogOpen(true);
+    };
+
+    const handleEditSubmit = async (showData: showDataProps) => {
+        if (!editingShow) return;
+        try {
+            await theatreOwnerApi.put(`/update-show/${editingShow.showId}`, {
+                theatreId,
+                screenId,
+                ...showData,
+            });
+            fetchShows();
+            setIsDialogOpen(false);
+            setEditingShow(null);
+        } catch (error) {
+            console.error("Error editing show:", error);
+        }
     };
 
     const handleDelete = async (showId: string) => {
@@ -96,8 +110,6 @@ export default function ShowManagementPage() {
     };
 
     const handleDateFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
-
         setDateFilter(e.target.value);
     };
 
@@ -106,15 +118,22 @@ export default function ShowManagementPage() {
             <h1 className="text-2xl font-bold mb-4">Show Management</h1>
 
             <div className="w-full flex justify-end px-4">
-                <Dialog open={isAddingShow} onOpenChange={setIsAddingShow}>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button className="mb-4">Add New Show</Button>
+                        <Button className="mb-4" onClick={() => setEditingShow(null)}>Add New Show</Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Add New Show</DialogTitle>
+                            <DialogTitle>{editingShow ? 'Edit Show' : 'Add New Show'}</DialogTitle>
                         </DialogHeader>
-                        <ShowForm onSubmit={handleAddShow} />
+                        <ShowForm
+                            onSubmit={editingShow ? handleEditSubmit : handleAddShow}
+                            initialData={editingShow ? {
+                                movieId: editingShow.movieId,
+                                movieTitle: editingShow.movieTitle,
+                                startTime: new Date(editingShow.startTime).toISOString().slice(0, 16)
+                            } : undefined}
+                        />
                     </DialogContent>
                 </Dialog>
             </div>
@@ -134,7 +153,6 @@ export default function ShowManagementPage() {
                 />
             </div>
 
-
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -152,9 +170,9 @@ export default function ShowManagementPage() {
                                 <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(show)}>
                                     <FaEdit className="mr-2" /> Edit
                                 </Button>
-                                <Button asChild variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(show)}>
+                                <Button asChild variant="outline" size="sm" className="mr-2">
                                     <Link to={`/theatreOwner/theatres/showBookingDetails/${show.showId}`} >
-                                        <Eye className="mr-2" /> view
+                                        <Eye className="mr-2" /> View
                                     </Link>
                                 </Button>
                                 <Button variant="destructive" size="sm" onClick={() => handleDelete(show.showId)}>
