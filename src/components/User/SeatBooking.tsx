@@ -104,15 +104,15 @@ const SeatBooking = ({ show }: ShowProps) => {
     }, []);
     const getSeatImage = (quantity: number) => {
         if (quantity === 1) {
-            return `/public/cycle.png`;
+            return `/cycle.png`;
         }
         if (quantity === 2) {
-            return `/public/scooter.png`;
+            return `/scooter.png`;
         }
         if (quantity <= 7) {
-            return `/public/car.png`;
+            return `/car.png`;
         }
-        return `/public/bus.png`;
+        return `/bus.png`;
     };
 
     const handleSeatQuantitySelect = (quantity: number) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AddMoneyForm from '../../components/User/AddMoneyForm';
+// import AddMoneyForm from '../../components/User/AddMoneyForm';
 import Balance from '../../components/User/Balance';
 import TransactionHistory from '../../components/User/TransactionHistory';
 import axiosInstance from '../../axiosInstance';
@@ -36,7 +36,7 @@ const WalletPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-[1fr,2fr] gap-6">
                 <div className="space-y-6">
                     <Balance balance={wallet?.balance || 0} />
-                    <AddMoneyForm />
+                    {/* <AddMoneyForm /> */}
                 </div>
                 <TransactionHistory transaction={wallet?.transaction || []} />
             </div>

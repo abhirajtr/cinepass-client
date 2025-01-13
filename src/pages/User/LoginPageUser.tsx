@@ -115,9 +115,9 @@ const LoginPageUser = () => {
                     </Form>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                    <Button variant="outline" className="w-full">
+                    {/* <Button variant="outline" className="w-full">
                         Log In with Google
-                    </Button>
+                    </Button> */}
                     <p className="text-sm text-center">
                         Don't have an account?{" "}
                         <Link to="/signup" className="text-primary hover:underline">

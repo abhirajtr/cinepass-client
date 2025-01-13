@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../comp
 import { Button } from "../../components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
 import { ScrollArea } from "../../components/ui/scroll-area"
-import { Plus, Eye, Edit, Film } from 'lucide-react'
+import { Plus, Eye, Film } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { buttonVariants } from "../../components/ui/button"
 import { AxiosError } from 'axios'
@@ -53,17 +53,17 @@ const ScreenCard: React.FC<{ screen: Screen, theatreId: string }> = ({ screen, t
                                     <h4 className="font-semibold">Capacity</h4>
                                     <p>{screen.capacity} seats</p>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <h4 className="font-semibold">Features</h4>
-                                    {/* Add features here if available */}
-                                </div>
+                                    Add features here if available
+                                </div> */}
                             </div>
                         </ScrollArea>
                     </DialogContent>
                 </Dialog>
-                <Link to={`/theatreOwner/theatres/${theatreId}/screens/${screen.id}/edit`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
+                {/* <Link to={`/theatreOwner/theatres/${theatreId}/screens/${screen.id}/edit`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
                     <Edit className="mr-2 h-4 w-4" /> Edit Screen
-                </Link>
+                </Link> */}
                 <Link to={`/theatreOwner/theatres/${theatreId}/screens/${screen.id}/show-management`} className={buttonVariants({ variant: "outline", className: "w-full" })}>
                     <Film className="mr-2 h-4 w-4" /> Manage Shows
                 </Link>
