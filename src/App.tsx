@@ -44,6 +44,7 @@ import ScreenConfig from "./pages/TheatreOwner/TheaterSeatArrangementTool";
 import NotFoundPage from "./pages/NotFoundPage";
 import WalletPage from "./pages/User/WalletPage";
 import Notifications from "./components/User/Notifications";
+import ShowBookingDetails from "./components/TheatreOwner/ShowBookingDetails";
 
 const App = () => {
   return (
@@ -84,6 +85,7 @@ const App = () => {
           <Route path="theatres/:theatreId/add-screen" element={<ScreenConfig />} />
           <Route path="movies" element={<MoviesTheatreOwnerPage />} />
           <Route path="theatres/:theatreId/screens/:screenId/show-management" element={<ShowManagementPage />} />
+          <Route path="theatres/showBookingDetails/:showId" element={<ShowBookingDetails />} />
         </Route>
       </Route>
 

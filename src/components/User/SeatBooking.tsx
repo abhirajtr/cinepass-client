@@ -1,8 +1,11 @@
-import { useState } from "react";
+"use client"
+
+import { useEffect, useState } from "react";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "../../components/ui/checkbox";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -10,6 +13,10 @@ import axiosInstance from "../../axiosInstance";
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
 import { Edit2, Users } from 'lucide-react';
+
+interface Wallet {
+    balance: number;
+}
 
 const stripePromise = loadStripe('pk_test_51QUjWbGpRrmAMBxhHsnuwfIGcv2fiQHVSEmMZ54lQdvRzIAKLOb190Cb5a2lGQyIhA7deJ84U1APVfPy6B1EnKOh00L9Gvy34f');
 
@@ -69,7 +76,10 @@ const SeatBooking = ({ show }: ShowProps) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [numberOfSeats, setNumberOfSeats] = useState(0);
+    const [useWalletBalance, setUseWalletBalance] = useState(false);
     const { userToken } = useSelector((state: RootState) => state.authReducer);
+    const [walletBalance, setWalletBalance] = useState<number>(0);
+
     const navigate = useNavigate();
 
     const handleSeatSelect = (seatLabel: string) => {
@@ -83,7 +93,17 @@ const SeatBooking = ({ show }: ShowProps) => {
             return prev;
         });
     };
-
+    useEffect(() => {
+        const fetchWallet = async () => {
+            try {
+                const { data } = await axiosInstance.get<{ responseData: Wallet }>('/user/wallet');
+                setWalletBalance(data.responseData?.balance || 0);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchWallet();
+    }, []);
     const getSeatImage = (quantity: number) => {
         if (quantity === 1) {
             return `/public/cycle.png`;
@@ -121,25 +141,43 @@ const SeatBooking = ({ show }: ShowProps) => {
             if (!userToken) {
                 return navigate("/login");
             }
+
+            const totalPrice = getTotalPrice();
+            const amountToCharge = useWalletBalance
+                ? Math.max(0, totalPrice - walletBalance)
+                : totalPrice;
+
             const response = await axiosInstance.post("/user/book-seat", {
                 showId: show.showId,
                 selectedSeats,
+                useWalletBalance,
+                amountToCharge,
             });
 
             const { sessionId } = response.data.responseData;
 
-            if (!sessionId) {
-                throw new Error("Failed to retrieve payment details.");
-            }
+            if (amountToCharge > 0) {
+                if (!sessionId) {
+                    throw new Error("Failed to retrieve payment details.");
+                }
 
-            const stripe = await stripePromise;
-            if (!stripe) {
-                throw new Error("Stripe failed to load.");
-            }
+                const stripe = await stripePromise;
+                if (!stripe) {
+                    throw new Error("Stripe failed to load.");
+                }
 
-            const result = await stripe.redirectToCheckout({ sessionId });
-            if (result?.error) {
-                throw new Error(`Stripe redirect failed: ${result.error.message}`);
+                const result = await stripe.redirectToCheckout({ sessionId });
+                if (result?.error) {
+                    throw new Error(`Stripe redirect failed: ${result.error.message}`);
+                }
+            } else {
+                // Handle successful booking without Stripe payment
+                // const response = await axiosInstance.post("/user/book-seat", {
+                //     showId: show.showId,
+                //     selectedSeats,
+                //     useWalletBalance,
+                //     amountToCharge,
+                // })
             }
         } catch (error) {
             console.error("Booking error:", error);
@@ -256,20 +294,43 @@ const SeatBooking = ({ show }: ShowProps) => {
 
             {selectedSeats.length > 0 && (
                 <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 shadow-lg">
-                    <div className="max-w-4xl mx-auto flex items-center justify-between">
-                        <div>
-                            <p className="text-sm font-medium">
-                                Selected Seats: {selectedSeats.join(", ")}
-                            </p>
-                            <p className="text-lg font-bold">Total: ₹{getTotalPrice()}</p>
+                    <div className="max-w-4xl mx-auto flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium">
+                                    Selected Seats: {selectedSeats.join(", ")}
+                                </p>
+                                <p className="text-lg font-bold">Total: ₹{getTotalPrice()}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="use-wallet"
+                                    checked={useWalletBalance}
+                                    onCheckedChange={(checked) => setUseWalletBalance(checked as boolean)}
+                                />
+                                <label
+                                    htmlFor="use-wallet"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Use Wallet Balance (₹{walletBalance / 100})
+                                </label>
+                            </div>
                         </div>
-                        <Button
-                            size="lg"
-                            disabled={selectedSeats.length !== numberOfSeats || isProcessing}
-                            onClick={handleBooking}
-                        >
-                            {isProcessing ? "Processing..." : "Book Tickets"}
-                        </Button>
+                        <div className="flex justify-between items-center">
+                            {useWalletBalance && (
+                                <div className="text-sm">
+                                    <p>Wallet: ₹{Math.min(walletBalance / 100, getTotalPrice())}</p>
+                                    <p>To Pay: ₹{Math.max(0, getTotalPrice() - walletBalance / 100)}</p>
+                                </div>
+                            )}
+                            <Button
+                                size="lg"
+                                disabled={selectedSeats.length !== numberOfSeats || isProcessing}
+                                onClick={handleBooking}
+                            >
+                                {isProcessing ? "Processing..." : "Book Tickets"}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             )}

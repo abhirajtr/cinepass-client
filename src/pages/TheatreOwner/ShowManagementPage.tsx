@@ -3,11 +3,12 @@ import ShowForm from "../../components/TheatreOwner/ShowForm"
 import { Button } from "../../components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
 import theatreOwnerApi from "../../axiosInstance/theatreOwnerApi"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { extractDate, extractTime } from "../../constants"
 import { Input } from "../../components/ui/input"
+import { Eye } from "lucide-react"
 
 interface showDataProps {
     movieId: string;
@@ -150,6 +151,11 @@ export default function ShowManagementPage() {
                             <TableCell>
                                 <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(show)}>
                                     <FaEdit className="mr-2" /> Edit
+                                </Button>
+                                <Button asChild variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(show)}>
+                                    <Link to={`/theatreOwner/theatres/showBookingDetails/${show.showId}`} >
+                                        <Eye className="mr-2" /> view
+                                    </Link>
                                 </Button>
                                 <Button variant="destructive" size="sm" onClick={() => handleDelete(show.showId)}>
                                     <FaTrash className="mr-2" /> Delete
