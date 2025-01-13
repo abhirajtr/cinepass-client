@@ -4,7 +4,7 @@ const socket = io('http://localhost:3000', {
     transports: ['websocket'],
 });
 import { Link } from "react-router-dom";
-import { Bell, Search, User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import { Button, buttonVariants } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { useSelector } from "react-redux";
@@ -101,14 +101,14 @@ const Navbar = () => {
                     {/* Right Section */}
                     <div className="flex items-center space-x-4">
                         <LocationDropdown />
-                        <Link to={`/notifications`} className="relative">
+                        {/* <Link to={`/notifications`} className="relative">
                             <Button variant="ghost" size="icon" className="relative">
                                 <Bell className="h-5 w-5" />
                                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[11px] font-medium text-destructive-foreground">
                                     3
                                 </span>
                             </Button>
-                        </Link>
+                        </Link> */}
                         {userToken ? (
                             <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                                 <DropdownMenuTrigger asChild>

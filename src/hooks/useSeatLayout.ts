@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Seat, SeatType } from '@/types/types';
+import { Seat, SeatType } from '../types/types';
 
 export const useSeatLayout = (initialRows: number, initialColumns: number) => {
     const [rows, setRows] = useState(initialRows);

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { useParams } from "react-router-dom";
 import BookingSeatLayout from "./BookingSeatLayout";
-import axiosInstance from "@/axiosInstance";
-import theatreOwnerApi from "@/axiosInstance/theatreOwnerApi";
+import axiosInstance from "../../axiosInstance";
+import theatreOwnerApi from "../../axiosInstance/theatreOwnerApi";
 
 interface ISeat {
     id: string;

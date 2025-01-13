@@ -1,4 +1,4 @@
-import { LogOut, User, Settings } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import {
     DropdownMenu,
@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar'
 import { FC } from 'react'
 
-const ProfileDropdownTheatreOwner: FC<{ logout: () => void }> = ({logout}) => {
+const ProfileDropdownTheatreOwner: FC<{ logout: () => void }> = ({ logout }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -27,19 +27,19 @@ const ProfileDropdownTheatreOwner: FC<{ logout: () => void }> = ({logout}) => {
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">Theatre Owner</p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            owner@example.com
+                            {/* owner@example.com */}
                         </p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />

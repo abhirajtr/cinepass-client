@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import AddMoneyForm from '../../components/User/AddMoneyForm';
 import Balance from '../../components/User/Balance';
 import TransactionHistory from '../../components/User/TransactionHistory';
-import axiosInstance from '@/axiosInstance';
+import axiosInstance from '../../axiosInstance';
 
 interface Transaction {
     amount: number;

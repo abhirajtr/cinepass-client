@@ -5,6 +5,8 @@ import { Badge } from '../../components/ui/badge';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance.ts';
 import { extractTime, getLanguageName } from '../../constants';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store.ts';
 
 // Cast member type
 export interface CastMember {
@@ -86,6 +88,7 @@ const MovieTheatresList = () => {
     const [theaters, setTheaters] = useState<Theatre[]>([]);
     const [movieDetails, setMovieDetails] = useState<Movie | null>(null);
     const { movieId } = useParams();
+    const place = useSelector((state: RootState) => state.location.district);
 
     const getNextDates = () => {
         const currentDate = new Date();
@@ -110,7 +113,7 @@ const MovieTheatresList = () => {
         const fetchTheatres = async () => {
             try {
                 const { data } = await axiosInstance.get<ApiResponse>(`/user/movie/${movieId}/theatres`, {
-                    params: { date: selectedDate, city: "Kochi" },
+                    params: { date: selectedDate, city: place },
                 });
                 // const fetchedTheatres = response.data.responseData?.theatres;
                 setTheaters(data.responseData?.theatres);
@@ -122,7 +125,7 @@ const MovieTheatresList = () => {
         };
 
         fetchTheatres();
-    }, [movieId, selectedDate]);
+    }, [movieId, selectedDate, place]);
 
     const nextDates = getNextDates();
 
